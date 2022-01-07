@@ -1,0 +1,32 @@
+{
+  "providers": [
+    {
+      "ascent": 19,
+      "chars": ["섥"],
+      "file": "unc:gui/grid_exemple.png",
+      "height": 256,
+      "type": "bitmap"
+    },
+    {
+      "ascent": 19,
+      "chars": ["ꈁ"],
+      "file": "unc:gui/grid_big_exemple.png",
+      "height": 256,
+      "type": "bitmap"
+    },
+    {
+      "ascent": 2,
+      "chars": ["ꌁ"],
+      "file": "unc:custom/tchat/unc.png",
+      "height": 19,
+      "type": "bitmap"
+    },
+    {
+      "ascent": -32768,
+      "chars": [""],
+      "file": "unc:gui/pixel_split.png",
+      "height": -10,
+      "type": "bitmap"
+    }
+  ]
+}
