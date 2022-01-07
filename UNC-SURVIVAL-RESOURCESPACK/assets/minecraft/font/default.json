@@ -15,18 +15,46 @@
       "type": "bitmap"
     },
     {
-      "ascent": 2,
-      "chars": ["ꌁ"],
-      "file": "unc:custom/tchat/unc.png",
-      "height": 19,
+      "ascent": -32768,
+      "chars": [""],
+      "file": "unc:gui/chest_carac_left_move.png",
+      "height": -10,
       "type": "bitmap"
     },
     {
       "ascent": -32768,
-      "chars": [""],
-      "file": "unc:gui/pixel_split.png",
-      "height": -10,
+      "chars": ["百"],
+      "file": "unc:gui/pixel_nosplit.png",
+      "height": 50,
       "type": "bitmap"
+    },
+    {
+      "type": "ttf",
+      "file": "minecraft:negative_spaces.ttf",
+      "shift": [0.0, 0.0],
+      "size": 10.0,
+      "oversample": 1.0
+    },
+    {
+      "type": "bitmap",
+      "file": "unc:gui/waterdrops/0.png",
+      "ascent": -16,
+      "height": 9,
+      "chars": ["啊"]
+    },
+    {
+      "type": "bitmap",
+      "file": "unc:gui/waterdrops/1.png",
+      "ascent": -16,
+      "height": 9,
+      "chars": ["爱"]
+    },
+    {
+      "type": "bitmap",
+      "file": "unc:gui/waterdrops/2.png",
+      "ascent": -16,
+      "height": 9,
+      "chars": ["安"]
     }
   ]
 }
