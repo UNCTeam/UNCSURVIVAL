@@ -1,0 +1,34 @@
+name: UNCSURVIVAL
+version: '1.0-SNAPSHOT'
+main: teamunc.uncsurvival.UNCSURVIVAL
+api-version: 1.18
+authors: [ Delsus ]
+description: UNCSURVIVAL PRIVATE PLUGIN
+website: team-unc.fr
+
+commands:
+  startuncsurvival:
+    description: Start the game
+    usage: /startuncsurvival
+    permission: uncsurvival.startuncsurvival
+  addplayer:
+    description: Add players to the game
+    usage: /addplayer <playerName> <playerName?> ...
+    permission: uncsurvival.addplayer
+  removeplayer:
+    description: Remove players from the game
+    usage: /removeplayer <playerName> <playerName?> ...
+    permission: uncsurvival.removeplayer
+  getplayersingame:
+    description: get players in the game
+    usage: /getplayersingame
+    permission: uncsurvival.getplayersingame
+
+  addspawnpoint:
+    description: Add a spawnpoint to the game
+    usage: /addspawnpoint <X> <Y> <Z>
+    permission: uncsurvival.addspawnpoint
+  removespawnpoint:
+    description: Remove a spawnpoint to the game
+    usage: /removespawnpoint <X> <Y> <Z>
+    permission: uncsurvival.removespawnpoint
