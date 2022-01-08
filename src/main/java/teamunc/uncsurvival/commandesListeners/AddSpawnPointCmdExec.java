@@ -1,18 +1,19 @@
 package teamunc.uncsurvival.commandesListeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import teamunc.uncsurvival.logic.GameManager;
-import teamunc.uncsurvival.utils.LocationManager;
+import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.utils.MessageTchatManager;
 
-public class AddSpawnPointCmdExec implements CommandExecutor {
+public class AddSpawnPointCmdExec extends abstractCommandExecutor {
+    public AddSpawnPointCmdExec(UNCSurvival api) {
+        super(api);
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         // error if not enougth args
@@ -34,7 +35,7 @@ public class AddSpawnPointCmdExec implements CommandExecutor {
                         Double.parseDouble(args[2])
                     );
 
-            boolean success = LocationManager.getInstance().addNewSpawnPoint(loc);
+            boolean success = this.plugin.getLocationManager().addNewSpawnPoint(loc);
 
             if (success) {
                 MessageTchatManager.getInstance().sendMessageToPlayer("The spawn point " + loc + " has been added to the game.",sender, ChatColor.GREEN);
