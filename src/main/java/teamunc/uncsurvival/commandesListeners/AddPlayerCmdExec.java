@@ -6,10 +6,16 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import teamunc.uncsurvival.logic.GameManager;
+import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.manager.GameManager;
 import teamunc.uncsurvival.utils.MessageTchatManager;
 
-public class AddPlayerCmdExec implements CommandExecutor {
+public class AddPlayerCmdExec extends abstractCommandExecutor implements CommandExecutor {
+
+    public AddPlayerCmdExec(UNCSurvival api) {
+        super(api);
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         // error if not enougth args
@@ -23,7 +29,7 @@ public class AddPlayerCmdExec implements CommandExecutor {
             if (response == null) {
                 MessageTchatManager.getInstance().sendMessageToPlayer("The player " + arg + "Can't be add.",sender, ChatColor.GOLD);
             } else {
-                boolean success = GameManager.getInstance().addPlayerToTheGame(response);
+                boolean success = UNCSurvival.getInstance().getGameManager().addPlayerToTheGame(response);
                 if (success) {
                     MessageTchatManager.getInstance().sendMessageToPlayer("The player " + arg + " has been added to the game.",sender, ChatColor.GREEN);
                 }

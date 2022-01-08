@@ -2,11 +2,9 @@ package teamunc.uncsurvival.utils.timer;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
-import teamunc.uncsurvival.UNCSURVIVAL;
+import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.features.thirst.ThirstActualiser;
 import teamunc.uncsurvival.utils.scoreboards.InfoScoreboardSideBarManager;
-
-import java.awt.event.ActionEvent;
 
 public class TimeManager {
 
@@ -19,7 +17,7 @@ public class TimeManager {
     }
     //# END SINGLETON
 
-    private JavaPlugin plugin = UNCSURVIVAL.getPlugin();
+    private JavaPlugin plugin = UNCSurvival.getPlugin();
     private BukkitScheduler scheduler = plugin.getServer().getScheduler();
 
     private int secondes = 0;
