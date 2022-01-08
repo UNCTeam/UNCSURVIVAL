@@ -3,6 +3,7 @@ package teamunc.uncsurvival.logic;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import teamunc.uncsurvival.features.thirst.ThirstActualiser;
 import teamunc.uncsurvival.utils.LocationManager;
 import teamunc.uncsurvival.utils.MessageTchatManager;
 import teamunc.uncsurvival.utils.timer.TimeManager;
@@ -53,6 +54,9 @@ public class GameManager {
 
         // start the timer
         TimeManager.getInstance().startTimer();
+
+        // Register all players for thirst
+        ThirstActualiser.getInstance().registerPlayers(new ArrayList<>(this.playersInGame));
 
         return true;
     }
