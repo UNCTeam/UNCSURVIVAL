@@ -1,5 +1,6 @@
 package teamunc.uncsurvival.features.thirst;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -36,6 +37,12 @@ public class ThirstActualiser {
             thirstPerPlayerName.put(playerName,actualWater - 1);
     }
 
+    public void decreaseWaterForAllRegisteredPlayers(int waterToRemove) {
+        for (String playerName : this.thirstPerPlayerName.keySet()) {
+            this.decreaseWater(1,playerName);
+        }
+    }
+
     public void increaseWater(int waterToAdd, String playerName) {
         int actualWater = this.thirstPerPlayerName.get(playerName);
 
@@ -48,6 +55,10 @@ public class ThirstActualiser {
 
     public int getWaterLevel(String playerName) {
         return this.thirstPerPlayerName.get(playerName);
+    }
+
+    public void actualiseDisplay() {
+        ThirstDisplay.getInstance().ActualiseDisplayForPlayers(this.thirstPerPlayerName);
     }
 
 }

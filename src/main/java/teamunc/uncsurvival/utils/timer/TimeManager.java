@@ -3,6 +3,7 @@ package teamunc.uncsurvival.utils.timer;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import teamunc.uncsurvival.UNCSURVIVAL;
+import teamunc.uncsurvival.features.thirst.ThirstActualiser;
 import teamunc.uncsurvival.utils.scoreboards.InfoScoreboardSideBarManager;
 
 import java.awt.event.ActionEvent;
@@ -64,11 +65,17 @@ public class TimeManager {
     public void actionsEachSeconds() {
         // place all events that can occur each seconds
         InfoScoreboardSideBarManager.getInstance().setTime(this.secondes,this.minutes);
+
+        // Actualise Water Level Display
+        ThirstActualiser.getInstance().actualiseDisplay();
     }
 
     public void actionsEachMinutes() {
         // place all events that can occur each minutes
         InfoScoreboardSideBarManager.getInstance().setTime(this.secondes,this.minutes);
+
+        // dicrease Water Level of 1
+        ThirstActualiser.getInstance().decreaseWaterForAllRegisteredPlayers(1);
     }
 
     public void actionsEachPhases() {
