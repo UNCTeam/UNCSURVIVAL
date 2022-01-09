@@ -1,4 +1,4 @@
-package teamunc.uncsurvival.utils.scoreboards;
+package teamunc.uncsurvival.logic.manager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -6,12 +6,12 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
+import teamunc.uncsurvival.UNCSurvival;
 
-public class InfoScoreboardSideBarManager {
+public class InfoScoreboardSideBarManager extends AbstractManager {
 
-    //# SINGLETON
-    private static InfoScoreboardSideBarManager instance;
-    private InfoScoreboardSideBarManager() {
+    public InfoScoreboardSideBarManager(UNCSurvival plugin) {
+        super(plugin);
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
 
         // Objective creation
@@ -27,11 +27,6 @@ public class InfoScoreboardSideBarManager {
         this.initDisplay();
 
     }
-    public static InfoScoreboardSideBarManager getInstance() {
-        if (InfoScoreboardSideBarManager.instance == null) InfoScoreboardSideBarManager.instance = new InfoScoreboardSideBarManager();
-        return InfoScoreboardSideBarManager.instance;
-    }
-    //# END SINGLETON
 
     private Objective objective;
     private int actualSec = 0; // only used to change the seconds displayed

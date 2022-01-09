@@ -1,20 +1,15 @@
-package teamunc.uncsurvival.utils;
+package teamunc.uncsurvival.logic.manager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import teamunc.uncsurvival.UNCSurvival;
 
-public class MessageTchatManager {
+public class MessageTchatManager extends AbstractManager{
 
-    //# SINGLETON
-    private static MessageTchatManager instance;
-    private MessageTchatManager() {}
-    public static MessageTchatManager getInstance() {
-        if (MessageTchatManager.instance == null) MessageTchatManager.instance = new MessageTchatManager();
-        return MessageTchatManager.instance;
+    public MessageTchatManager(UNCSurvival plugin) {
+        super(plugin);
     }
-    //# END SINGLETON
 
     private String prefix = "[UNC-SURVIVAL] : ";
 

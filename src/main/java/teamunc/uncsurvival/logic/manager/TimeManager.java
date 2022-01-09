@@ -1,23 +1,16 @@
-package teamunc.uncsurvival.utils.timer;
+package teamunc.uncsurvival.logic.manager;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.features.thirst.ThirstActualiser;
-import teamunc.uncsurvival.utils.scoreboards.InfoScoreboardSideBarManager;
 
-public class TimeManager {
+public class TimeManager extends AbstractManager{
 
-    //# SINGLETON
-    private static TimeManager instance;
-    private TimeManager() {}
-    public static TimeManager getInstance() {
-        if (TimeManager.instance == null) TimeManager.instance = new TimeManager();
-        return TimeManager.instance;
+    public TimeManager(UNCSurvival plugin) {
+        super(plugin);
     }
-    //# END SINGLETON
 
-    private JavaPlugin plugin = UNCSurvival.getPlugin();
     private BukkitScheduler scheduler = plugin.getServer().getScheduler();
 
     private int secondes = 0;
@@ -62,7 +55,7 @@ public class TimeManager {
 
     public void actionsEachSeconds() {
         // place all events that can occur each seconds
-        InfoScoreboardSideBarManager.getInstance().setTime(this.secondes,this.minutes);
+        UNCSurvival.getInstance().getScoreboardSideBarManager().setTime(this.secondes,this.minutes);
 
         // Actualise Water Level Display
         ThirstActualiser.getInstance().actualiseDisplay();
@@ -70,7 +63,7 @@ public class TimeManager {
 
     public void actionsEachMinutes() {
         // place all events that can occur each minutes
-        InfoScoreboardSideBarManager.getInstance().setTime(this.secondes,this.minutes);
+        UNCSurvival.getInstance().getScoreboardSideBarManager().setTime(this.secondes,this.minutes);
 
         // dicrease Water Level of 1
         ThirstActualiser.getInstance().decreaseWaterForAllRegisteredPlayers(1);
@@ -78,7 +71,7 @@ public class TimeManager {
 
     public void actionsEachPhases() {
         // place all events that can occur each phases
-        InfoScoreboardSideBarManager.getInstance().setPhase(this.phase);
+        UNCSurvival.getInstance().getScoreboardSideBarManager().setPhase(this.phase);
     }
 
 }

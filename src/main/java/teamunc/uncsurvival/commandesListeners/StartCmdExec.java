@@ -5,9 +5,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import teamunc.uncsurvival.UNCSurvival;
-import teamunc.uncsurvival.utils.MessageTchatManager;
+import teamunc.uncsurvival.logic.manager.MessageTchatManager;
 
-public class StartCmdExec extends abstractCommandExecutor implements CommandExecutor {
+public class StartCmdExec extends AbstractCommandExecutor implements CommandExecutor {
 
     public StartCmdExec(UNCSurvival api) {
         super(api);
@@ -18,7 +18,7 @@ public class StartCmdExec extends abstractCommandExecutor implements CommandExec
         boolean res = this.plugin.getGameManager().start(sender);
 
         if (res) {
-            MessageTchatManager.getInstance().sendMessageToPlayer("The Game has been started.",sender, ChatColor.GREEN);
+            this.messageTchatManager.sendMessageToPlayer("The Game has been started.",sender, ChatColor.GREEN);
         }
 
         return res;
