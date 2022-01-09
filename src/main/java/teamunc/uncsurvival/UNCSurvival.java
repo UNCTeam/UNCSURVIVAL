@@ -5,7 +5,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import teamunc.uncsurvival.commandesListeners.*;
 import teamunc.uncsurvival.logic.manager.*;
-import teamunc.uncsurvival.utils.LocationManager;
 import teamunc.uncsurvival.eventsListeners.AppleListener;
 
 import java.io.FileReader;
@@ -14,13 +13,10 @@ import java.io.FileWriter;
 public class UNCSurvival extends JavaPlugin {
 
     private GameManager gameManager;
-    private LocationManager locationManager;
-    private ItemsManager itemsManager;
-    private InfoScoreboardSideBarManager scoreboardSideBarManager;
     private MessageTchatManager messageTchatManager;
 
     private static UNCSurvival instance;
-    private TimeManager timeManager;
+
 
     @Override
     public void onEnable() {
@@ -30,11 +26,8 @@ public class UNCSurvival extends JavaPlugin {
 
         // init Managers
         this.messageTchatManager = new MessageTchatManager(this);
+
         this.gameManager = new GameManager(this);
-        this.locationManager = new LocationManager(this);
-        this.itemsManager = new ItemsManager(this);
-        this.timeManager = new TimeManager(this);
-        this.scoreboardSideBarManager = new InfoScoreboardSideBarManager(this);
 
         // register commands
         this.getCommand("startuncsurvival").setExecutor(new StartCmdExec(this));
@@ -54,22 +47,6 @@ public class UNCSurvival extends JavaPlugin {
 
     public GameManager getGameManager() {
         return this.gameManager;
-    }
-
-    public LocationManager getLocationManager() {
-        return this.locationManager;
-    }
-
-    public ItemsManager getItemsManager() {
-        return this.itemsManager;
-    }
-
-    public InfoScoreboardSideBarManager getScoreboardSideBarManager() {
-        return scoreboardSideBarManager;
-    }
-
-    public TimeManager getTimeManager() {
-        return timeManager;
     }
 
     public MessageTchatManager getMessageTchatManager() {

@@ -31,7 +31,7 @@ public class AppleListener extends AbstractEventsListener{
 
         // case if objectType
 
-        switch (data.get(this.plugin.getItemsManager().getCustomitemKey(), PersistentDataType.STRING)) {
+        switch (data.get(this.plugin.getGameManager().getItemsManager().getCustomitemKey(), PersistentDataType.STRING)) {
             case "DiamondApple":
                 double baseValue = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
 
