@@ -1,10 +1,15 @@
 package teamunc.uncsurvival;
 
+import com.google.gson.Gson;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import teamunc.uncsurvival.commandesListeners.*;
 import teamunc.uncsurvival.logic.manager.*;
 import teamunc.uncsurvival.utils.LocationManager;
 import teamunc.uncsurvival.eventsListeners.AppleListener;
+
+import java.io.FileReader;
+import java.io.FileWriter;
 
 public class UNCSurvival extends JavaPlugin {
 
@@ -21,21 +26,21 @@ public class UNCSurvival extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
+        Bukkit.broadcastMessage("UNCSurvival ON");
+
         // init Managers
+        this.messageTchatManager = new MessageTchatManager(this);
         this.gameManager = new GameManager(this);
         this.locationManager = new LocationManager(this);
         this.itemsManager = new ItemsManager(this);
         this.timeManager = new TimeManager(this);
         this.scoreboardSideBarManager = new InfoScoreboardSideBarManager(this);
-        this.messageTchatManager = new MessageTchatManager(this);
 
         // register commands
         this.getCommand("startuncsurvival").setExecutor(new StartCmdExec(this));
         this.getCommand("addplayer").setExecutor(new AddPlayerCmdExec(this));
         this.getCommand("removeplayer").setExecutor(new RemovePlayerCmdExec(this));
         this.getCommand("getplayersingame").setExecutor(new GetPlayersInGameCmdExec(this));
-        this.getCommand("addspawnpoint").setExecutor(new AddSpawnPointCmdExec(this));
-        this.getCommand("removespawnpoint").setExecutor(new RemoveSpawnPointCmdExec(this));
         this.getCommand("givediamondapple").setExecutor(new GiveDiamondAppleCmdExec(this));
 
         // register events listeners

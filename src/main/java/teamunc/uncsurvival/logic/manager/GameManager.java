@@ -1,5 +1,6 @@
 package teamunc.uncsurvival.logic.manager;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -36,15 +37,6 @@ public class GameManager extends AbstractManager {
             this.messageTchatManager.sendMessageToPlayer("You need a minimum of 1 player in the game !", sender, ChatColor.RED);
             return false;
         }
-
-        // test si liste joueurs < locations
-        if (this.playersInGame.size() > this.plugin.getLocationManager().getSpawnPoints().size()) {
-            this.messageTchatManager.sendMessageToPlayer("SpawnPoints registred are lower than player in game ! ", sender, ChatColor.RED);
-            return false;
-        }
-
-        // tp all players
-        plugin.getLocationManager().spreadPlayerWithSpawnPointList(this.playersInGame);
 
         // start the timer
         UNCSurvival.getInstance().getTimeManager().startTimer();

@@ -1,7 +1,12 @@
 package teamunc.uncsurvival.logic.manager;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
+import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.utils.scoreboards.VScoreboard;
 
 import java.util.HashMap;
@@ -18,6 +23,8 @@ public class ScoreboardManager {
 
     public void addScoreboard(VScoreboard vScoreboard){
         this.scoreboardMap.put(vScoreboard.getPlayer().getUniqueId(), vScoreboard);
+        ItemStack item = new ItemStack(Material.DIAMOND_HOE);
+        item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(UNCSurvival.getInstance(), ""), PersistentDataType.INTEGER);
     }
 
     public void update(int line,String value){
