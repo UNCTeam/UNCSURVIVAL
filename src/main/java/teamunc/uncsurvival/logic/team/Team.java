@@ -1,10 +1,14 @@
 package teamunc.uncsurvival.logic.team;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import teamunc.uncsurvival.logic.player.GamePlayer;
+import teamunc.uncsurvival.utils.Region;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class Team {
@@ -12,15 +16,23 @@ public class Team {
     private final UUID uuid;
     private String name;
     private ChatColor chatColor;
+    private int score = 0;
+    private Map<Material, Integer> itemsProduction;
+    private Location spawnPoint;
+    private int range = 10;
+    private Region region;
 
     private final List<GamePlayer> members;
 
-    public Team(String name, ChatColor chatColor) {
+    public Team(String name, ChatColor chatColor, Location spawnPoint) {
         this.name = name;
         this.chatColor = chatColor;
         this.members = new ArrayList<>();
 
         this.uuid = UUID.randomUUID();
+
+        this.spawnPoint = spawnPoint;
+        this.region = new Region(spawnPoint, range);
     }
 
     public boolean hasMember(GamePlayer gamePlayer) {
