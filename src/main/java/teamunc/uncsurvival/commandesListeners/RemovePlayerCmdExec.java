@@ -6,10 +6,14 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import teamunc.uncsurvival.logic.GameManager;
+import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.utils.MessageTchatManager;
 
-public class RemovePlayerCmdExec implements CommandExecutor {
+public class RemovePlayerCmdExec extends abstractCommandExecutor implements CommandExecutor {
+    public RemovePlayerCmdExec(UNCSurvival api) {
+        super(api);
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         // error if not enougth args
@@ -23,7 +27,7 @@ public class RemovePlayerCmdExec implements CommandExecutor {
             if (response == null) {
                 MessageTchatManager.getInstance().sendMessageToPlayer("The player " + arg + "Can't be removed.",sender, ChatColor.GOLD);
             } else {
-                boolean success = GameManager.getInstance().removePlayerToTheGame(response);
+                boolean success = this.plugin.getGameManager().removePlayerToTheGame(response);
                 if (success) {
                     MessageTchatManager.getInstance().sendMessageToPlayer("The player " + arg + " has been removed to the game.",sender, ChatColor.GREEN);
                 }
