@@ -14,61 +14,8 @@ public class LocationManager {
 
     private final UNCSurvival api;
 
-    private ArrayList<Location> spawnPoints = new ArrayList<>();
-
     public LocationManager(UNCSurvival api) {
         this.api = api;
-    }
-
-    public ArrayList<Location> getSpawnPoints() {
-        return spawnPoints;
-    }
-
-    public void setSpawnPoints(ArrayList<Location> spawnPoints) {
-        this.spawnPoints = spawnPoints;
-    }
-
-    public boolean addNewSpawnPoint(Location loc) {
-        return this.spawnPoints.add(loc);
-    }
-
-    public boolean removeSpawnPoint(Location loc) {
-        boolean res = false;
-        ArrayList<Location> spawnPointsCopy = new ArrayList<>(this.spawnPoints);
-
-        for (Location location : spawnPointsCopy) {
-            if ( location.getBlockX() == loc.getBlockX()
-                    && location.getBlockY() == loc.getBlockY()
-                    && location.getBlockZ() == loc.getBlockZ() ) {
-                res = this.spawnPoints.remove(location);
-            }
-        }
-
-        return res;
-    }
-
-    public void clearSpawnPoint() {
-        this.spawnPoints = new ArrayList<>();
-    }
-
-
-    public void spreadPlayerWithSpawnPointList(Collection<Player> players) {
-        ArrayList<Player> playersArray = new ArrayList<>(players);
-
-        ArrayList<Location> shuffledSpawnPoints = this.spawnPoints;
-        Collections.shuffle(shuffledSpawnPoints);
-
-        shuffledSpawnPoints.forEach(location -> {
-            if( playersArray.size() > 0) {
-                Player playerActual = playersArray.remove(0);
-                playerActual.teleport(location);
-            }
-        });
-
-    }
-
-    public void swapPlayerRandomly() {
-        //TODO
     }
 
 }

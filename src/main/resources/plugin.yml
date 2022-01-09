@@ -28,12 +28,3 @@ commands:
     description: give a diamond apple
     usage: /givediamondapple
     permission: uncsurvival.giveDiamondApple
-
-  addspawnpoint:
-    description: Add a spawnpoint to the game
-    usage: /addspawnpoint <X> <Y> <Z>
-    permission: uncsurvival.addspawnpoint
-  removespawnpoint:
-    description: Remove a spawnpoint to the game
-    usage: /removespawnpoint <X> <Y> <Z>
-    permission: uncsurvival.removespawnpoint

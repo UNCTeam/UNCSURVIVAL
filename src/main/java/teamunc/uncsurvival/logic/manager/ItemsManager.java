@@ -8,7 +8,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
 
-public class ItemsManager extends AbstractManager{
+public class ItemsManager extends AbstractManager {
 
     private NamespacedKey customitemKey = new NamespacedKey(this.plugin,"customitem");
 
