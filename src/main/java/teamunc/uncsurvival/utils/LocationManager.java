@@ -2,6 +2,7 @@ package teamunc.uncsurvival.utils;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import teamunc.uncsurvival.UNCSurvival;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -11,16 +12,13 @@ import java.util.List;
 
 public class LocationManager {
 
-    //# SINGLETON
-    private static LocationManager instance;
-    private LocationManager() {}
-    public static LocationManager getInstance() {
-        if (LocationManager.instance == null) LocationManager.instance = new LocationManager();
-        return LocationManager.instance;
-    }
-    //# END SINGLETON
+    private final UNCSurvival api;
 
     private ArrayList<Location> spawnPoints = new ArrayList<>();
+
+    public LocationManager(UNCSurvival api) {
+        this.api = api;
+    }
 
     public ArrayList<Location> getSpawnPoints() {
         return spawnPoints;

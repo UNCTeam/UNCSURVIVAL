@@ -4,13 +4,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import teamunc.uncsurvival.utils.LocationManager;
+import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.utils.MessageTchatManager;
 
-public class RemoveSpawnPointCmdExec implements CommandExecutor {
+public class RemoveSpawnPointCmdExec extends abstractCommandExecutor {
+    public RemoveSpawnPointCmdExec(UNCSurvival api) {
+        super(api);
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         // error if not enougth args
@@ -32,7 +35,7 @@ public class RemoveSpawnPointCmdExec implements CommandExecutor {
                         Double.parseDouble(args[2])
                     );
 
-            boolean success = LocationManager.getInstance().removeSpawnPoint(loc);
+            boolean success = this.plugin.getLocationManager().removeSpawnPoint(loc);
             if (success) {
                 MessageTchatManager.getInstance().sendMessageToPlayer("The spawn point " + loc + " has been removed to the game.",sender, ChatColor.GREEN);
             }
