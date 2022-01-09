@@ -1,6 +1,6 @@
 name: UNCSURVIVAL
 version: '${project.version}'
-main: teamunc.uncsurvival.UNCSURVIVAL
+main: teamunc.uncsurvival.UNCSurvival
 api-version: 1.18
 authors: [ Delsus ]
 description: UNCSURVIVAL PRIVATE PLUGIN
@@ -23,6 +23,11 @@ commands:
     description: get players in the game
     usage: /getplayersingame
     permission: uncsurvival.getplayersingame
+
+  givediamondapple:
+    description: give a diamond apple
+    usage: /givediamondapple
+    permission: uncsurvival.giveDiamondApple
 
   addspawnpoint:
     description: Add a spawnpoint to the game
