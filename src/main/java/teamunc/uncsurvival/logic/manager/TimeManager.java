@@ -55,7 +55,7 @@ public class TimeManager extends AbstractManager{
 
     public void actionsEachSeconds() {
         // place all events that can occur each seconds
-        UNCSurvival.getInstance().getScoreboardSideBarManager().setTime(this.secondes,this.minutes);
+        plugin.getGameManager().getScoreboardManager().update();
 
         // Actualise Water Level Display
         ThirstActualiser.getInstance().actualiseDisplay();
@@ -63,7 +63,6 @@ public class TimeManager extends AbstractManager{
 
     public void actionsEachMinutes() {
         // place all events that can occur each minutes
-        UNCSurvival.getInstance().getScoreboardSideBarManager().setTime(this.secondes,this.minutes);
 
         // dicrease Water Level of 1
         ThirstActualiser.getInstance().decreaseWaterForAllRegisteredPlayers(1);
@@ -71,7 +70,9 @@ public class TimeManager extends AbstractManager{
 
     public void actionsEachPhases() {
         // place all events that can occur each phases
-        UNCSurvival.getInstance().getScoreboardSideBarManager().setPhase(this.phase);
     }
 
+    public int getSecondes() {
+        return secondes;
+    }
 }

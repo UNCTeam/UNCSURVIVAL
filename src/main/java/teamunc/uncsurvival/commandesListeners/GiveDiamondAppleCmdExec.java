@@ -18,7 +18,7 @@ public class GiveDiamondAppleCmdExec extends AbstractCommandExecutor implements 
         if (sender instanceof Player ) {
             Player p = (Player) sender;
 
-            ItemStack item = this.plugin.getItemsManager().createDiamondApple();
+            ItemStack item = this.plugin.getGameManager().getItemsManager().createDiamondApple();
 
             p.getInventory().addItem(item);
         }

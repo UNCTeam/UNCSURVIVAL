@@ -1,34 +1,31 @@
 package teamunc.uncsurvival.logic.manager;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.utils.scoreboards.InGameInfoScoreboard;
 import teamunc.uncsurvival.utils.scoreboards.VScoreboard;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ScoreboardManager {
+public class ScoreboardManager extends AbstractManager{
 
     private Map<UUID, VScoreboard> scoreboardMap;
 
-    public ScoreboardManager() {
+    public ScoreboardManager(UNCSurvival plugin) {
+        super(plugin);
         this.scoreboardMap = new HashMap<>();
     }
 
     public void addScoreboard(VScoreboard vScoreboard){
         this.scoreboardMap.put(vScoreboard.getPlayer().getUniqueId(), vScoreboard);
-        ItemStack item = new ItemStack(Material.DIAMOND_HOE);
-        item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(UNCSurvival.getInstance(), ""), PersistentDataType.INTEGER);
     }
 
-    public void update(int line,String value){
-        getScoreboardMap().forEach((uuid, vScoreboard) -> vScoreboard.updateLine(line,value));
+    public void update(){
+        getScoreboardMap().forEach((uuid, vScoreboard) -> vScoreboard.actualise());
     }
 
     public void removeScoreboard(Player player){

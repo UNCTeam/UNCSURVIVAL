@@ -7,7 +7,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import teamunc.uncsurvival.UNCSurvival;
-import teamunc.uncsurvival.logic.manager.MessageTchatManager;
 
 public class AddPlayerCmdExec extends AbstractCommandExecutor implements CommandExecutor {
 

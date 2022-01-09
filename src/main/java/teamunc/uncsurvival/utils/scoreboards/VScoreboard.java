@@ -18,4 +18,6 @@ public abstract class VScoreboard extends FastBoard {
     }
 
     public abstract List<String> getLines();
+
+    public abstract void actualise();
 }
