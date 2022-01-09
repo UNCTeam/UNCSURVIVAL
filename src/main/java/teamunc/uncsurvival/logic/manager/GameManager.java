@@ -16,8 +16,11 @@ public class GameManager extends AbstractManager {
     private Set<Player> playersInGame = new HashSet<>();
     private boolean isGameRunning = false;
 
+    private TeamsManager teamsManager;
+
     public GameManager(UNCSurvival plugin) {
         super(plugin);
+        this.teamsManager = new TeamsManager(plugin);
     }
 
     public Set<Player> getPlayersInGame() {

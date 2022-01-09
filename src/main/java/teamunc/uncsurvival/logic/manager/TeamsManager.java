@@ -8,12 +8,11 @@ import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.team.Team;
 import teamunc.uncsurvival.logic.team.TeamList;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamsManager extends AbstractManager {
+public class TeamsManager extends AbstractManager implements Serializable {
     private final List<Team> teams;
 
     public TeamsManager(UNCSurvival plugin) {
@@ -31,6 +30,7 @@ public class TeamsManager extends AbstractManager {
         teams.add(team2);
         teams.add(team3);
         teams.add(team4);
+        saveTeams();
     }
 
     public void loadTeams() {
@@ -40,7 +40,13 @@ public class TeamsManager extends AbstractManager {
     public void saveTeams() {
         final Gson gson = new Gson();
         try {
-            gson.toJson(this, new FileWriter("/"));
+            File file = new File(UNCSurvival.getInstance().getDataFolder().getAbsolutePath() + "/teams.json");
+            file.getParentFile().mkdir();
+            file.createNewFile();
+            Writer writer = new FileWriter(file, false);
+            gson.toJson(this.teams, writer);
+            writer.flush();
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

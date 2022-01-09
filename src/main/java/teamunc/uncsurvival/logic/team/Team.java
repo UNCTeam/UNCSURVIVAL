@@ -6,12 +6,13 @@ import org.bukkit.Material;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.utils.Region;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class Team {
+public class Team implements Serializable {
 
     private final UUID uuid;
     private String name;

@@ -3,6 +3,8 @@ package teamunc.uncsurvival.utils;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.io.Serializable;
+
 public class Region {
     private final World world;
     private int minX;
