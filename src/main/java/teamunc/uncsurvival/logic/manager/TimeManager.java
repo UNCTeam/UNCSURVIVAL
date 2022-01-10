@@ -15,8 +15,8 @@ public class TimeManager extends AbstractManager{
 
     private int secondes = 0;
     private int minutes = 0;
-    /** each 20 minutes */
-    private int phase = 1;
+    private int heures = 0;
+    private int jours = 0;
 
     // ID OF SCHEDULE
     private int eachSecondsTimerID;
@@ -37,11 +37,18 @@ public class TimeManager extends AbstractManager{
                                 this.actionsEachMinutes();
                             }
 
-                            // phases
-                            if (this.minutes >= 20) {
+                            // heures
+                            if (this.minutes >= 60) {
                                 this.minutes = 0;
-                                this.phase++;
-                                this.actionsEachPhases();
+                                this.heures++;
+                                this.actionsEachHours();
+                            }
+
+                            // jours
+                            if (this.heures >= 24) {
+                                this.heures = 0;
+                                this.jours++;
+                                this.actionsEachDays();
                             }
                         },
                         0L,
@@ -68,7 +75,11 @@ public class TimeManager extends AbstractManager{
         ThirstActualiser.getInstance().decreaseWaterForAllRegisteredPlayers(1);
     }
 
-    public void actionsEachPhases() {
+    public void actionsEachHours() {
+        // place all events that can occur each phases
+    }
+
+    public void actionsEachDays() {
         // place all events that can occur each phases
     }
 

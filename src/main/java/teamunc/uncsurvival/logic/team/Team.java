@@ -78,4 +78,16 @@ public class Team implements Serializable {
     public List<GamePlayer> getMembers() {
         return members;
     }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public void addScore(int score) {
+        this.score += score;
+    }
 }

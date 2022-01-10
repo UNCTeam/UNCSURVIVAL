@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TeamsManager extends AbstractManager implements Serializable {
-    private final List<Team> teams;
+    private final ArrayList<Team> teams;
 
     public TeamsManager(UNCSurvival plugin) {
         super(plugin);
@@ -30,11 +30,15 @@ public class TeamsManager extends AbstractManager implements Serializable {
         teams.add(team2);
         teams.add(team3);
         teams.add(team4);
-        saveTeams();
+        //saveTeams();
     }
 
     public void loadTeams() {
 
+    }
+
+    public ArrayList<Team> getAllTeams() {
+        return this.teams;
     }
 
     public void saveTeams() {
