@@ -3,6 +3,7 @@ package teamunc.uncsurvival.logic.team;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.utils.Region;
 
@@ -17,8 +18,8 @@ public class Team implements Serializable {
     private final UUID uuid;
     private String name;
     private ChatColor chatColor;
-    private int score = 0;
     private Map<Material, Integer> itemsProduction;
+    private int bonusScore = 0;
     private Location spawnPoint;
     private int range = 10;
     private Region region;
@@ -55,6 +56,14 @@ public class Team implements Serializable {
         }
     }
 
+    public int getItemsProduction(Material item) {
+        return itemsProduction.get(item);
+    }
+
+    public void addItemsProduction(Material item, int number) {
+        this.itemsProduction.put(item,this.itemsProduction.get(item) + number);
+    }
+
     public UUID getUuid() {
         return uuid;
     }
@@ -80,14 +89,14 @@ public class Team implements Serializable {
     }
 
     public int getScore() {
-        return score;
+        int total = 0;
+        for (Material i: this.itemsProduction.keySet()) {
+            total = UNCSurvival.getInstance().getGameManager().getItemsManager().getGoalItemScore(i) * this.itemsProduction.get(i);
+        }
+        return total;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public void addScore(int score) {
-        this.score += score;
+    public void addABonusScore(int score) {
+        this.bonusScore += score;
     }
 }

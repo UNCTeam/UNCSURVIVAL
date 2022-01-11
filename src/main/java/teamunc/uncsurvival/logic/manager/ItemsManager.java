@@ -6,11 +6,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.checkerframework.checker.units.qual.A;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.goals.GoalItem;
+
+import java.util.ArrayList;
 
 public class ItemsManager extends AbstractManager {
 
     private NamespacedKey customitemKey = new NamespacedKey(this.plugin,"customitem");
+    private ArrayList<GoalItem> goalItems = new ArrayList<>();
 
     public NamespacedKey getCustomitemKey() {
         return customitemKey;
@@ -34,5 +39,25 @@ public class ItemsManager extends AbstractManager {
         item.setItemMeta(meta);
 
         return item;
+    }
+
+    public ArrayList<GoalItem> getGoalItems() {
+        return goalItems;
+    }
+
+    public int getGoalItemScore(Material item) {
+        int res = 0;
+
+        for (GoalItem i : this.goalItems) {
+            if (i.getItem() == item) {
+                res = i.getPoints();
+            }
+        }
+
+        return res;
+    }
+
+    public void setGoalItems(ArrayList<GoalItem> goalItems) {
+        this.goalItems = goalItems;
     }
 }
