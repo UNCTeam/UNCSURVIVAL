@@ -35,6 +35,18 @@ public class ParticipantManager extends AbstractManager{
         return res;
     }
 
+    public GamePlayer getGamePlayer(String name) {
+        GamePlayer player = null;
+
+        for (GamePlayer gamePlayer : this.gamePlayers) {
+            if ( gamePlayer.getBukkitPlayer().getName() == name ) {
+                player = gamePlayer;
+            }
+        }
+
+        return player;
+    }
+
     public ArrayList<GamePlayer> getGamePlayers() {
         return gamePlayers;
     }

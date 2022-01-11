@@ -30,26 +30,25 @@ public class AppleListener extends AbstractEventsListener{
         PersistentDataContainer data = itemMeta.getPersistentDataContainer();
 
         // case if objectType
+        String customType = data.get(this.plugin.getGameManager().getItemsManager().getCustomitemKey(), PersistentDataType.STRING);
+        if (customType != null) {
+            switch (customType) {
+                case "DiamondApple":
+                    double baseValue = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
 
-        switch (data.get(this.plugin.getGameManager().getItemsManager().getCustomitemKey(), PersistentDataType.STRING)) {
-            case "DiamondApple":
-                double baseValue = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-
-                if (baseValue >= 40) {
-                    this.plugin.getMessageTchatManager().sendMessageToPlayer(" Vous aviez déjà 2 barres de coeurs !",player, ChatColor.GOLD);
-                    e.setCancelled(true);
-                } else {
-                    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(baseValue + 2);
-                    if ((baseValue + 2 ) == 40) {
-                        this.plugin.getMessageTchatManager().sendMessageToPlayer(" Vous avez maintenant votre vie au max !",player, ChatColor.GOLD);
+                    if ( baseValue >= 40 ) {
+                        this.plugin.getMessageTchatManager().sendMessageToPlayer(" Vous aviez déjà 2 barres de coeurs !", player, ChatColor.GOLD);
+                        e.setCancelled(true);
+                    } else {
+                        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(baseValue + 2);
+                        if ( (baseValue + 2) == 40 ) {
+                            this.plugin.getMessageTchatManager().sendMessageToPlayer(" Vous avez maintenant votre vie au max !", player, ChatColor.GOLD);
+                        }
                     }
-                }
 
-                break;
+                    break;
 
+            }
         }
-
-
-
     }
 }

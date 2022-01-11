@@ -11,6 +11,7 @@ import teamunc.uncsurvival.logic.team.TeamList;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class TeamsManager extends AbstractManager implements Serializable {
     private final ArrayList<Team> teams;
@@ -54,6 +55,24 @@ public class TeamsManager extends AbstractManager implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Team getTeam(String name) {
+        Team res = null;
+        Optional<Team> resOptional = this.teams.stream().filter(team -> team.getName() == name).findFirst();
+        if (resOptional.isPresent()) {
+            res = resOptional.get();
+        }
+        return res;
+    }
+
+    public Team getTeam(ChatColor color) {
+        Team res = null;
+        Optional<Team> resOptional = this.teams.stream().filter(team -> team.getChatColor() == color).findFirst();
+        if (resOptional.isPresent()) {
+            res = resOptional.get();
+        }
+        return res;
     }
 
 }

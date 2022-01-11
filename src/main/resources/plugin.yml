@@ -19,6 +19,16 @@ commands:
     description: Remove players from the game
     usage: /removeplayer <playerName> <playerName?> ...
     permission: uncsurvival.removeplayer
+
+  addplayertoteam:
+    description: Add players to a team
+    usage: /addplayertoteam <TeamColor> <ParticipantplayerName> <ParticipantplayerName?> ...
+    permission: uncsurvival.addplayertoteam
+  removeplayertoteam:
+    description: Remove players from a team
+    usage: /removeplayertoteam <TeamColor> <ParticipantplayerName> <ParticipantplayerName?> ...
+    permission: uncsurvival.removeplayertoteam
+
   getplayersingame:
     description: get players in the game
     usage: /getplayersingame
