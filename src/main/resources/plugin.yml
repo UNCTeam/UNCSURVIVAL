@@ -29,6 +29,18 @@ commands:
     usage: /removeplayertoteam <TeamColor> <ParticipantplayerName> <ParticipantplayerName?> ...
     permission: uncsurvival.removeplayertoteam
 
+  addteam:
+    description: Add a Team
+    usage: must be a player to execute this command.
+      Actual location = spawnpoint and center of the team
+      /addteam <TeamName> <TeamColor>
+    permission: uncsurvival.addteam
+
+  removeteam:
+    description: Remove a team
+    usage: /removeteam <TeamName>
+    permission: uncsurvival.removeteam
+
   getplayersingame:
     description: get players in the game
     usage: /getplayersingame

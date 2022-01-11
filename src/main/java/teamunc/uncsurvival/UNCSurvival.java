@@ -37,6 +37,8 @@ public class UNCSurvival extends JavaPlugin {
         this.getCommand("givediamondapple").setExecutor(new GiveDiamondAppleCmdExec(this));
         this.getCommand("addplayertoteam").setExecutor(new JoinTeamCmdExec(this));
         this.getCommand("removeplayertoteam").setExecutor(new LeaveTeamCmdExec(this));
+        this.getCommand("removeteam").setExecutor(new RemoveTeamCmdExec(this));
+        this.getCommand("addteam").setExecutor(new AddTeamCmdExec(this));
 
         // register events listeners
         getServer().getPluginManager().registerEvents(new AppleListener(this),this);
@@ -57,6 +59,7 @@ public class UNCSurvival extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        // Save
+        this.gameManager.save();
     }
 }
