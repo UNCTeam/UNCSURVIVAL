@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.team.Team;
 import teamunc.uncsurvival.logic.team.TeamList;
+import teamunc.uncsurvival.utils.FileService;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,52 +15,63 @@ import java.util.List;
 import java.util.Optional;
 
 public class TeamsManager extends AbstractManager implements Serializable {
-    private final ArrayList<Team> teams;
+    private TeamList teams;
 
     public TeamsManager(UNCSurvival plugin) {
         super(plugin);
-        this.teams = new ArrayList<>();
         this.init();
     }
 
     public void init() {
-        Team team1 = new Team("Rouge", ChatColor.RED, new Location(Bukkit.getWorld("world"), 0, 100, 0));
-        Team team2 = new Team("Bleu", ChatColor.BLUE, new Location(Bukkit.getWorld("world"), 50, 100, 0));
-        Team team3 = new Team("Jaune", ChatColor.YELLOW, new Location(Bukkit.getWorld("world"), 0, 100, 50));
-        Team team4 = new Team("Verte", ChatColor.GREEN, new Location(Bukkit.getWorld("world"), 50, 100, 50));
-        teams.add(team1);
-        teams.add(team2);
-        teams.add(team3);
-        teams.add(team4);
-        //saveTeams();
-    }
-
-    public void loadTeams() {
-
+        // loading teamList
+        TeamList teamListLoaded = FileService.loadTeams();
+        if (teamListLoaded != null)
+            this.teams = teamListLoaded;
+        else {
+            this.teams = new TeamList();
+            FileService.saveTeams(this.teams);
+        }
     }
 
     public ArrayList<Team> getAllTeams() {
-        return this.teams;
+        return this.teams.getTeams();
     }
 
-    public void saveTeams() {
-        final Gson gson = new Gson();
-        try {
-            File file = new File(UNCSurvival.getInstance().getDataFolder().getAbsolutePath() + "/teams.json");
-            file.getParentFile().mkdir();
-            file.createNewFile();
-            Writer writer = new FileWriter(file, false);
-            gson.toJson(this.teams, writer);
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public Team addTeam(String name, ChatColor chatColor,Location spawnPoint) {
+        Team t = null;
+        if (!this.teams.hasTeam(name)) {
+            t = new Team(name, chatColor, spawnPoint);
+            this.teams.addTeam(t);
+        }
+
+        return t;
+    }
+
+    public Team removeTeam(String name) {
+        Team team = null;
+        for (Team t : this.teams.getTeams()) {
+            if (t.getName() == name) {
+                team = t;
+                this.teams.removeTeam(t);
+            }
+        }
+
+        return team;
+    }
+
+    public void removeTeam(Team t) {
+        this.teams.removeTeam(t);
+    }
+
+    public void removeTeam(ChatColor color) {
+        for (Team t : this.teams.getTeams()) {
+            if (t.getChatColor() == color) this.teams.removeTeam(t);
         }
     }
 
     public Team getTeam(String name) {
         Team res = null;
-        Optional<Team> resOptional = this.teams.stream().filter(team -> team.getName() == name).findFirst();
+        Optional<Team> resOptional = this.teams.getTeams().stream().filter(team -> team.getName() == name).findFirst();
         if (resOptional.isPresent()) {
             res = resOptional.get();
         }
@@ -68,11 +80,16 @@ public class TeamsManager extends AbstractManager implements Serializable {
 
     public Team getTeam(ChatColor color) {
         Team res = null;
-        Optional<Team> resOptional = this.teams.stream().filter(team -> team.getChatColor() == color).findFirst();
+        Optional<Team> resOptional = this.teams.getTeams().stream().filter(team -> team.getChatColor() == color).findFirst();
         if (resOptional.isPresent()) {
             res = resOptional.get();
         }
         return res;
+    }
+
+
+    public void saveTeams() {
+        FileService.saveTeams(this.teams);
     }
 
 }

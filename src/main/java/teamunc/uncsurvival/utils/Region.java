@@ -2,31 +2,24 @@ package teamunc.uncsurvival.utils;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import teamunc.uncsurvival.UNCSurvival;
 
 import java.io.Serializable;
 
-public class Region {
-    private final World world;
+public class Region implements Serializable{
     private int minX;
     private int maxX;
     private int minZ;
     private int maxZ;
 
-    public Region(Location loc1, Location loc2) {
-        this(loc1.getWorld(), loc1.getBlockX(), loc1.getBlockZ(), loc2.getBlockX(), loc2.getBlockZ());
-    }
-
     public Region(Location loc, int range) {
-        this.world = loc.getWorld();
         this.minX = loc.getBlockX()-range;
         this.maxX = loc.getBlockX()+range;
         this.minZ = loc.getBlockZ()-range;
         this.maxZ = loc.getBlockZ()+range;
     }
 
-    public Region(World world, int x1, int z1, int x2, int z2) {
-        this.world = world;
-
+    public Region( int x1, int z1, int x2, int z2) {
         minX = Math.min(x1, x2);
         minZ = Math.min(z1, z2);
         maxX = Math.max(x1, x2);
@@ -34,7 +27,7 @@ public class Region {
     }
 
     public World getWorld() {
-        return world;
+        return UNCSurvival.getInstance().getGameManager().getMainWorld();
     }
 
     public int getMinX() {
@@ -54,7 +47,7 @@ public class Region {
     }
 
     public boolean contains(Region region) {
-        return region.getWorld().equals(world) &&
+        return region.getWorld().equals(getWorld()) &&
                 region.getMinX() >= minX && region.getMaxX() <= maxX &&
                 region.getMinZ() >= minZ && region.getMaxZ() <= maxZ;
     }
@@ -69,7 +62,7 @@ public class Region {
     }
 
     public boolean overlaps(Region region) {
-        return region.getWorld().equals(world) &&
+        return region.getWorld().equals(getWorld()) &&
                 !(region.getMinX() > maxX || region.getMinZ() > maxZ ||
                         minZ > region.getMaxX() || minZ > region.getMaxZ());
     }
@@ -83,7 +76,7 @@ public class Region {
             return false;
         }
         final Region other = (Region) obj;
-        return world.equals(other.world)
+        return getWorld().equals(other.getWorld())
                 && minX == other.minX
                 && minZ == other.minZ
                 && maxX == other.maxX
@@ -92,7 +85,7 @@ public class Region {
 
     @Override
     public String toString() {
-        return "Region[world:" + world.getName() +
+        return "Region[world:" + getWorld().getName() +
                 ", minX:" + minX +
                 ", minZ:" + minZ +
                 ", maxX:" + maxX +

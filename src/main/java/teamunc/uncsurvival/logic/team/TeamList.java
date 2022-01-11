@@ -1,26 +1,43 @@
 package teamunc.uncsurvival.logic.team;
 
 import org.bukkit.ChatColor;
+import teamunc.uncsurvival.UNCSurvival;
 
-public enum TeamList {
-    TEAM_1(ChatColor.RED, "Team Rouge"),
-    TEAM_2(ChatColor.YELLOW, "Team Jaune"),
-    TEAM_3(ChatColor.GREEN, "Team Verte"),
-    TEAM_4(ChatColor.BLUE, "Team Bleue");
+import java.io.Serializable;
+import java.util.ArrayList;
 
-    private ChatColor chatColor;
-    private String name;
+public class TeamList implements Serializable {
+    private static transient final long serialVersionUID = -1681012206529286330L;
+    private ArrayList<Team> teams = new ArrayList<>();
 
-    TeamList(ChatColor chatColor, String name) {
-        this.chatColor = chatColor;
-        this.name = name;
+    public TeamList() {
     }
 
-    public ChatColor getChatColor() {
-        return chatColor;
+    public ArrayList<Team> getTeams() {
+        return teams;
     }
 
-    public String getName() {
-        return name;
+    public void addTeam(Team team) {
+        this.teams.add(team);
     }
+
+    public void removeTeam(Team team) {
+        this.teams.remove(team);
+    }
+
+    public Team getTeam(String name) {
+        Team t = null;
+
+        for (Team team : this.teams) {
+            if ( team.getName().equals(name) ) t = team;
+        }
+
+        return t;
+    }
+
+    public boolean hasTeam(String name) {
+        return (this.getTeam(name) != null);
+    }
+
+
 }

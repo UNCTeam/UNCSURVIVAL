@@ -8,17 +8,14 @@ import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.utils.Region;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Team implements Serializable {
 
     private final UUID uuid;
     private String name;
     private ChatColor chatColor;
-    private Map<Material, Integer> itemsProduction;
+    private Map<Material, Integer> itemsProduction = new HashMap<>();
     private int bonusScore = 0;
     private Location spawnPoint;
     private int range = 10;

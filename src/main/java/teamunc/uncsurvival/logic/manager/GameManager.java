@@ -2,6 +2,7 @@ package teamunc.uncsurvival.logic.manager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import teamunc.uncsurvival.UNCSurvival;
@@ -46,6 +47,10 @@ public class GameManager extends AbstractManager {
         }
 
         return set;
+    }
+
+    public World getMainWorld() {
+        return Bukkit.getWorlds().get(0);
     }
 
     public boolean start(CommandSender sender) {
@@ -124,5 +129,9 @@ public class GameManager extends AbstractManager {
     }
     public TimeManager getTimeManager() {
         return timeManager;
+    }
+
+    public void save() {
+        this.getTeamsManager().saveTeams();
     }
 }
