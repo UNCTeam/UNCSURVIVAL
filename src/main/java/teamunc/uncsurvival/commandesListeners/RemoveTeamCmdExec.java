@@ -22,7 +22,7 @@ public class RemoveTeamCmdExec extends AbstractCommandExecutor{
             // Name
             String name = args[0];
 
-            // Team creation
+            // Team remove
             Team t = UNCSurvival.getInstance().getGameManager().getTeamsManager().removeTeam(name);
             if (t == null)
                 plugin.getMessageTchatManager().sendMessageToPlayer("You can't delete the team " + name + ".",

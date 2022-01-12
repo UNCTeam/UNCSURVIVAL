@@ -50,11 +50,11 @@ public class TeamsManager extends AbstractManager implements Serializable {
     public Team removeTeam(String name) {
         Team team = null;
         for (Team t : this.teams.getTeams()) {
-            if (t.getName() == name) {
+            if ( t.getName().equals(name) ) {
                 team = t;
-                this.teams.removeTeam(t);
             }
         }
+        this.teams.removeTeam(team);
 
         return team;
     }
@@ -70,12 +70,7 @@ public class TeamsManager extends AbstractManager implements Serializable {
     }
 
     public Team getTeam(String name) {
-        Team res = null;
-        Optional<Team> resOptional = this.teams.getTeams().stream().filter(team -> team.getName() == name).findFirst();
-        if (resOptional.isPresent()) {
-            res = resOptional.get();
-        }
-        return res;
+        return this.teams.getTeam(name);
     }
 
     public Team getTeam(ChatColor color) {
