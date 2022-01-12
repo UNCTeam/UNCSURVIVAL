@@ -1,20 +1,17 @@
 package teamunc.uncsurvival;
 
-import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import teamunc.uncsurvival.commandesListeners.*;
 import teamunc.uncsurvival.logic.manager.*;
 import teamunc.uncsurvival.eventsListeners.AppleListener;
-
-import java.io.FileReader;
-import java.io.FileWriter;
+import teamunc.uncsurvival.logic.manager.FileManager;
 
 public class UNCSurvival extends JavaPlugin {
 
     private GameManager gameManager;
     private MessageTchatManager messageTchatManager;
-
+    private FileManager fileManager;
     private static UNCSurvival instance;
 
 
@@ -24,10 +21,13 @@ public class UNCSurvival extends JavaPlugin {
 
         Bukkit.broadcastMessage("UNCSurvival ON");
 
+        // init File Manager
+        this.fileManager = new FileManager(this);
+
         // init Managers
         this.messageTchatManager = new MessageTchatManager(this);
-
         this.gameManager = new GameManager(this);
+
 
         // register commands
         this.getCommand("startuncsurvival").setExecutor(new StartCmdExec(this));
@@ -55,6 +55,10 @@ public class UNCSurvival extends JavaPlugin {
 
     public MessageTchatManager getMessageTchatManager() {
         return messageTchatManager;
+    }
+
+    public FileManager getFileManager() {
+        return fileManager;
     }
 
     @Override

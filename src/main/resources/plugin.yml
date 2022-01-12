@@ -1,4 +1,4 @@
-name: UNCSURVIVAL
+name: UNCSurvival
 version: '${project.version}'
 main: teamunc.uncsurvival.UNCSurvival
 api-version: 1.18
