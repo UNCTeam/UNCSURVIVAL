@@ -49,7 +49,7 @@ public class ThirstActualiser {
     public void damageAllnoWater() {
         for (String playername : this.getThirstPerPlayerName().keySet()) {
             Player p = Bukkit.getPlayer(playername);
-            if (p.isOnline() && this.getThirstPerPlayerName().get(playername) == 0) {
+            if (p != null && this.getThirstPerPlayerName().get(playername) == 0) {
                 p.damage(1);
             }
         }
