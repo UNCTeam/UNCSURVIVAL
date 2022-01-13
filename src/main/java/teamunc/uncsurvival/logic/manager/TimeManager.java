@@ -66,6 +66,9 @@ public class TimeManager extends AbstractManager{
 
         // Actualise Water Level Display
         ThirstActualiser.getInstance().actualiseDisplay();
+
+        // damage due to Water
+        if (this.secondes%5 == 0) ThirstActualiser.getInstance().damageAllnoWater();
     }
 
     public void actionsEachMinutes() {
