@@ -1,4 +1,4 @@
-package teamunc.uncsurvival.eventsListeners;
+package teamunc.uncsurvival.eventsListeners.customsItems;
 
 import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
@@ -10,15 +10,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.eventsListeners.AbstractEventsListener;
 
-public class AppleListener extends AbstractEventsListener{
+public class ConsumeListenerCustom extends AbstractEventsListener {
 
-    public AppleListener(UNCSurvival plugin) {
+    public ConsumeListenerCustom(UNCSurvival plugin) {
         super(plugin);
     }
 
     @EventHandler
-    public void onAppleEated(PlayerItemConsumeEvent e) {
+    public void onExecute(PlayerItemConsumeEvent e) {
         // taking Data of the player
         Player player = e.getPlayer();
 
@@ -47,7 +48,6 @@ public class AppleListener extends AbstractEventsListener{
                     }
 
                     break;
-
             }
         }
     }

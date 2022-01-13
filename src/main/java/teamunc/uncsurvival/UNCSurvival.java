@@ -3,8 +3,8 @@ package teamunc.uncsurvival;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import teamunc.uncsurvival.commandesListeners.*;
+import teamunc.uncsurvival.eventsListeners.EventsManager;
 import teamunc.uncsurvival.logic.manager.*;
-import teamunc.uncsurvival.eventsListeners.AppleListener;
 import teamunc.uncsurvival.logic.manager.FileManager;
 
 public class UNCSurvival extends JavaPlugin {
@@ -13,7 +13,7 @@ public class UNCSurvival extends JavaPlugin {
     private MessageTchatManager messageTchatManager;
     private FileManager fileManager;
     private static UNCSurvival instance;
-
+    private EventsManager eventsManager;
 
     @Override
     public void onEnable() {
@@ -27,7 +27,7 @@ public class UNCSurvival extends JavaPlugin {
         // init Managers
         this.messageTchatManager = new MessageTchatManager(this);
         this.gameManager = new GameManager(this);
-
+        this.eventsManager = new EventsManager(this);
 
         // register commands
         this.getCommand("startuncsurvival").setExecutor(new StartCmdExec(this));
@@ -39,9 +39,6 @@ public class UNCSurvival extends JavaPlugin {
         this.getCommand("removeplayertoteam").setExecutor(new LeaveTeamCmdExec(this));
         this.getCommand("removeteam").setExecutor(new RemoveTeamCmdExec(this));
         this.getCommand("addteam").setExecutor(new AddTeamCmdExec(this));
-
-        // register events listeners
-        getServer().getPluginManager().registerEvents(new AppleListener(this),this);
 
     }
 
@@ -65,5 +62,9 @@ public class UNCSurvival extends JavaPlugin {
     public void onDisable() {
         // Save
         this.gameManager.save();
+    }
+
+    public EventsManager getEventsManager() {
+        return this.eventsManager;
     }
 }

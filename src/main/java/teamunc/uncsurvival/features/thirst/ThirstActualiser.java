@@ -61,14 +61,26 @@ public class ThirstActualiser {
         }
     }
 
-    public void increaseWater(int waterToAdd, String playerName) {
+    /**
+     * (i.e. waterPlayer = 10 + 14 from waterToAdd = 20 cause max and return true)
+     * (i.e. waterPlayer = 20 + 14 from waterToAdd = 20 cause max and return false)
+     * @param waterToAdd
+     * @param playerName
+     * @return false if water is full
+     */
+    public boolean increaseWater(int waterToAdd, String playerName) {
         int actualWater = this.getThirstPerPlayerName().get(playerName);
-
-        // set to 20 if higher than 20
-        if (actualWater + waterToAdd > 20)
-            this.getThirstPerPlayerName().put(playerName,20);
-        else
-            this.getThirstPerPlayerName().put(playerName,actualWater + 1);
+        boolean res = true;
+        if (actualWater == 20) {
+            res = false;
+        } else {
+            // set to 20 if higher than 20
+            if ( actualWater + waterToAdd > 20 )
+                this.getThirstPerPlayerName().put(playerName, 20);
+            else
+                this.getThirstPerPlayerName().put(playerName, actualWater + waterToAdd);
+        }
+        return res;
     }
 
     public void actualiseDisplay() {
