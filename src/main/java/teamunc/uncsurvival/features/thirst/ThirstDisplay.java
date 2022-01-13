@@ -19,8 +19,10 @@ public class ThirstDisplay {
     public void ActualiseDisplayForPlayers(HashMap<String,Integer> playersScore) {
         playersScore.forEach((playerName, integer) -> {
             Player p = Bukkit.getPlayerExact(playerName);
-            String actionBarText = "thirst.normal." + integer;
-            p.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TranslatableComponent(actionBarText));
+            if (p != null) {
+                String actionBarText = "thirst.normal." + integer;
+                p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TranslatableComponent(actionBarText));
+            }
         });
         }
 }

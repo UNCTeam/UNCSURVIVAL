@@ -3,12 +3,12 @@ package teamunc.uncsurvival.logic.manager;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.player.PlayersInformations;
 import teamunc.uncsurvival.logic.team.TeamList;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -17,7 +17,8 @@ import java.util.zip.GZIPOutputStream;
  */
 public class FileManager extends AbstractManager{
     private String teamList_path;
-    private String GameConfiguration_path;
+    private String gameConfiguration_path;
+    private String playersInfos_path;
     private File pluginDataFile;
 
     public FileManager(UNCSurvival plugin) {
@@ -29,28 +30,57 @@ public class FileManager extends AbstractManager{
 
         // init paths
         this.teamList_path = this.pluginDataFile.getPath() + "/teams.unc_save";
-        this.GameConfiguration_path = this.pluginDataFile.getPath() + "/game_config.unc_save";
+        this.gameConfiguration_path = this.pluginDataFile.getPath() + "/game_config.unc_save";
+        this.playersInfos_path = this.pluginDataFile.getPath() + "/players_infos.unc_save";
     }
 
-    public boolean saveTeams( TeamList teamList) {
+    public boolean saveTeams(TeamList teamList) {
         try {
-            BukkitObjectOutputStream out = new BukkitObjectOutputStream(new GZIPOutputStream(new FileOutputStream(teamList_path)));
-            out.writeObject(teamList);
-            out.close();
+            this.save(teamList,teamList_path);
             return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             return false;
         }
     }
 
     public TeamList loadTeams() {
         try {
-            BukkitObjectInputStream in = new BukkitObjectInputStream(new GZIPInputStream(new FileInputStream(teamList_path)));
-            TeamList teamList = (TeamList) in.readObject();
-            in.close();
+            TeamList teamList = (TeamList) this.load(teamList_path);
             return teamList;
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public boolean savePlayersInfos(PlayersInformations playersInfos) {
+        try {
+            this.save(playersInfos,playersInfos_path);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public PlayersInformations loadPlayersInfos() {
+        try {
+            PlayersInformations playersInfos = (PlayersInformations) this.load(playersInfos_path);
+            return playersInfos;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+
+    private void save(Object o, String path) throws Exception{
+            BukkitObjectOutputStream out = new BukkitObjectOutputStream(new GZIPOutputStream(new FileOutputStream(path)));
+            out.writeObject(o);
+            out.close();
+    }
+
+    private Object load(String path) throws Exception{
+            BukkitObjectInputStream in = new BukkitObjectInputStream(new GZIPInputStream(new FileInputStream(path)));
+            Object res =  in.readObject();
+            in.close();
+            return res;
     }
 }

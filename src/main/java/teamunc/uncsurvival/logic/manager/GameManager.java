@@ -8,10 +8,13 @@ import org.bukkit.entity.Player;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.features.thirst.ThirstActualiser;
 import teamunc.uncsurvival.logic.player.GamePlayer;
+import teamunc.uncsurvival.logic.player.PlayersInformations;
+import teamunc.uncsurvival.logic.team.TeamList;
 import teamunc.uncsurvival.utils.LocationManager;
 import teamunc.uncsurvival.utils.scoreboards.InGameInfoScoreboard;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,6 +29,7 @@ public class GameManager extends AbstractManager {
     private ScoreboardManager scoreboardManager;
     private TimeManager timeManager;
     private PhaseManager phaseManager;
+    private PlayersInformations playersInformations;
 
     public GameManager(UNCSurvival plugin) {
         super(plugin);
@@ -37,6 +41,14 @@ public class GameManager extends AbstractManager {
         this.timeManager = new TimeManager(plugin);
         this.phaseManager = new PhaseManager(plugin);
 
+        // load playersInformation
+        PlayersInformations playersInfos = this.plugin.getFileManager().loadPlayersInfos();
+        if (playersInfos != null)
+            this.playersInformations = playersInfos;
+        else {
+            this.playersInformations = new PlayersInformations();
+            this.plugin.getFileManager().savePlayersInfos(this.playersInformations);
+        }
     }
 
     public Set<Player> getPlayersInGame() {
@@ -130,8 +142,14 @@ public class GameManager extends AbstractManager {
     public TimeManager getTimeManager() {
         return timeManager;
     }
+    public PlayersInformations getPlayersInformations() {
+        return this.playersInformations;
+    }
 
     public void save() {
         this.getTeamsManager().saveTeams();
+        this.plugin.getFileManager().savePlayersInfos(this.playersInformations);
     }
+
+
 }
