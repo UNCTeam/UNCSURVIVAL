@@ -58,13 +58,13 @@ public class UNCSurvival extends JavaPlugin {
         return fileManager;
     }
 
+    public EventsManager getEventsManager() {
+        return this.eventsManager;
+    }
+
     @Override
     public void onDisable() {
         // Save
         this.gameManager.save();
-    }
-
-    public EventsManager getEventsManager() {
-        return this.eventsManager;
     }
 }
