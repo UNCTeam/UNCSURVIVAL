@@ -19,7 +19,6 @@ public class InterfacesManager extends AbstractManager{
     }
 
     public void init() {
-        this.plugin.getMessageTchatManager().sendGeneralMesssage("EH OH");
 
         // load playersInformation
         // TODO ici bug, ca save mais ca load pas
