@@ -2,18 +2,19 @@ package teamunc.uncsurvival.logic.manager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.configuration.GameConfiguration;
+import teamunc.uncsurvival.logic.configuration.GameRuleConfiguration;
 import teamunc.uncsurvival.logic.interfaces.GameInterfaceList;
 import teamunc.uncsurvival.logic.player.PlayersInformations;
 import teamunc.uncsurvival.logic.team.TeamList;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.zip.GZIPInputStream;
@@ -24,6 +25,7 @@ import java.util.zip.GZIPOutputStream;
  */
 public class FileManager extends AbstractManager{
     private String teamList_path;
+    private String gameRuleConfiguration_path;
     private String gameConfiguration_path;
     private String playersInfos_path;
     private String interfaces_path;
@@ -38,9 +40,53 @@ public class FileManager extends AbstractManager{
 
         // init paths
         this.teamList_path = this.pluginDataFile.getPath() + "/teams.unc_save";
-        this.gameConfiguration_path = this.pluginDataFile.getPath() + "/game_config.unc_save";
-        this.playersInfos_path = this.pluginDataFile.getPath() + "/players_infos.unc_save";
+        this.gameRuleConfiguration_path = this.pluginDataFile.getPath() + "/game-config.json";
+        this.gameConfiguration_path = this.pluginDataFile.getPath() + "/gamerule-config.json";
+        this.playersInfos_path = this.pluginDataFile.getPath() + "/players-infos.unc_save";
         this.interfaces_path = this.pluginDataFile.getPath() + "/interfaces.unc_save";
+    }
+
+    public GameConfiguration loadGameConfiguration() {
+        try {
+            GameConfiguration gameConfiguration = (GameConfiguration) this.loadJson(gameConfiguration_path, GameConfiguration.class);
+            return gameConfiguration;
+        } catch (Exception e) {
+            Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
+            return null;
+        }
+    }
+
+    public boolean saveGameConfiguration(GameConfiguration gameConfiguration) {
+        try {
+            Gson gson = new Gson();
+            Bukkit.broadcastMessage(gameConfiguration.getDatePhase3().toString());
+            Bukkit.broadcastMessage(gson.toJson(gameConfiguration));
+            this.saveJson(gameConfiguration, gameConfiguration_path);
+            return true;
+        } catch (Exception e) {
+            Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
+            return false;
+        }
+    }
+
+    public GameRuleConfiguration loadGameRuleConfiguration() {
+        try {
+            GameRuleConfiguration gameRuleConfiguration = (GameRuleConfiguration) this.loadJson(gameRuleConfiguration_path, GameRuleConfiguration.class);
+            return gameRuleConfiguration;
+        } catch (Exception e) {
+            Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
+            return null;
+        }
+    }
+
+    public boolean saveGameRuleConfiguration(GameRuleConfiguration gameRuleConfiguration) {
+        try {
+            this.saveJson(gameRuleConfiguration,gameRuleConfiguration_path);
+            return true;
+        } catch (Exception e) {
+            Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
+            return false;
+        }
     }
 
     public boolean saveTeams(TeamList teamList) {
@@ -48,6 +94,7 @@ public class FileManager extends AbstractManager{
             this.save(teamList,teamList_path);
             return true;
         } catch (Exception e) {
+            Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
             return false;
         }
     }
@@ -57,6 +104,7 @@ public class FileManager extends AbstractManager{
             TeamList teamList = (TeamList) this.load(teamList_path);
             return teamList;
         } catch (Exception e) {
+            Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
             return null;
         }
     }
@@ -66,6 +114,7 @@ public class FileManager extends AbstractManager{
             this.save(playersInfos,playersInfos_path);
             return true;
         } catch (Exception e) {
+            Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
             return false;
         }
     }
@@ -75,6 +124,7 @@ public class FileManager extends AbstractManager{
             PlayersInformations playersInfos = (PlayersInformations) this.load(playersInfos_path);
             return playersInfos;
         } catch (Exception e) {
+            Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
             return null;
         }
     }
@@ -116,13 +166,25 @@ public class FileManager extends AbstractManager{
     }
 
     private void saveJson(Object o, String path) throws Exception {
-        new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()
-                .toJson(o, new FileWriter(path));
+        try (Writer writer = new FileWriter(path)) {
+            Gson gson = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                    .disableHtmlEscaping()
+                    .create();
+            gson.toJson(o, writer);
+        }
     }
 
-    private Object loadJson(String path) throws Exception {
-        Gson gson = new Gson();
-        Object res = gson.fromJson(Files.newBufferedReader(Paths.get(path)), Object.class);
-        return res;
+    private <T> T loadJson(String path, Class<T> clazz) throws Exception {
+        Reader reader = Files.newBufferedReader(Paths.get(path));
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .disableHtmlEscaping()
+                .create();
+        T object = gson.fromJson(reader, clazz);
+        reader.close();
+        return object;
     }
 }

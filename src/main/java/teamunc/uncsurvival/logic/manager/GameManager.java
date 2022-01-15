@@ -1,27 +1,32 @@
 package teamunc.uncsurvival.logic.manager;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.features.thirst.ThirstActualiser;
+import teamunc.uncsurvival.logic.configuration.GameConfiguration;
+import teamunc.uncsurvival.logic.configuration.GameRuleConfiguration;
+import teamunc.uncsurvival.logic.goals.GoalItem;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.player.PlayersInformations;
 import teamunc.uncsurvival.logic.team.TeamList;
 import teamunc.uncsurvival.utils.LocationManager;
 import teamunc.uncsurvival.utils.scoreboards.InGameInfoScoreboard;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.*;
 
 public class GameManager extends AbstractManager {
 
     private boolean isGameRunning = false;
 
+    /* Configuration */
+    private GameConfiguration gameConfiguration;
+    private GameRuleConfiguration gameRuleConfiguration;
+
+    /* Mananger */
     private TeamsManager teamsManager;
     private LocationManager locationManager;
     private ItemsManager itemsManager;
@@ -43,14 +48,38 @@ public class GameManager extends AbstractManager {
         this.phaseManager = new PhaseManager(plugin);
         this.interfacesManager = new InterfacesManager(plugin);
 
-        // load playersInformation
-        PlayersInformations playersInfos = this.plugin.getFileManager().loadPlayersInfos();
-        if (playersInfos != null)
-            this.playersInformations = playersInfos;
-        else {
-            this.playersInformations = new PlayersInformations();
-            this.plugin.getFileManager().savePlayersInfos(this.playersInformations);
-        }
+        this.loadPlayerInformation();
+        this.loadGameRuleConfiguration();
+        this.loadGameConfiguration();
+        this.loadPlayerInformation();
+
+    }
+
+    public void loadGameRuleConfiguration() {
+        this.gameRuleConfiguration = this.plugin.getFileManager().loadGameRuleConfiguration();
+        //if(this.gameRuleConfiguration == null) {
+            HashMap<GameRule, Boolean> gamerules = new HashMap<GameRule, Boolean>();
+            gamerules.put(GameRule.DISABLE_ELYTRA_MOVEMENT_CHECK, true);
+            gamerules.put(GameRule.DO_FIRE_TICK, true);
+            gamerules.put(GameRule.DROWNING_DAMAGE, false);
+            this.gameRuleConfiguration = new GameRuleConfiguration(gamerules);
+        //}
+    }
+
+    public void loadGameConfiguration() {
+        this.gameConfiguration = this.plugin.getFileManager().loadGameConfiguration();
+        //if(this.gameConfiguration == null) {
+            Date phase1 = Date.from(Instant.now());
+            Date phase2 = Date.from(Instant.now());
+            ArrayList<GoalItem> goalItems = new ArrayList<>();
+            goalItems.add(new GoalItem(Material.IRON_AXE, 20));
+            goalItems.add(new GoalItem(Material.DIAMOND, 40));
+            this.gameConfiguration = new GameConfiguration(phase2, phase1, goalItems);
+        //}
+    }
+
+    public void loadPlayerInformation() {
+        this.playersInformations = this.plugin.getFileManager().loadPlayersInfos();
     }
 
     public Set<Player> getPlayersInGame() {
@@ -156,6 +185,8 @@ public class GameManager extends AbstractManager {
         this.getInterfacesManager().save();
 
         this.plugin.getFileManager().savePlayersInfos(this.playersInformations);
+        this.plugin.getFileManager().saveGameConfiguration(this.gameConfiguration);
+        this.plugin.getFileManager().saveGameRuleConfiguration(this.gameRuleConfiguration);
 
     }
 
