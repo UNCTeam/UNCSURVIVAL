@@ -29,14 +29,7 @@ public class LeaveTeamCmdExec extends AbstractCommandExecutor{
                 Team team = this.plugin.getGameManager().getTeamsManager().getTeam(ChatColor.valueOf(teamColor));
 
                 for (String playerName : playersName) {
-                    GamePlayer player = this.plugin.getGameManager().getParticipantManager().getGamePlayer(playerName);
-
-                    if (player != null) {
-                        team.quit(player);
-                    } else {
-                        commandValid = false;
-                        this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! The player isn't in the participants !",sender, ChatColor.RED);
-                    }
+                    this.plugin.getGameManager().getParticipantManager().removePlayer(playerName);
                 }
             } else {
                 commandValid = false;

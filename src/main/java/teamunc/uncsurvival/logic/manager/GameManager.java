@@ -52,6 +52,7 @@ public class GameManager extends AbstractManager {
         this.loadGameRuleConfiguration();
         this.loadGameConfiguration();
         this.loadPlayerInformation();
+        this.getParticipantManager().loadParticipants();
 
     }
 
@@ -107,19 +108,6 @@ public class GameManager extends AbstractManager {
         return true;
     }
 
-    /**
-     *
-     * @param player
-     * @return false if the player already exist in the list
-     */
-    public boolean addPlayerToTheGame(Player player) {
-
-        // adding and creating GamePlayer
-        this.participantManager.addPlayer(player);
-
-        return true;
-    }
-
     public void addInGameScoreboard() {
         for (GamePlayer p : this.participantManager.getGamePlayers()) {
             Player player = p.getBukkitPlayer();
@@ -168,7 +156,7 @@ public class GameManager extends AbstractManager {
     public void save() {
         this.getTeamsManager().saveTeams();
         this.getInterfacesManager().save();
-
+        this.getParticipantManager().saveParticipants();
         this.plugin.getFileManager().savePlayersInfos(this.playersInformations);
     }
 

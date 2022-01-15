@@ -25,16 +25,22 @@ public class JoinTeamCmdExec extends AbstractCommandExecutor{
             for (int i = 1; i < args.length; i++) {
                 playersName.add(args[i]);
             }
-            if ( ChatColor.valueOf(teamColor) != null ) {
-                Team team = this.plugin.getGameManager().getTeamsManager().getTeam(ChatColor.valueOf(teamColor));
-
-                for (String playerName : playersName) {
-                    GamePlayer player = this.plugin.getGameManager().getParticipantManager().getGamePlayer(playerName);
-                    team.join(player);
-                }
-            } else {
-                commandValid = false;
+            if ( ChatColor.valueOf(teamColor) == null ) {
                 this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like \"AQUA\"",sender, ChatColor.RED);
+                return false;
+            }
+            Team team = this.plugin.getGameManager().getTeamsManager().getTeam(ChatColor.valueOf(teamColor));
+            if(team == null) {
+                this.messageTchatManager.sendMessageToPlayer("La team n'existe pas",sender, ChatColor.RED);
+                return false;
+            }
+            for (String playerName : playersName) {
+                try {
+                    this.plugin.getGameManager().getParticipantManager().addPlayer(team, playerName);
+                } catch (Exception e) {
+                    commandValid = false;
+                    this.messageTchatManager.sendMessageToPlayer(e.toString(),sender, ChatColor.RED);
+                }
             }
         } else {
             commandValid = false;

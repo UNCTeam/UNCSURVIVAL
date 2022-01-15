@@ -16,7 +16,9 @@ import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 import teamunc.uncsurvival.logic.configuration.GameRuleConfiguration;
 import teamunc.uncsurvival.logic.goals.GoalItem;
 import teamunc.uncsurvival.logic.interfaces.GameInterfaceList;
+import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.player.PlayersInformations;
+import teamunc.uncsurvival.logic.team.Team;
 import teamunc.uncsurvival.logic.team.TeamList;
 
 import java.io.*;
@@ -160,6 +162,24 @@ public class FileManager extends AbstractManager{
         } catch (Exception e) {
             Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + e.toString());
             return null;
+        }
+    }
+
+    public HashMap<GamePlayer, Team> loadParticipants() {
+        try {
+            HashMap<GamePlayer, Team> players = (HashMap<GamePlayer, Team>) this.load(this.pluginDataFile.getPath() + "players.unc_save");
+            return players;
+        } catch (Exception e) {
+            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + e.toString());
+            return null;
+        }
+    }
+
+    public void saveParticipants(HashMap<GamePlayer, Team> playersByTeam) {
+        try {
+            this.save(playersByTeam, this.pluginDataFile.getPath() + "players.unc_save");
+        } catch (Exception e) {
+            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + e.toString());
         }
     }
 

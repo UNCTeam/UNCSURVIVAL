@@ -4,11 +4,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import teamunc.uncsurvival.utils.scoreboards.FastBoard;
 
+import java.io.Serializable;
+import java.util.Objects;
 import java.util.UUID;
 
-public class GamePlayer {
-    protected final UUID uuid;
-    protected final Player bukkitPlayer;
+public class GamePlayer implements Serializable {
+    private final UUID uuid;
+    private final Player bukkitPlayer;
 
     public GamePlayer(Player bukkitPlayer) {
         this.bukkitPlayer = bukkitPlayer;
@@ -21,5 +23,18 @@ public class GamePlayer {
 
     public Player getBukkitPlayer() {
         return bukkitPlayer;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GamePlayer that = (GamePlayer) o;
+        return Objects.equals(uuid, that.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid);
     }
 }
