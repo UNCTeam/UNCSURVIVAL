@@ -1,17 +1,19 @@
 package teamunc.uncsurvival.logic.manager;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.interfaces.GameInterfaceList;
+import teamunc.uncsurvival.logic.interfaces.GoalCustomInterface;
 
 
 public class InterfacesManager extends AbstractManager{
 
-    private GameInterfaceList gameInterfaceList;
+    private GameInterfaceList gameInterfaceList = new GameInterfaceList();
+
 
     public InterfacesManager(UNCSurvival plugin) {
         super(plugin);
@@ -32,10 +34,14 @@ public class InterfacesManager extends AbstractManager{
         Inventory inv = this.gameInterfaceList.getInterface(location);
 
         if (inv == null) {
-            inv = Bukkit.createInventory(null,27,"\uF80Bꈃ");
+            inv = new GoalCustomInterface(1).updateName(5,1000);
+
             this.gameInterfaceList.addInterface(location,inv);
         }
 
         player.openInventory(inv);
     }
+
+
+
 }

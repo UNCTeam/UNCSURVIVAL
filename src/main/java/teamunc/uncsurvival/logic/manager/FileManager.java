@@ -91,7 +91,6 @@ public class FileManager extends AbstractManager{
     }
 
     private void saveJson(Object o, String path) throws Exception {
-        plugin.getMessageTchatManager().sendGeneralMesssage(o.toString());
         new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()
                 .toJson(o, new FileWriter(path));
     }
