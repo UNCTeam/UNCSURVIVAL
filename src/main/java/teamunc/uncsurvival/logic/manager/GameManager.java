@@ -153,7 +153,6 @@ public class GameManager extends AbstractManager {
 
     public void save() {
         this.getTeamsManager().saveTeams();
-        this.getInterfacesManager().save();
 
         this.plugin.getFileManager().savePlayersInfos(this.playersInformations);
 

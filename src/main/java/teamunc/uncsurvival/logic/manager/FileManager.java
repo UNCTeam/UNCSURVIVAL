@@ -26,7 +26,6 @@ public class FileManager extends AbstractManager{
     private String teamList_path;
     private String gameConfiguration_path;
     private String playersInfos_path;
-    private String interfaces_path;
     private File pluginDataFile;
 
     public FileManager(UNCSurvival plugin) {
@@ -40,7 +39,6 @@ public class FileManager extends AbstractManager{
         this.teamList_path = this.pluginDataFile.getPath() + "/teams.unc_save";
         this.gameConfiguration_path = this.pluginDataFile.getPath() + "/game_config.unc_save";
         this.playersInfos_path = this.pluginDataFile.getPath() + "/players_infos.unc_save";
-        this.interfaces_path = this.pluginDataFile.getPath() + "/interfaces.unc_save";
     }
 
     public boolean saveTeams(TeamList teamList) {
@@ -79,29 +77,6 @@ public class FileManager extends AbstractManager{
         }
     }
 
-    public boolean saveInterfaces(GameInterfaceList gameInterfaceList) {
-        try {
-            plugin.getMessageTchatManager().sendGeneralMesssage(gameInterfaceList.getInterfaces().values().toString());
-            this.save(gameInterfaceList,interfaces_path);
-            return true;
-        } catch (Exception e) {
-            Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
-            return false;
-        }
-    }
-
-    public GameInterfaceList loadInterfaces() {
-        try {
-            GameInterfaceList gameInterfaceList = (GameInterfaceList) this.load(interfaces_path);
-            plugin.getMessageTchatManager().sendGeneralMesssage(gameInterfaceList.getInterfaces().values().toString());
-            return gameInterfaceList;
-        } catch (Exception e) {
-            Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
-            return null;
-        }
-    }
-
-
     private void save(Object o, String path) throws Exception{
             BukkitObjectOutputStream out = new BukkitObjectOutputStream(new GZIPOutputStream(new FileOutputStream(path)));
             out.writeObject(o);
@@ -116,6 +91,7 @@ public class FileManager extends AbstractManager{
     }
 
     private void saveJson(Object o, String path) throws Exception {
+        plugin.getMessageTchatManager().sendGeneralMesssage(o.toString());
         new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()
                 .toJson(o, new FileWriter(path));
     }

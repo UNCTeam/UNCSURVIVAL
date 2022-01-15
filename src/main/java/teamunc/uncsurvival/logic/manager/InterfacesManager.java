@@ -19,15 +19,6 @@ public class InterfacesManager extends AbstractManager{
     }
 
     public void init() {
-
-        // load playersInformation
-        // TODO ici bug, ca save mais ca load pas
-        GameInterfaceList interfaceListLoaded = this.plugin.getFileManager().loadInterfaces();
-        if (interfaceListLoaded != null) {
-            this.gameInterfaceList = interfaceListLoaded;
-        } else {
-            this.gameInterfaceList = new GameInterfaceList();
-        }
     }
 
     /**
@@ -46,9 +37,5 @@ public class InterfacesManager extends AbstractManager{
         }
 
         player.openInventory(inv);
-    }
-
-    public void save() {
-        this.plugin.getFileManager().saveInterfaces(this.gameInterfaceList);
     }
 }
