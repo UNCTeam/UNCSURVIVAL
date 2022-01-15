@@ -50,3 +50,8 @@ commands:
     description: give a diamond apple
     usage: /givediamondapple
     permission: uncsurvival.giveDiamondApple
+
+  reloadconfig:
+    description: reload configuration
+    usage: /reloadconfig
+    permission: uncsurvival.reloadconfig

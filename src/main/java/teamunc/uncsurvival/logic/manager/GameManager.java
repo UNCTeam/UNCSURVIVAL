@@ -57,25 +57,10 @@ public class GameManager extends AbstractManager {
 
     public void loadGameRuleConfiguration() {
         this.gameRuleConfiguration = this.plugin.getFileManager().loadGameRuleConfiguration();
-        //if(this.gameRuleConfiguration == null) {
-            HashMap<GameRule, Boolean> gamerules = new HashMap<GameRule, Boolean>();
-            gamerules.put(GameRule.DISABLE_ELYTRA_MOVEMENT_CHECK, true);
-            gamerules.put(GameRule.DO_FIRE_TICK, true);
-            gamerules.put(GameRule.DROWNING_DAMAGE, false);
-            this.gameRuleConfiguration = new GameRuleConfiguration(gamerules);
-        //}
     }
 
     public void loadGameConfiguration() {
         this.gameConfiguration = this.plugin.getFileManager().loadGameConfiguration();
-        //if(this.gameConfiguration == null) {
-            Date phase1 = Date.from(Instant.now());
-            Date phase2 = Date.from(Instant.now());
-            ArrayList<GoalItem> goalItems = new ArrayList<>();
-            goalItems.add(new GoalItem(Material.IRON_AXE, 20));
-            goalItems.add(new GoalItem(Material.DIAMOND, 40));
-            this.gameConfiguration = new GameConfiguration(phase2, phase1, goalItems);
-        //}
     }
 
     public void loadPlayerInformation() {
@@ -185,9 +170,6 @@ public class GameManager extends AbstractManager {
         this.getInterfacesManager().save();
 
         this.plugin.getFileManager().savePlayersInfos(this.playersInformations);
-        this.plugin.getFileManager().saveGameConfiguration(this.gameConfiguration);
-        this.plugin.getFileManager().saveGameRuleConfiguration(this.gameRuleConfiguration);
-
     }
 
 
