@@ -19,7 +19,6 @@ public class BlockListener extends AbstractEventsListener {
 
         if (block != null && e.getAction() == Action.RIGHT_CLICK_BLOCK && !e.getPlayer().isSneaking()) {
             // TODO check si le joueur est de la bonne team
-            // TODO ckeck si quel block custom c'est (interface ou autre)
             if (block.getType() == Material.BARRIER) {
                 this.plugin.getGameManager().getInterfacesManager().ouvrirInterface(block.getLocation(),e.getPlayer());
                 e.setCancelled(true);

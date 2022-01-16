@@ -10,8 +10,13 @@ public abstract class GameCustomInterface {
     protected Inventory inv;
     protected String name;
 
-    public GameCustomInterface(int itemNumber) {
-        switch (itemNumber) {
+    /**
+     * 1 à 5 les 5 items Goal interface
+     * 6 l'interface de team
+     * @param titleNumber
+     */
+    public GameCustomInterface(int titleNumber) {
+        switch (titleNumber) {
             case 1:
                 this.name = ChatColor.WHITE +"\uF80B本";
                 break;
@@ -27,12 +32,21 @@ public abstract class GameCustomInterface {
             case 5:
                 this.name = ChatColor.WHITE +"\uF80B备";
                 break;
+            case 6:
+                this.name = ChatColor.WHITE +"\uF80B鼻";
+                break;
         }
 
 
         this.name = name;
         this.inv = Bukkit.createInventory(null, 27,name);
     }
+
+    public Inventory getInv() {
+        return inv;
+    }
+
+    public abstract Inventory update();
 
     public String translateInInterfaceDisplay(String numbers, int ligne) {
         String res = "";

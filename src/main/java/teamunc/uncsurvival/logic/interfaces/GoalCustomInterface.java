@@ -13,9 +13,13 @@ public class GoalCustomInterface extends GameCustomInterface{
         super(itemNumber);
     }
 
-    public Inventory updateName(int itemPrice, int itemNumber) {
+    @Override
+    public Inventory update() {
+        int itemPrice = 10;
+        int itemNumbers = 10000;
+
         String itemPriceStr = this.reduceAt(21) + "       " + translateInInterfaceDisplay(""+ itemPrice,1);
-        String itemNumberStr = this.reduceAt(4) + translateInInterfaceDisplay(""+ itemNumber,4);
+        String itemNumberStr = this.reduceAt(4) + translateInInterfaceDisplay(""+ itemNumbers,4);
 
         this.inv = Bukkit.createInventory(null,27,name + itemPriceStr + itemNumberStr);
         return this.inv;
