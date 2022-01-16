@@ -43,8 +43,6 @@ public class UNCSurvival extends JavaPlugin {
         this.getCommand("addteam").setExecutor(new TeamCmdExec(this));
 
         this.getCommand("reloadconfig").setExecutor(new ReloadConfigurationCmdExec(this));
-
-
     }
 
     /**

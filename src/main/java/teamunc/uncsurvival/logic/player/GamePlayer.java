@@ -11,6 +11,7 @@ import java.util.UUID;
 public class GamePlayer implements Serializable {
     private final UUID uuid;
     private final Player bukkitPlayer;
+    private int waterLevel;
 
     public GamePlayer(Player bukkitPlayer) {
         this.bukkitPlayer = bukkitPlayer;
@@ -23,6 +24,14 @@ public class GamePlayer implements Serializable {
 
     public Player getBukkitPlayer() {
         return bukkitPlayer;
+    }
+
+    public int getWaterLevel() {
+        return waterLevel;
+    }
+
+    public void setWaterLevel(int waterLevel) {
+        this.waterLevel = waterLevel;
     }
 
     @Override
