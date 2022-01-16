@@ -140,24 +140,6 @@ public class FileManager extends AbstractManager{
         }
     }
 
-    public HashMap<GamePlayer, Team> loadParticipants() {
-        try {
-            HashMap<GamePlayer, Team> players = (HashMap<GamePlayer, Team>) this.load(this.participants_path);
-            return players;
-        } catch (Exception e) {
-            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + e.toString());
-            return null;
-        }
-    }
-
-    public void saveParticipants(HashMap<GamePlayer, Team> playersByTeam) {
-        try {
-            this.save(playersByTeam, this.participants_path);
-        } catch (Exception e) {
-            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + e.toString());
-        }
-    }
-
     private void save(Object o, String path) throws Exception{
             BukkitObjectOutputStream out = new BukkitObjectOutputStream(new GZIPOutputStream(new FileOutputStream(path)));
             out.writeObject(o);

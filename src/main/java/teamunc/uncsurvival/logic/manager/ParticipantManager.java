@@ -19,6 +19,16 @@ public class ParticipantManager extends AbstractManager{
         super(plugin);
     }
 
+    public HashMap<GamePlayer, Team> getPlayersByTeam() {
+        HashMap<GamePlayer, Team> players = new HashMap<>();
+        for(Team team : this.plugin.getGameManager().getTeamsManager().getAllTeams()) {
+            for (GamePlayer player : team.getMembers()) {
+                players.put(player, team);
+            }
+        }
+        return players;
+    }
+
     /**
      * Ajoute un joueur à une team
      *
@@ -26,11 +36,10 @@ public class ParticipantManager extends AbstractManager{
      * @param player
      */
     public void addPlayer(Team team, GamePlayer player) {
-            Team team1 = this.playersByTeam.get(player);
+        Team team1 = this.getPlayersByTeam().get(player);
         if(team1 != null) {
             team1.quit(player);
         }
-        this.playersByTeam.put(player, team);
         team.join(player);
     }
 
@@ -58,7 +67,6 @@ public class ParticipantManager extends AbstractManager{
     public boolean removePlayer(Team team, GamePlayer player) {
         if(team.hasMember(player)) {
             team.quit(player);
-            this.playersByTeam.remove(player);
             return true;
         } else {
             return false;
@@ -80,9 +88,8 @@ public class ParticipantManager extends AbstractManager{
      * @return
      */
     public boolean removePlayer(GamePlayer player) {
-        if(this.playersByTeam.get(player) != null && this.playersByTeam.get(player).hasMember(player)) {
-            this.playersByTeam.get(player).quit(player);
-            this.playersByTeam.remove(player);
+        if(this.getPlayersByTeam().get(player) != null && this.getPlayersByTeam().get(player).hasMember(player)) {
+            this.getPlayersByTeam().get(player).quit(player);
             return true;
         } else {
             return false;
@@ -109,7 +116,7 @@ public class ParticipantManager extends AbstractManager{
      * @return
      */
     public GamePlayer getGamePlayer(String name) {
-        for (Map.Entry<GamePlayer, Team> entry : playersByTeam.entrySet()) {
+        for (Map.Entry<GamePlayer, Team> entry : getPlayersByTeam().entrySet()) {
             GamePlayer player = entry.getKey();
             if(player.getBukkitPlayer().getName().equals(name)) {
                 return player;
@@ -119,7 +126,7 @@ public class ParticipantManager extends AbstractManager{
     }
 
     public GamePlayer getGamePlayerByUUID(UUID uuid) {
-        for (Map.Entry<GamePlayer, Team> entry : playersByTeam.entrySet()) {
+        for (Map.Entry<GamePlayer, Team> entry : getPlayersByTeam().entrySet()) {
             GamePlayer player = entry.getKey();
             if(player.getBukkitPlayer().getUniqueId().equals(uuid)) {
                 return player;
@@ -134,18 +141,10 @@ public class ParticipantManager extends AbstractManager{
      */
     public ArrayList<GamePlayer> getGamePlayers() {
         ArrayList<GamePlayer> players = new ArrayList<>();
-        for (Map.Entry<GamePlayer, Team> entry : playersByTeam.entrySet()) {
+        for (Map.Entry<GamePlayer, Team> entry : getPlayersByTeam().entrySet()) {
             players.add(entry.getKey());
         }
         return players;
-    }
-
-    public HashMap<GamePlayer, Team> getPlayersByTeam() {
-        return playersByTeam;
-    }
-
-    public void saveParticipants() {
-        this.plugin.getFileManager().saveParticipants(this.playersByTeam);
     }
 
     /**
@@ -156,12 +155,5 @@ public class ParticipantManager extends AbstractManager{
         return this.getGamePlayers().stream()
                 .map(gamePlayer -> gamePlayer.getBukkitPlayer())
                 .collect(Collectors.toList());
-    }
-
-    public void loadParticipants() {
-        HashMap<GamePlayer, Team> players = this.plugin.getFileManager().loadParticipants();
-        if(players != null) {
-            this.playersByTeam = players;
-        }
     }
 }

@@ -42,8 +42,6 @@ public class GameManager extends AbstractManager {
 
         this.loadGameRuleConfiguration();
         this.loadGameConfiguration();
-        this.getParticipantManager().loadParticipants();
-
     }
 
     public void loadGameRuleConfiguration() {
@@ -136,7 +134,6 @@ public class GameManager extends AbstractManager {
 
     public void save() {
         this.getTeamsManager().saveTeams();
-        this.getParticipantManager().saveParticipants();
     }
 
 
