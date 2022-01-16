@@ -16,7 +16,7 @@ public class InGameInfoScoreboard extends VScoreboard{
      * @param player the player the scoreboard is for
      */
     public InGameInfoScoreboard(Player player) {
-        super(player, ChatColor.RED + "" +ChatColor.BOLD + "UNC SURVIVAL");
+        super(player, ChatColor.RED + "" + ChatColor.BOLD + "UNC SURVIVAL");
     }
 
     @Override

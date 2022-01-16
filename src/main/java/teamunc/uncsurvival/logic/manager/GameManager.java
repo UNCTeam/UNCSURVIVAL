@@ -1,12 +1,14 @@
 package teamunc.uncsurvival.logic.manager;
 
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.features.thirst.ThirstActualiser;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 import teamunc.uncsurvival.logic.configuration.GameRuleConfiguration;
+import teamunc.uncsurvival.logic.gameStats.GameStats;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.utils.scoreboards.InGameInfoScoreboard;
 
@@ -14,11 +16,10 @@ import java.util.*;
 
 public class GameManager extends AbstractManager {
 
-    private boolean isGameRunning = false;
-
     /* Configuration */
     private GameConfiguration gameConfiguration;
     private GameRuleConfiguration gameRuleConfiguration;
+    private GameStats gameStats;
 
     /* Mananger */
     private TeamsManager teamsManager;
@@ -42,6 +43,15 @@ public class GameManager extends AbstractManager {
 
         this.loadGameRuleConfiguration();
         this.loadGameConfiguration();
+        this.loadGameStats();
+
+        this.afterReload();
+    }
+
+    public void afterReload() {
+        if (!gameStats.isGameStarted()) return;
+
+        this.timeManager.startTimer();
     }
 
     public void loadGameRuleConfiguration() {
@@ -50,6 +60,9 @@ public class GameManager extends AbstractManager {
 
     public void loadGameConfiguration() {
         this.gameConfiguration = this.plugin.getFileManager().loadGameConfiguration();
+    }
+    public void loadGameStats() {
+        this.gameStats = this.plugin.getFileManager().loadGameStats();
     }
 
 
@@ -70,7 +83,7 @@ public class GameManager extends AbstractManager {
     public boolean start(CommandSender sender) {
 
         // error if Game is already Running
-        if (this.isGameRunning == true) {
+        if (this.gameStats.isGameStarted()) {
             this.messageTchatManager.sendMessageToPlayer("Game has already started !",sender, ChatColor.RED);
             return false;
         }
@@ -84,13 +97,40 @@ public class GameManager extends AbstractManager {
         // start the timer
         this.getTimeManager().startTimer();
 
+        // teleport everyplayers at their spawnpoint
+        this.getTeamsManager().teleportEveryPlayers();
+
+        // set survival conditions
+        this.setSurvivalConditions();
+
         // Register all players for thirst
         ThirstActualiser.getInstance().registerPlayers(new ArrayList<>(this.participantManager.getGamePlayers()));
 
         // InGameInfoScoreboard
         addInGameScoreboard();
+        this.scoreboardManager.initStatsScoreboard();
 
+        // save game started info
+        this.gameStats.setGameStarted(true);
         return true;
+    }
+
+    private void setSurvivalConditions() {
+        // All spec
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            player.setGameMode(GameMode.SPECTATOR);
+        });
+
+        // set Attributes
+        this.participantManager.getGamePlayers().forEach(gamePlayer -> {
+            Player p = gamePlayer.getBukkitPlayer();
+            p.setGameMode(GameMode.SURVIVAL);
+            p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(14);
+            p.getInventory().clear();
+        });
+
+        // Gamerules
+        Bukkit.getWorlds().get(0).setGameRule(GameRule.NATURAL_REGENERATION,false);
     }
 
     public void addInGameScoreboard() {
@@ -135,6 +175,4 @@ public class GameManager extends AbstractManager {
     public void save() {
         this.getTeamsManager().saveTeams();
     }
-
-
 }
