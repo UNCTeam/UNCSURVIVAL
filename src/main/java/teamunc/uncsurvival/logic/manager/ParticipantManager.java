@@ -120,6 +120,10 @@ public class ParticipantManager extends AbstractManager{
         return null;
     }
 
+    public Team getTeamForPlayer(Player player) {
+        return this.getPlayersByTeam().get(new GamePlayer(player));
+    }
+
     /**
      * Renvoi la liste des joueurs sous forme de liste GamePlayer
      * @return

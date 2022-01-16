@@ -2,6 +2,7 @@ package teamunc.uncsurvival.eventsListeners;
 
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.eventsListeners.customsBlock.BlockListener;
+import teamunc.uncsurvival.eventsListeners.playerChat.PlayerChatListener;
 import teamunc.uncsurvival.eventsListeners.vanillaItems.ConsumeListenerVanilla;
 import teamunc.uncsurvival.eventsListeners.customsItems.ConsumeListenerCustom;
 import teamunc.uncsurvival.logic.manager.AbstractManager;
@@ -18,6 +19,7 @@ public class EventsManager extends AbstractManager {
         this.eventsListeners.add(new ConsumeListenerVanilla(this.plugin));
         this.eventsListeners.add(new ConsumeListenerCustom(this.plugin));
         this.eventsListeners.add(new BlockListener(this.plugin));
+        this.eventsListeners.add(new PlayerChatListener(this.plugin));
 
         // register
         for (AbstractEventsListener evLi : this.eventsListeners)

@@ -36,9 +36,12 @@ public class TabManager extends AbstractManager {
                     if(players.containsKey(new GamePlayer(player))) {
                         GamePlayer gamePlayer = new GamePlayer(player);
                         Team teamPlayer = players.get(gamePlayer);
+                        player.setPlayerListName(teamPlayer.getChatColor() + "" + ChatColor.BOLD + "[" + teamPlayer.getName() + "]"
+                                + teamPlayer.getChatColor() + " " + gamePlayer.getBukkitPlayer().getName());
                         header += ChatColor.GOLD + "Team : " + teamPlayer.getChatColor() + teamPlayer.getName() + "\n";
                     } else {
                         header += ChatColor.GOLD + "Team : " + ChatColor.GRAY + "Spectator" + "\n";
+                        player.setPlayerListName(ChatColor.GRAY + player.getName());
                     }
                     header+=ChatColor.GOLD + "Phase : 0  \n";
                     header+=ChatColor.GOLD + "Players : " + ChatColor.WHITE + Bukkit.getOnlinePlayers().size() + "\n" + spacer;
