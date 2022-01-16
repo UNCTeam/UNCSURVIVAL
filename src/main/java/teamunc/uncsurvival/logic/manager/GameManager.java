@@ -10,8 +10,6 @@ import teamunc.uncsurvival.logic.configuration.GameRuleConfiguration;
 import teamunc.uncsurvival.logic.goals.GoalItem;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.player.PlayersInformations;
-import teamunc.uncsurvival.logic.team.TeamList;
-import teamunc.uncsurvival.utils.LocationManager;
 import teamunc.uncsurvival.utils.scoreboards.InGameInfoScoreboard;
 
 import java.time.Instant;
@@ -28,7 +26,6 @@ public class GameManager extends AbstractManager {
 
     /* Mananger */
     private TeamsManager teamsManager;
-    private LocationManager locationManager;
     private ItemsManager itemsManager;
     private ParticipantManager participantManager;
     private ScoreboardManager scoreboardManager;
@@ -39,7 +36,6 @@ public class GameManager extends AbstractManager {
 
     public GameManager(UNCSurvival plugin) {
         super(plugin);
-        this.locationManager = new LocationManager(plugin);
         this.itemsManager = new ItemsManager(plugin);
         this.participantManager = new ParticipantManager(plugin);
         this.scoreboardManager = new ScoreboardManager(plugin);
@@ -125,9 +121,6 @@ public class GameManager extends AbstractManager {
         return true;
     }
 
-    public LocationManager getLocationManager() {
-        return this.locationManager;
-    }
     public ItemsManager getItemsManager() {
         return this.itemsManager;
     }

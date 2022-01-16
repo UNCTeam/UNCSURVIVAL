@@ -3,11 +3,9 @@ package teamunc.uncsurvival.logic.interfaces;
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 
-import java.io.Serializable;
 import java.util.HashMap;
 
-public class GameInterfaceList implements Serializable {
-    private static transient final long serialVersionUID = -1681012206529286330L;
+public class GameInterfaceList {
     private HashMap<Location, Inventory> interfaces = new HashMap<>();
 
     public GameInterfaceList() {}

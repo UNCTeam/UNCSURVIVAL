@@ -17,7 +17,7 @@ public class BlockListener extends AbstractEventsListener {
     public void onBarrierClick(PlayerInteractEvent e) {
         Block block = e.getClickedBlock();
 
-        if (block != null && e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+        if (block != null && e.getAction() == Action.RIGHT_CLICK_BLOCK && !e.getPlayer().isSneaking()) {
             // TODO check si le joueur est de la bonne team
             // TODO ckeck si quel block custom c'est (interface ou autre)
             if (block.getType() == Material.BARRIER) {

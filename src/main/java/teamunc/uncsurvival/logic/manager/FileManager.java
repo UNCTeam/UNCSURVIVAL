@@ -41,7 +41,6 @@ public class FileManager extends AbstractManager{
     private String gameRuleConfiguration_path;
     private String gameConfiguration_path;
     private String playersInfos_path;
-    private String interfaces_path;
     private File pluginDataFile;
 
     public FileManager(UNCSurvival plugin) {
@@ -202,7 +201,6 @@ public class FileManager extends AbstractManager{
             return null;
         }
     }
-
 
     private void save(Object o, String path) throws Exception{
             BukkitObjectOutputStream out = new BukkitObjectOutputStream(new GZIPOutputStream(new FileOutputStream(path)));

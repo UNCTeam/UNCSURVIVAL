@@ -20,7 +20,10 @@ public class Team implements Serializable {
     private Location spawnPoint;
     private int range = 10;
     private Region region;
-
+    /**
+     * l'index de la list correspond au numero de l'item Goal (1 à 5)
+     */
+    private ArrayList<Location> interfaces = new ArrayList<>();
     private final List<GamePlayer> members;
 
     public Team(String name, ChatColor chatColor, Location spawnPoint) {
@@ -29,6 +32,8 @@ public class Team implements Serializable {
         this.members = new ArrayList<>();
 
         this.uuid = UUID.randomUUID();
+
+        // todo calculs de la location
 
         this.spawnPoint = spawnPoint;
         this.region = new Region(spawnPoint, range);
