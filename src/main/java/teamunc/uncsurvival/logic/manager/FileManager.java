@@ -12,9 +12,6 @@ import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 import teamunc.uncsurvival.logic.configuration.GameRuleConfiguration;
 import teamunc.uncsurvival.logic.gameStats.GameStats;
-import teamunc.uncsurvival.logic.goals.GoalItem;
-import teamunc.uncsurvival.logic.player.GamePlayer;
-import teamunc.uncsurvival.logic.team.Team;
 import teamunc.uncsurvival.logic.team.TeamList;
 
 import java.io.*;
@@ -66,10 +63,23 @@ public class FileManager extends AbstractManager{
             Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "Creation du fichier de gameconfig");
             Date phase1 = Date.from(Instant.now());
             Date phase2 = Date.from(Instant.now());
-            ArrayList<GoalItem> goalItems = new ArrayList<>();
-            goalItems.add(new GoalItem(Material.IRON_AXE, 20));
-            goalItems.add(new GoalItem(Material.DIAMOND, 40));
-            GameConfiguration gameConfiguration = new GameConfiguration(phase2, phase1, goalItems);
+
+            ArrayList<Material> goalItems = new ArrayList<>();
+            goalItems.add(Material.BRICK);
+            goalItems.add(Material.STONE);
+            goalItems.add(Material.STONE);
+            goalItems.add(Material.STONE);
+            goalItems.add(Material.STONE);
+
+            ArrayList<Integer> goalItemsPrices = new ArrayList<>();
+            goalItemsPrices.add(1);
+            goalItemsPrices.add(2);
+            goalItemsPrices.add(3);
+            goalItemsPrices.add(4);
+            goalItemsPrices.add(5);
+
+
+            GameConfiguration gameConfiguration = new GameConfiguration(phase2, phase1, goalItems,goalItemsPrices);
             this.plugin.getFileManager().saveGameConfiguration(gameConfiguration);
             return gameConfiguration;
         } catch (Exception e) {

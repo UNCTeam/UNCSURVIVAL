@@ -2,26 +2,30 @@ package teamunc.uncsurvival.logic.manager;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
-import teamunc.uncsurvival.logic.goals.GoalItem;
+import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 
 import java.util.ArrayList;
 
 public class ItemsManager extends AbstractManager {
 
     private NamespacedKey customitemKey = new NamespacedKey(this.plugin,"customitem");
-    private ArrayList<GoalItem> goalItems = new ArrayList<>();
+    private ArrayList<Material> goalItems;
+    private ArrayList<Integer> goalItemsPrices;
 
     public NamespacedKey getCustomitemKey() {
         return customitemKey;
     }
 
-    public ItemsManager(UNCSurvival plugin) {
+    public ItemsManager(UNCSurvival plugin, GameConfiguration gameConfiguration) {
         super(plugin);
+        this.goalItems = gameConfiguration.getGoalItems();
+        this.goalItemsPrices = gameConfiguration.getGoalItemsPrices();
     }
 
     public ItemStack createDiamondApple() {
@@ -40,23 +44,10 @@ public class ItemsManager extends AbstractManager {
         return item;
     }
 
-    public ArrayList<GoalItem> getGoalItems() {
-        return goalItems;
-    }
+    public Material getItem(int itemNumber) {return this.goalItems.get(itemNumber);}
 
-    public int getGoalItemScore(Material item) {
-        int res = 0;
+    public int getGoalItemPrice(Integer itemNumber) {
 
-        for (GoalItem i : this.goalItems) {
-            if (i.getItem() == item) {
-                res = i.getPoints();
-            }
-        }
-
-        return res;
-    }
-
-    public void setGoalItems(ArrayList<GoalItem> goalItems) {
-        this.goalItems = goalItems;
+        return this.goalItemsPrices.get(itemNumber);
     }
 }

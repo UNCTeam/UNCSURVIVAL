@@ -32,18 +32,18 @@ public class GameManager extends AbstractManager {
 
     public GameManager(UNCSurvival plugin) {
         super(plugin);
-        this.itemsManager = new ItemsManager(plugin);
+
+        this.loadGameRuleConfiguration();
+        this.loadGameConfiguration();
+        this.loadGameStats();
+
+        this.itemsManager = new ItemsManager(plugin,gameConfiguration);
         this.participantManager = new ParticipantManager(plugin);
         this.scoreboardManager = new ScoreboardManager(plugin);
         this.timeManager = new TimeManager(plugin);
         this.phaseManager = new PhaseManager(plugin);
         this.teamsManager = new TeamsManager(plugin);
         this.interfacesManager = new InterfacesManager(plugin);
-
-
-        this.loadGameRuleConfiguration();
-        this.loadGameConfiguration();
-        this.loadGameStats();
 
         this.afterReload();
     }
@@ -170,6 +170,9 @@ public class GameManager extends AbstractManager {
     }
     public InterfacesManager getInterfacesManager() {
         return this.interfacesManager;
+    }
+    public GameConfiguration getGameConfiguration() {
+        return gameConfiguration;
     }
 
     public void save() {

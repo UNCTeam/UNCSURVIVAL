@@ -3,6 +3,10 @@ package teamunc.uncsurvival.logic.team;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.interfaces.GoalCustomInterface;
 import teamunc.uncsurvival.logic.interfaces.TeamCustomInterface;
@@ -17,7 +21,7 @@ public class Team implements Serializable {
     private final UUID uuid;
     private String name;
     private ChatColor chatColor;
-    private Map<Material, Integer> itemsProduction = new HashMap<>();
+    private ArrayList<Integer> itemsProduction = new ArrayList<>(Arrays.asList(0,0,0,0,0));
     private int bonusScore = 0;
     private Location spawnPoint;
     private int range = 10;
@@ -36,10 +40,40 @@ public class Team implements Serializable {
         this.region = new Region(spawnPoint, range);
 
         this.initInterfaceBlock();
+        this.armorStandsCustomBlock();
     }
 
     public Location getSpawnPoint() {
         return spawnPoint;
+    }
+
+    public void armorStandsCustomBlock() {
+        ArrayList<ArmorStand> customblockStyles = new ArrayList<>();
+        Location loc1 = new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()+8,spawnPoint.getBlockY(),spawnPoint.getBlockZ()).add(0.5,0,0.5);
+        Location loc2 = new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()-8,spawnPoint.getBlockY(),spawnPoint.getBlockZ()).add(0.5,0,0.5);
+        Location loc3 = new Location(spawnPoint.getWorld(),spawnPoint.getBlockX(),spawnPoint.getBlockY(),spawnPoint.getBlockZ()+8).add(0.5,0,0.5);
+        Location loc4 = new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()+6,spawnPoint.getBlockY(),spawnPoint.getBlockZ()+6).add(0.5,0,0.5);
+        Location loc5 = new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()-6,spawnPoint.getBlockY(),spawnPoint.getBlockZ()+6).add(0.5,0,0.5);
+        Location locTeam = new Location(spawnPoint.getWorld(),spawnPoint.getBlockX(),spawnPoint.getBlockY(),spawnPoint.getBlockZ()-8).add(0.5,0,0.5);
+
+        customblockStyles.add((ArmorStand) spawnPoint.getWorld().spawnEntity(loc1, EntityType.ARMOR_STAND));
+        customblockStyles.add((ArmorStand) spawnPoint.getWorld().spawnEntity(loc2, EntityType.ARMOR_STAND));
+        customblockStyles.add((ArmorStand) spawnPoint.getWorld().spawnEntity(loc3, EntityType.ARMOR_STAND));
+        customblockStyles.add((ArmorStand) spawnPoint.getWorld().spawnEntity(loc4, EntityType.ARMOR_STAND));
+        customblockStyles.add((ArmorStand) spawnPoint.getWorld().spawnEntity(loc5, EntityType.ARMOR_STAND));
+        customblockStyles.add((ArmorStand) spawnPoint.getWorld().spawnEntity(locTeam, EntityType.ARMOR_STAND));
+
+        ItemStack texture = new ItemStack(Material.DROPPER, 1);
+        ItemMeta textMeta = texture.getItemMeta();
+        textMeta.setCustomModelData(2);
+        texture.setItemMeta(textMeta);
+
+        customblockStyles.forEach(armorStand -> {
+            armorStand.setPersistent(true);
+            armorStand.setVisible(false);
+            armorStand.setMarker(true);
+            armorStand.getEquipment().setHelmet(texture);
+        });
     }
 
     public void initInterfaceBlock() {
@@ -61,14 +95,13 @@ public class Team implements Serializable {
         locTeam.getBlock().setType(Material.BARRIER);
 
         // adding
-        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc1,new GoalCustomInterface(1));
-        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc2,new GoalCustomInterface(2));
-        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc3,new GoalCustomInterface(3));
-        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc4,new GoalCustomInterface(4));
-        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc5,new GoalCustomInterface(5));
+        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc1,new GoalCustomInterface(1,this));
+        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc2,new GoalCustomInterface(2,this));
+        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc3,new GoalCustomInterface(3,this));
+        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc4,new GoalCustomInterface(4,this));
+        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc5,new GoalCustomInterface(5,this));
 
         UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(locTeam,new TeamCustomInterface());
-
     }
 
     public boolean hasMember(GamePlayer gamePlayer) {
@@ -90,12 +123,12 @@ public class Team implements Serializable {
         }
     }
 
-    public int getItemsProduction(Material item) {
-        return itemsProduction.get(item);
+    public int getItemsProduction(int itemNumber) {
+        return itemsProduction.get(itemNumber);
     }
 
-    public void addItemsProduction(Material item, int number) {
-        this.itemsProduction.put(item,this.itemsProduction.get(item) + number);
+    public void addItemsProduction(int itemNumber, int number) {
+        this.itemsProduction.set(itemNumber,this.itemsProduction.get(itemNumber) + number);
     }
 
     public UUID getUuid() {
@@ -124,8 +157,8 @@ public class Team implements Serializable {
 
     public int getScore() {
         int total = 0;
-        for (Material i: this.itemsProduction.keySet()) {
-            total = UNCSurvival.getInstance().getGameManager().getItemsManager().getGoalItemScore(i) * this.itemsProduction.get(i);
+        for (int i: this.itemsProduction) {
+            total = UNCSurvival.getInstance().getGameManager().getItemsManager().getGoalItemPrice(i) * this.itemsProduction.get(i);
         }
         return total;
     }

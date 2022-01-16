@@ -9,6 +9,7 @@ public abstract class GameCustomInterface {
 
     protected Inventory inv;
     protected String name;
+    protected int itemNumber;
 
     /**
      * 1 à 5 les 5 items Goal interface
@@ -16,6 +17,7 @@ public abstract class GameCustomInterface {
      * @param titleNumber
      */
     public GameCustomInterface(int titleNumber) {
+        this.itemNumber = titleNumber;
         switch (titleNumber) {
             case 1:
                 this.name = ChatColor.WHITE +"\uF80B本";
