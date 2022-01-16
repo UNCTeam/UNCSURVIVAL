@@ -36,11 +36,11 @@ public class UNCSurvival extends JavaPlugin {
         this.getCommand("startuncsurvival").setExecutor(new StartCmdExec(this));
         this.getCommand("removeplayer").setExecutor(new RemovePlayerCmdExec(this));
         this.getCommand("getplayersingame").setExecutor(new GetPlayersInGameCmdExec(this));
-        this.getCommand("givediamondapple").setExecutor(new GiveDiamondAppleCmdExec(this));
-        this.getCommand("addplayertoteam").setExecutor(new JoinTeamCmdExec(this));
-        this.getCommand("removeplayertoteam").setExecutor(new LeaveTeamCmdExec(this));
-        this.getCommand("removeteam").setExecutor(new RemoveTeamCmdExec(this));
-        this.getCommand("addteam").setExecutor(new AddTeamCmdExec(this));
+        this.getCommand("givediamondapple").setExecutor(new GiveCustomItemsCmdExec(this));
+        this.getCommand("addplayertoteam").setExecutor(new TeamCmdExec(this));
+        this.getCommand("removeplayertoteam").setExecutor(new TeamCmdExec(this));
+        this.getCommand("removeteam").setExecutor(new TeamCmdExec(this));
+        this.getCommand("addteam").setExecutor(new TeamCmdExec(this));
 
         this.getCommand("reloadconfig").setExecutor(new ReloadConfigurationCmdExec(this));
 
