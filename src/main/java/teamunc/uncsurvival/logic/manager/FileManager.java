@@ -2,9 +2,6 @@ package teamunc.uncsurvival.logic.manager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
@@ -16,7 +13,6 @@ import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 import teamunc.uncsurvival.logic.configuration.GameRuleConfiguration;
 import teamunc.uncsurvival.logic.goals.GoalItem;
 import teamunc.uncsurvival.logic.player.GamePlayer;
-import teamunc.uncsurvival.logic.player.PlayersInformations;
 import teamunc.uncsurvival.logic.team.Team;
 import teamunc.uncsurvival.logic.team.TeamList;
 
@@ -140,26 +136,6 @@ public class FileManager extends AbstractManager{
             return teamList;
         } catch (Exception e) {
             Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
-            return null;
-        }
-    }
-
-    public boolean savePlayersInfos(PlayersInformations playersInfos) {
-        try {
-            this.save(playersInfos,playersInfos_path);
-            return true;
-        } catch (Exception e) {
-            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + e.toString());
-            return false;
-        }
-    }
-
-    public PlayersInformations loadPlayersInfos() {
-        try {
-            PlayersInformations playersInfos = (PlayersInformations) this.load(playersInfos_path);
-            return playersInfos;
-        } catch (Exception e) {
-            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + e.toString());
             return null;
         }
     }
