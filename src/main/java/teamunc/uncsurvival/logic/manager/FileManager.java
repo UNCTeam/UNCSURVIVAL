@@ -11,6 +11,7 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 import teamunc.uncsurvival.logic.configuration.GameRuleConfiguration;
+import teamunc.uncsurvival.logic.gameStats.GameStats;
 import teamunc.uncsurvival.logic.goals.GoalItem;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.team.Team;
@@ -35,6 +36,7 @@ public class FileManager extends AbstractManager{
     private String teamList_path;
     private String gameRuleConfiguration_path;
     private String gameConfiguration_path;
+    private String gameStats_path;
     private String playersInfos_path;
     private String participants_path;
     private File pluginDataFile;
@@ -50,6 +52,7 @@ public class FileManager extends AbstractManager{
         this.teamList_path = this.pluginDataFile.getPath() + "/teams.unc_save";
         this.gameRuleConfiguration_path = this.pluginDataFile.getPath() + "/gamerule-config.json";
         this.gameConfiguration_path = this.pluginDataFile.getPath() + "/game-config.json";
+        this.gameStats_path = this.pluginDataFile.getPath() + "/game-stats.json";
         this.playersInfos_path = this.pluginDataFile.getPath() + "/players-infos.unc_save";
         this.participants_path = this.pluginDataFile.getPath() + "/participants.unc_save";
     }
@@ -81,6 +84,33 @@ public class FileManager extends AbstractManager{
             Bukkit.broadcastMessage(gameConfiguration.getDatePhase3().toString());
             Bukkit.broadcastMessage(gson.toJson(gameConfiguration));
             this.saveJson(gameConfiguration, gameConfiguration_path);
+            return true;
+        } catch (Exception e) {
+            Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
+            return false;
+        }
+    }
+
+    public GameStats loadGameStats() {
+        try {
+            GameStats gameStats = this.loadJson(gameStats_path, GameStats.class);
+            return gameStats;
+        } catch (NoSuchFileException e) {
+            // Le fichier n'existe pas alors on l'init et le créer
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "Creation du fichier de gameStats");
+            GameStats gameStats = new GameStats(false,1);
+            this.plugin.getFileManager().saveGameStats(gameStats);
+            return gameStats;
+        } catch (Exception e) {
+            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + e.toString());
+            return null;
+        }
+    }
+
+    public boolean saveGameStats(GameStats gameStats) {
+        try {
+            Gson gson = new Gson();
+            this.saveJson(gameStats, gameStats_path);
             return true;
         } catch (Exception e) {
             Bukkit.getServer().getConsoleSender().sendMessage(e.toString());

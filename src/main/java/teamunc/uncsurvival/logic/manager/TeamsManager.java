@@ -3,8 +3,10 @@ package teamunc.uncsurvival.logic.manager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.team.Team;
 import teamunc.uncsurvival.logic.team.TeamList;
 
@@ -86,4 +88,12 @@ public class TeamsManager extends AbstractManager implements Serializable {
         this.plugin.getFileManager().saveTeams(this.teams);
     }
 
+    public void teleportEveryPlayers() {
+        for (Team t : this.getAllTeams()) {
+            for (GamePlayer p : t.getMembers()) {
+                p.getBukkitPlayer().teleport(t.getSpawnPoint());
+                p.getBukkitPlayer().setBedSpawnLocation(t.getSpawnPoint(),true);
+            }
+        }
+    }
 }

@@ -38,6 +38,10 @@ public class Team implements Serializable {
         this.initInterfaceBlock();
     }
 
+    public Location getSpawnPoint() {
+        return spawnPoint;
+    }
+
     public void initInterfaceBlock() {
         // calculs des locations interface goal et de l'interface de team (amelioration rayon)
         Location loc1 = new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()+8,spawnPoint.getBlockY(),spawnPoint.getBlockZ());
