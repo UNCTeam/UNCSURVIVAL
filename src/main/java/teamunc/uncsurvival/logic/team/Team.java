@@ -17,7 +17,7 @@ public class Team implements Serializable {
     private final UUID uuid;
     private String name;
     private ChatColor chatColor;
-    private Map<Material, Integer> itemsProduction = new HashMap<>();
+    private ArrayList<Integer> itemsProduction = new ArrayList<>(Arrays.asList(0,0,0,0,0));
     private int bonusScore = 0;
     private Location spawnPoint;
     private int range = 10;
@@ -61,11 +61,11 @@ public class Team implements Serializable {
         locTeam.getBlock().setType(Material.BARRIER);
 
         // adding
-        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc1,new GoalCustomInterface(1));
-        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc2,new GoalCustomInterface(2));
-        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc3,new GoalCustomInterface(3));
-        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc4,new GoalCustomInterface(4));
-        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc5,new GoalCustomInterface(5));
+        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc1,new GoalCustomInterface(1,this));
+        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc2,new GoalCustomInterface(2,this));
+        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc3,new GoalCustomInterface(3,this));
+        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc4,new GoalCustomInterface(4,this));
+        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc5,new GoalCustomInterface(5,this));
 
         UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(locTeam,new TeamCustomInterface());
 
@@ -90,12 +90,12 @@ public class Team implements Serializable {
         }
     }
 
-    public int getItemsProduction(Material item) {
-        return itemsProduction.get(item);
+    public int getItemsProduction(int itemNumber) {
+        return itemsProduction.get(itemNumber);
     }
 
-    public void addItemsProduction(Material item, int number) {
-        this.itemsProduction.put(item,this.itemsProduction.get(item) + number);
+    public void addItemsProduction(int itemNumber, int number) {
+        this.itemsProduction.set(itemNumber,this.itemsProduction.get(itemNumber) + number);
     }
 
     public UUID getUuid() {
@@ -124,8 +124,8 @@ public class Team implements Serializable {
 
     public int getScore() {
         int total = 0;
-        for (Material i: this.itemsProduction.keySet()) {
-            total = UNCSurvival.getInstance().getGameManager().getItemsManager().getGoalItemScore(i) * this.itemsProduction.get(i);
+        for (int i: this.itemsProduction) {
+            total = UNCSurvival.getInstance().getGameManager().getItemsManager().getGoalItemPrice(i) * this.itemsProduction.get(i);
         }
         return total;
     }
