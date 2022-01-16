@@ -4,6 +4,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.interfaces.GoalCustomInterface;
+import teamunc.uncsurvival.logic.interfaces.TeamCustomInterface;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.utils.Region;
 
@@ -20,10 +22,7 @@ public class Team implements Serializable {
     private Location spawnPoint;
     private int range = 10;
     private Region region;
-    /**
-     * l'index de la list correspond au numero de l'item Goal (1 à 5)
-     */
-    private ArrayList<Location> interfaces = new ArrayList<>();
+
     private final List<GamePlayer> members;
 
     public Team(String name, ChatColor chatColor, Location spawnPoint) {
@@ -33,10 +32,39 @@ public class Team implements Serializable {
 
         this.uuid = UUID.randomUUID();
 
-        // todo calculs de la location
-
         this.spawnPoint = spawnPoint;
         this.region = new Region(spawnPoint, range);
+
+        this.initInterfaceBlock();
+    }
+
+    public void initInterfaceBlock() {
+        // calculs des locations interface goal et de l'interface de team (amelioration rayon)
+        Location loc1 = new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()+8,spawnPoint.getBlockY(),spawnPoint.getBlockZ());
+        Location loc2 = new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()-8,spawnPoint.getBlockY(),spawnPoint.getBlockZ());
+        Location loc3 = new Location(spawnPoint.getWorld(),spawnPoint.getBlockX(),spawnPoint.getBlockY(),spawnPoint.getBlockZ()+8);
+        Location loc4 = new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()+6,spawnPoint.getBlockY(),spawnPoint.getBlockZ()+6);
+        Location loc5 = new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()-6,spawnPoint.getBlockY(),spawnPoint.getBlockZ()+6);
+        Location locTeam = new Location(spawnPoint.getWorld(),spawnPoint.getBlockX(),spawnPoint.getBlockY(),spawnPoint.getBlockZ()-8);
+
+        // placement des block
+        loc1.getBlock().setType(Material.BARRIER);
+        loc2.getBlock().setType(Material.BARRIER);
+        loc3.getBlock().setType(Material.BARRIER);
+        loc4.getBlock().setType(Material.BARRIER);
+        loc5.getBlock().setType(Material.BARRIER);
+
+        locTeam.getBlock().setType(Material.BARRIER);
+
+        // adding
+        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc1,new GoalCustomInterface(1));
+        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc2,new GoalCustomInterface(2));
+        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc3,new GoalCustomInterface(3));
+        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc4,new GoalCustomInterface(4));
+        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(loc5,new GoalCustomInterface(5));
+
+        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(locTeam,new TeamCustomInterface());
+
     }
 
     public boolean hasMember(GamePlayer gamePlayer) {

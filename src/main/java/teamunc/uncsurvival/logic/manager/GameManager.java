@@ -39,10 +39,11 @@ public class GameManager extends AbstractManager {
         this.itemsManager = new ItemsManager(plugin);
         this.participantManager = new ParticipantManager(plugin);
         this.scoreboardManager = new ScoreboardManager(plugin);
-        this.teamsManager = new TeamsManager(plugin);
         this.timeManager = new TimeManager(plugin);
         this.phaseManager = new PhaseManager(plugin);
+        this.teamsManager = new TeamsManager(plugin);
         this.interfacesManager = new InterfacesManager(plugin);
+
 
         this.loadPlayerInformation();
         this.loadGameRuleConfiguration();
@@ -148,7 +149,6 @@ public class GameManager extends AbstractManager {
 
     public void save() {
         this.getTeamsManager().saveTeams();
-        this.getInterfacesManager().save();
         this.getParticipantManager().saveParticipants();
         this.plugin.getFileManager().savePlayersInfos(this.playersInformations);
     }

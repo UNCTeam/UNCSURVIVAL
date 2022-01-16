@@ -1,28 +1,34 @@
 package teamunc.uncsurvival.logic.manager;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import teamunc.uncsurvival.UNCSurvival;
-import teamunc.uncsurvival.logic.interfaces.GameInterfaceList;
-import teamunc.uncsurvival.logic.interfaces.GoalCustomInterface;
+import teamunc.uncsurvival.logic.interfaces.GameCustomInterface;
+
+import java.util.HashMap;
 
 
 public class InterfacesManager extends AbstractManager{
 
-    private GameInterfaceList gameInterfaceList = new GameInterfaceList();
-
+    private HashMap<Location, GameCustomInterface> interfaces = new HashMap<>();
 
     public InterfacesManager(UNCSurvival plugin) {
         super(plugin);
-        this.init();
     }
 
-    public void init() {
+    public void addInterface(Location location,GameCustomInterface inventory) {
+        this.interfaces.put(location,inventory);
     }
 
+    public GameCustomInterface getInterface(Location location) {
+        GameCustomInterface res = null;
+
+        if(this.interfaces.containsKey(location)) {
+            res = this.interfaces.get(location);
+        }
+
+        return res;
+    }
     /**
      * workflow d'un block custom
      *
@@ -31,9 +37,8 @@ public class InterfacesManager extends AbstractManager{
      *                                           si non alors creer l'interface
      */
     public void ouvrirInterface(Location location, Player player) {
-        Inventory inv = this.gameInterfaceList.getInterface(location);
-
-        if (inv != null) player.openInventory(inv);
+        GameCustomInterface inv = this.getInterface(location);
+        if (inv != null) player.openInventory(inv.update());
     }
 
 

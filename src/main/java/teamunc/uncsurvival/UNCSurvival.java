@@ -29,6 +29,9 @@ public class UNCSurvival extends JavaPlugin {
         this.gameManager = new GameManager(this);
         this.eventsManager = new EventsManager(this);
 
+        // post load
+        this.postLoad();
+
         // register commands
         this.getCommand("startuncsurvival").setExecutor(new StartCmdExec(this));
         this.getCommand("removeplayer").setExecutor(new RemovePlayerCmdExec(this));
@@ -42,6 +45,16 @@ public class UNCSurvival extends JavaPlugin {
         this.getCommand("reloadconfig").setExecutor(new ReloadConfigurationCmdExec(this));
 
 
+    }
+
+    /**
+     * fonction pour chargé les save apres le chargements complet des managers
+     */
+    private void postLoad() {
+        // register des interface teams
+        this.gameManager.getTeamsManager().getAllTeams().forEach(team -> {
+            team.initInterfaceBlock();
+        });
     }
 
     public static UNCSurvival getInstance() {

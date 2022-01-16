@@ -15,7 +15,6 @@ import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 import teamunc.uncsurvival.logic.configuration.GameRuleConfiguration;
 import teamunc.uncsurvival.logic.goals.GoalItem;
-import teamunc.uncsurvival.logic.interfaces.GameInterfaceList;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.player.PlayersInformations;
 import teamunc.uncsurvival.logic.team.Team;
@@ -41,6 +40,7 @@ public class FileManager extends AbstractManager{
     private String gameRuleConfiguration_path;
     private String gameConfiguration_path;
     private String playersInfos_path;
+    private String participants_path;
     private File pluginDataFile;
 
     public FileManager(UNCSurvival plugin) {
@@ -55,7 +55,7 @@ public class FileManager extends AbstractManager{
         this.gameRuleConfiguration_path = this.pluginDataFile.getPath() + "/gamerule-config.json";
         this.gameConfiguration_path = this.pluginDataFile.getPath() + "/game-config.json";
         this.playersInfos_path = this.pluginDataFile.getPath() + "/players-infos.unc_save";
-        this.interfaces_path = this.pluginDataFile.getPath() + "/interfaces.unc_save";
+        this.participants_path = this.pluginDataFile.getPath() + "/participants.unc_save";
     }
 
     public GameConfiguration loadGameConfiguration() {
@@ -166,7 +166,7 @@ public class FileManager extends AbstractManager{
 
     public HashMap<GamePlayer, Team> loadParticipants() {
         try {
-            HashMap<GamePlayer, Team> players = (HashMap<GamePlayer, Team>) this.load(this.pluginDataFile.getPath() + "players.unc_save");
+            HashMap<GamePlayer, Team> players = (HashMap<GamePlayer, Team>) this.load(this.participants_path);
             return players;
         } catch (Exception e) {
             Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + e.toString());
@@ -176,29 +176,9 @@ public class FileManager extends AbstractManager{
 
     public void saveParticipants(HashMap<GamePlayer, Team> playersByTeam) {
         try {
-            this.save(playersByTeam, this.pluginDataFile.getPath() + "players.unc_save");
+            this.save(playersByTeam, this.participants_path);
         } catch (Exception e) {
             Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + e.toString());
-        }
-    }
-
-    public boolean saveInterfaces(GameInterfaceList gameInterfaceList) {
-        try {
-            this.save(gameInterfaceList,interfaces_path);
-            return true;
-        } catch (Exception e) {
-            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + e.toString());
-            return false;
-        }
-    }
-
-    public GameInterfaceList loadInterfaces() {
-        try {
-            GameInterfaceList gameInterfaceList = (GameInterfaceList) this.load(interfaces_path);
-            return gameInterfaceList;
-        } catch (Exception e) {
-            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + e.toString());
-            return null;
         }
     }
 
