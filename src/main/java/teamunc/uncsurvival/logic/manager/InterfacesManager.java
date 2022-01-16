@@ -33,13 +33,7 @@ public class InterfacesManager extends AbstractManager{
     public void ouvrirInterface(Location location, Player player) {
         Inventory inv = this.gameInterfaceList.getInterface(location);
 
-        if (inv == null) {
-            inv = new GoalCustomInterface(1).updateName(5,1000);
-
-            this.gameInterfaceList.addInterface(location,inv);
-        }
-
-        player.openInventory(inv);
+        if (inv != null) player.openInventory(inv);
     }
 
 
