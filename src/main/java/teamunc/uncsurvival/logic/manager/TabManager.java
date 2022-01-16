@@ -1,4 +1,4 @@
-package teamunc.uncsurvival.utils;
+package teamunc.uncsurvival.logic.manager;
 
 import net.minecraft.network.chat.ChatComponentText;
 import net.minecraft.network.chat.IChatBaseComponent;
@@ -36,7 +36,7 @@ public class TabManager extends AbstractManager {
                     if(players.containsKey(new GamePlayer(player))) {
                         GamePlayer gamePlayer = new GamePlayer(player);
                         Team teamPlayer = players.get(gamePlayer);
-                        player.setPlayerListName(teamPlayer.getChatColor() + "" + ChatColor.BOLD + "[" + teamPlayer.getName() + "]"
+                        player.setPlayerListName(teamPlayer.getChatColor() + " " + ChatColor.BOLD + "[" + teamPlayer.getName() + "]"
                                 + teamPlayer.getChatColor() + " " + gamePlayer.getBukkitPlayer().getName());
                         header += ChatColor.GOLD + "Team : " + teamPlayer.getChatColor() + teamPlayer.getName() + "\n";
                     } else {
