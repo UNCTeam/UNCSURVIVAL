@@ -11,14 +11,6 @@ commands:
     description: Start the game
     usage: /startuncsurvival
     permission: uncsurvival.startuncsurvival
-  addplayer:
-    description: Add players to the game
-    usage: /addplayer <playerName> <playerName?> ...
-    permission: uncsurvival.addplayer
-  removeplayer:
-    description: Remove players from the game
-    usage: /removeplayer <playerName> <playerName?> ...
-    permission: uncsurvival.removeplayer
 
   addplayertoteam:
     description: Add players to a team
