@@ -6,10 +6,12 @@ import teamunc.uncsurvival.commandesListeners.*;
 import teamunc.uncsurvival.eventsListeners.EventsManager;
 import teamunc.uncsurvival.logic.manager.*;
 import teamunc.uncsurvival.logic.manager.FileManager;
+import teamunc.uncsurvival.utils.TabManager;
 
 public class UNCSurvival extends JavaPlugin {
 
     private GameManager gameManager;
+    private TabManager tabManager;
     private MessageTchatManager messageTchatManager;
     private FileManager fileManager;
     private static UNCSurvival instance;
@@ -28,6 +30,8 @@ public class UNCSurvival extends JavaPlugin {
         this.messageTchatManager = new MessageTchatManager(this);
         this.gameManager = new GameManager(this);
         this.eventsManager = new EventsManager(this);
+        this.tabManager = new TabManager(this);
+        tabManager.showTab();
 
         // post load
         this.postLoad();

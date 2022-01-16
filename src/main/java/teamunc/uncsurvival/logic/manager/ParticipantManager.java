@@ -75,10 +75,9 @@ public class ParticipantManager extends AbstractManager{
 
     public boolean removePlayer(String playerName) {
         Player player = Bukkit.getPlayer(playerName);
-        if(player != null) {
+        if(player == null) {
             return false;
         }
-
         return this.removePlayer(player);
     }
 
@@ -102,12 +101,8 @@ public class ParticipantManager extends AbstractManager{
      * @return
      */
     public boolean removePlayer(Player player) {
-        GamePlayer gamePlayer = this.getGamePlayerByUUID(player.getUniqueId());
-        if(gamePlayer != null) {
-            this.removePlayer(gamePlayer);
-            return true;
-        }
-        return false;
+        GamePlayer gamePlayer = new GamePlayer(player);
+        return this.removePlayer(gamePlayer);
     }
 
     /**
@@ -119,16 +114,6 @@ public class ParticipantManager extends AbstractManager{
         for (Map.Entry<GamePlayer, Team> entry : getPlayersByTeam().entrySet()) {
             GamePlayer player = entry.getKey();
             if(player.getBukkitPlayer().getName().equals(name)) {
-                return player;
-            }
-        }
-        return null;
-    }
-
-    public GamePlayer getGamePlayerByUUID(UUID uuid) {
-        for (Map.Entry<GamePlayer, Team> entry : getPlayersByTeam().entrySet()) {
-            GamePlayer player = entry.getKey();
-            if(player.getBukkitPlayer().getUniqueId().equals(uuid)) {
                 return player;
             }
         }
