@@ -6,7 +6,6 @@ import teamunc.uncsurvival.commandesListeners.*;
 import teamunc.uncsurvival.eventsListeners.EventsManager;
 import teamunc.uncsurvival.logic.manager.*;
 import teamunc.uncsurvival.logic.manager.FileManager;
-import teamunc.uncsurvival.utils.TabManager;
 
 public class UNCSurvival extends JavaPlugin {
 
