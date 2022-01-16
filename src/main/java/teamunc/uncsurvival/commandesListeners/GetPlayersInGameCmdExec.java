@@ -6,6 +6,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.manager.MessageTchatManager;
+import teamunc.uncsurvival.logic.player.GamePlayer;
+import teamunc.uncsurvival.logic.team.Team;
+
+import java.util.Map;
 
 public class GetPlayersInGameCmdExec extends AbstractCommandExecutor implements CommandExecutor {
     public GetPlayersInGameCmdExec(UNCSurvival api) {
@@ -14,7 +18,15 @@ public class GetPlayersInGameCmdExec extends AbstractCommandExecutor implements 
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        this.messageTchatManager.sendMessageToPlayer("Players : " + this.plugin.getGameManager().getPlayersInGame(), sender, ChatColor.GREEN);
+        if(command.getName().equalsIgnoreCase("getplayersingame")) {
+            String playerList = "Players : ";
+            for(Map.Entry<GamePlayer, Team> mapentry : this.plugin.getGameManager().getParticipantManager().getPlayersByTeam().entrySet()) {
+                playerList += mapentry.getValue().getChatColor() + mapentry.getKey().getBukkitPlayer().getDisplayName() + ChatColor.WHITE + ", ";
+            }
+            sender.sendMessage(playerList);
+        } else if(command.getName().equalsIgnoreCase("getplayersinteam")) {
+
+        }
         return true;
     }
 }

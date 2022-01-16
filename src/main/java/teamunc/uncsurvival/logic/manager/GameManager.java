@@ -1,24 +1,30 @@
 package teamunc.uncsurvival.logic.manager;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.features.thirst.ThirstActualiser;
+import teamunc.uncsurvival.logic.configuration.GameConfiguration;
+import teamunc.uncsurvival.logic.configuration.GameRuleConfiguration;
+import teamunc.uncsurvival.logic.goals.GoalItem;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.player.PlayersInformations;
 import teamunc.uncsurvival.utils.scoreboards.InGameInfoScoreboard;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.*;
 
 public class GameManager extends AbstractManager {
 
     private boolean isGameRunning = false;
 
+    /* Configuration */
+    private GameConfiguration gameConfiguration;
+    private GameRuleConfiguration gameRuleConfiguration;
+
+    /* Mananger */
     private TeamsManager teamsManager;
     private ItemsManager itemsManager;
     private ParticipantManager participantManager;
@@ -38,14 +44,24 @@ public class GameManager extends AbstractManager {
         this.phaseManager = new PhaseManager(plugin);
         this.interfacesManager = new InterfacesManager(plugin);
 
-        // load playersInformation
-        PlayersInformations playersInfos = this.plugin.getFileManager().loadPlayersInfos();
-        if (playersInfos != null)
-            this.playersInformations = playersInfos;
-        else {
-            this.playersInformations = new PlayersInformations();
-            this.plugin.getFileManager().savePlayersInfos(this.playersInformations);
-        }
+        this.loadPlayerInformation();
+        this.loadGameRuleConfiguration();
+        this.loadGameConfiguration();
+        this.loadPlayerInformation();
+        this.getParticipantManager().loadParticipants();
+
+    }
+
+    public void loadGameRuleConfiguration() {
+        this.gameRuleConfiguration = this.plugin.getFileManager().loadGameRuleConfiguration();
+    }
+
+    public void loadGameConfiguration() {
+        this.gameConfiguration = this.plugin.getFileManager().loadGameConfiguration();
+    }
+
+    public void loadPlayerInformation() {
+        this.playersInformations = this.plugin.getFileManager().loadPlayersInfos();
     }
 
     public Set<Player> getPlayersInGame() {
@@ -84,19 +100,6 @@ public class GameManager extends AbstractManager {
 
         // InGameInfoScoreboard
         addInGameScoreboard();
-
-        return true;
-    }
-
-    /**
-     *
-     * @param player
-     * @return false if the player already exist in the list
-     */
-    public boolean addPlayerToTheGame(Player player) {
-
-        // adding and creating GamePlayer
-        this.participantManager.addPlayer(player);
 
         return true;
     }
@@ -145,9 +148,9 @@ public class GameManager extends AbstractManager {
 
     public void save() {
         this.getTeamsManager().saveTeams();
-
+        this.getInterfacesManager().save();
+        this.getParticipantManager().saveParticipants();
         this.plugin.getFileManager().savePlayersInfos(this.playersInformations);
-
     }
 
 
