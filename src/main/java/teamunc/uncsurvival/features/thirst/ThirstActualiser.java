@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.manager.GameManager;
+import teamunc.uncsurvival.logic.player.GamePlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,37 +28,35 @@ public class ThirstActualiser {
      */
 
 
-    public void registerPlayers(ArrayList<Player> players) {
-        for (Player p : players) {
-            this.getThirstPerPlayerName().put(p.getName(),10);
+    public void registerPlayers(ArrayList<GamePlayer> players) {
+        for (GamePlayer p : players) {
+            p.setWaterLevel(10);
         }
     }
 
-    public void decreaseWaterIfConnected(int waterToRemove, String playerName) {
-        Player p = Bukkit.getPlayerExact(playerName);
-        if (p.isOnline()) {
-            int actualWater = this.getThirstPerPlayerName().get(playerName);
+    public void decreaseWaterIfConnected(int waterToRemove, GamePlayer player) {
+        if (player.getBukkitPlayer().isOnline()) {
+            int actualWater = player.getWaterLevel();
 
             // set to 0 if lower than 0
             if ( actualWater - waterToRemove < 0 ) {
-                this.getThirstPerPlayerName().put(playerName, 0);
+                player.setWaterLevel(0);
             } else
-                this.getThirstPerPlayerName().put(playerName, actualWater - 1);
+                player.setWaterLevel(actualWater - 1);
         }
     }
 
     public void damageAllnoWater() {
-        for (String playername : this.getThirstPerPlayerName().keySet()) {
-            Player p = Bukkit.getPlayer(playername);
-            if (p != null && this.getThirstPerPlayerName().get(playername) == 0) {
-                p.damage(1);
+        for (GamePlayer player : this.gameManager.getParticipantManager().getGamePlayers()) {
+            if (player.getBukkitPlayer() != null && player.getWaterLevel() == 0) {
+                player.getBukkitPlayer().damage(1);
             }
         }
     }
 
     public void decreaseWaterForAllRegisteredPlayers(int waterToRemove) {
-        for (String playerName : this.getThirstPerPlayerName().keySet()) {
-            this.decreaseWaterIfConnected(waterToRemove,playerName);
+        for (GamePlayer player : this.gameManager.getParticipantManager().getGamePlayers()) {
+            this.decreaseWaterIfConnected(waterToRemove,player);
         }
     }
 
@@ -68,26 +67,23 @@ public class ThirstActualiser {
      * @param playerName
      * @return false if water is full
      */
-    public boolean increaseWater(int waterToAdd, String playerName) {
-        int actualWater = this.getThirstPerPlayerName().get(playerName);
+    public boolean increaseWater(int waterToAdd, GamePlayer player) {
+
+        int actualWater = player.getWaterLevel();
         boolean res = true;
         if (actualWater == 20) {
             res = false;
         } else {
             // set to 20 if higher than 20
             if ( actualWater + waterToAdd > 20 )
-                this.getThirstPerPlayerName().put(playerName, 20);
+                player.setWaterLevel(20);
             else
-                this.getThirstPerPlayerName().put(playerName, actualWater + waterToAdd);
+                player.setWaterLevel(actualWater + waterToAdd);
         }
         return res;
     }
 
     public void actualiseDisplay() {
-        ThirstDisplay.getInstance().ActualiseDisplayForPlayers(this.getThirstPerPlayerName());
-    }
-
-    public HashMap<String, Integer> getThirstPerPlayerName() {
-        return this.gameManager.getPlayersInformations().getThirstPerPlayerName();
+        ThirstDisplay.getInstance().ActualiseDisplayForPlayers();
     }
 }

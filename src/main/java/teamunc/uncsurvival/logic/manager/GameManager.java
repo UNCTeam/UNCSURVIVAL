@@ -7,13 +7,9 @@ import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.features.thirst.ThirstActualiser;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 import teamunc.uncsurvival.logic.configuration.GameRuleConfiguration;
-import teamunc.uncsurvival.logic.goals.GoalItem;
 import teamunc.uncsurvival.logic.player.GamePlayer;
-import teamunc.uncsurvival.logic.player.PlayersInformations;
 import teamunc.uncsurvival.utils.scoreboards.InGameInfoScoreboard;
 
-import java.time.Instant;
-import java.time.LocalDate;
 import java.util.*;
 
 public class GameManager extends AbstractManager {
@@ -31,7 +27,6 @@ public class GameManager extends AbstractManager {
     private ScoreboardManager scoreboardManager;
     private TimeManager timeManager;
     private PhaseManager phaseManager;
-    private PlayersInformations playersInformations;
     private InterfacesManager interfacesManager;
 
     public GameManager(UNCSurvival plugin) {
@@ -45,12 +40,8 @@ public class GameManager extends AbstractManager {
         this.interfacesManager = new InterfacesManager(plugin);
 
 
-        this.loadPlayerInformation();
         this.loadGameRuleConfiguration();
         this.loadGameConfiguration();
-        this.loadPlayerInformation();
-        this.getParticipantManager().loadParticipants();
-
     }
 
     public void loadGameRuleConfiguration() {
@@ -61,9 +52,6 @@ public class GameManager extends AbstractManager {
         this.gameConfiguration = this.plugin.getFileManager().loadGameConfiguration();
     }
 
-    public void loadPlayerInformation() {
-        this.playersInformations = this.plugin.getFileManager().loadPlayersInfos();
-    }
 
     public Set<Player> getPlayersInGame() {
         Set<Player> set = new HashSet<>();
@@ -97,7 +85,7 @@ public class GameManager extends AbstractManager {
         this.getTimeManager().startTimer();
 
         // Register all players for thirst
-        ThirstActualiser.getInstance().registerPlayers(new ArrayList<>(this.participantManager.getBukkitPlayers()));
+        ThirstActualiser.getInstance().registerPlayers(new ArrayList<>(this.participantManager.getGamePlayers()));
 
         // InGameInfoScoreboard
         addInGameScoreboard();
@@ -140,17 +128,12 @@ public class GameManager extends AbstractManager {
     public TimeManager getTimeManager() {
         return timeManager;
     }
-    public PlayersInformations getPlayersInformations() {
-        return this.playersInformations;
-    }
     public InterfacesManager getInterfacesManager() {
         return this.interfacesManager;
     }
 
     public void save() {
         this.getTeamsManager().saveTeams();
-        this.getParticipantManager().saveParticipants();
-        this.plugin.getFileManager().savePlayersInfos(this.playersInformations);
     }
 
 
