@@ -55,7 +55,7 @@ public class UNCSurvival extends JavaPlugin {
     private void postLoad() {
         // register des interface teams
         this.gameManager.getTeamsManager().getAllTeams().forEach(team -> {
-            team.registerInterfaces();
+            team.postLoad();
         });
     }
 
@@ -83,5 +83,10 @@ public class UNCSurvival extends JavaPlugin {
     public void onDisable() {
         // Save
         this.gameManager.save();
+
+        // each team armor stand
+        this.gameManager.getTeamsManager().getAllTeams().forEach(team -> {
+            team.onDisable();
+        });
     }
 }
