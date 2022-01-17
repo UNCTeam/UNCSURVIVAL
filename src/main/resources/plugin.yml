@@ -38,10 +38,10 @@ commands:
     usage: /getplayersingame
     permission: uncsurvival.getplayersingame
 
-  givediamondapple:
-    description: give a diamond apple
-    usage: /givediamondapple
-    permission: uncsurvival.giveDiamondApple
+  givecustomitem:
+    description: give a custom item
+    usage: /givecustomitem
+    permission: uncsurvival.giveCustomItem
 
   reloadconfig:
     description: reload configuration
