@@ -41,6 +41,7 @@ public class UNCSurvival extends JavaPlugin {
         this.getCommand("givecustomitem").setExecutor(new GiveCustomItemsCmdExec(this));
         this.getCommand("givecustomitem").setTabCompleter(new CustomTabComplete(this));
         this.getCommand("addplayertoteam").setExecutor(new TeamCmdExec(this));
+        this.getCommand("addplayertoteam").setTabCompleter(new CustomTabComplete(this));
         this.getCommand("removeplayertoteam").setExecutor(new TeamCmdExec(this));
         this.getCommand("removeteam").setExecutor(new TeamCmdExec(this));
         this.getCommand("addteam").setExecutor(new TeamCmdExec(this));
