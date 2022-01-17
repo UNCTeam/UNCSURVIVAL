@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -81,9 +82,8 @@ public class ItemsManager extends AbstractManager {
         return res;
     }
 
-    public ItemStack createWrenchItem(Integer id) {
+    public ItemStack createWrenchItem(Integer id, Integer durability) {
         ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK,1);
-
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName("§8§lWrench - §f" + this.getGoalItemName(id) + " block");
@@ -97,14 +97,20 @@ public class ItemsManager extends AbstractManager {
 
         item.setItemMeta(meta);
 
+        // Change durability
+        Damageable im = (Damageable) item.getItemMeta();
+        int damage = durability;
+        im.setDamage(damage);
+        item.setItemMeta(im);
+
         return item;
     }
 
-    public ItemStack giveNextWrenchItem(Integer id) {
+    public ItemStack giveNextWrenchItem(Integer id, Integer durability) {
         if(id != 4) {
-            return this.createWrenchItem(id+1);
+            return this.createWrenchItem(id+1, durability);
         } else {
-            return this.createWrenchItem(0);
+            return this.createWrenchItem(0, durability);
         }
     }
 

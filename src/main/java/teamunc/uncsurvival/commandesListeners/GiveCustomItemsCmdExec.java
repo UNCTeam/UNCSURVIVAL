@@ -24,7 +24,7 @@ public class GiveCustomItemsCmdExec extends AbstractCommandExecutor implements C
                             p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createDiamondApple());
                             break;
                         case "wrench":
-                            p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createWrenchItem(0));
+                            p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createWrenchItem(0, 0));
                             break;
                     }
                 }
