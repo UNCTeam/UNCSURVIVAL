@@ -56,7 +56,7 @@ public class Team implements Serializable {
                     new Location(spawnPoint.getWorld(),spawnPoint.getBlockX(),spawnPoint.getBlockY(),spawnPoint.getBlockZ()+8),
                     new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()+6,spawnPoint.getBlockY(),spawnPoint.getBlockZ()+6),
                     new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()-6,spawnPoint.getBlockY(),spawnPoint.getBlockZ()+6),
-                        new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()-8,spawnPoint.getBlockY(),spawnPoint.getBlockZ())
+                    new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()-8,spawnPoint.getBlockY(),spawnPoint.getBlockZ())
             )
         );
         // placement des block
@@ -82,6 +82,8 @@ public class Team implements Serializable {
 
         // interface team
         this.interfaceTeam = new Location(spawnPoint.getWorld(),spawnPoint.getBlockX(),spawnPoint.getBlockY(),spawnPoint.getBlockZ()-8);
+        this.interfaceTeam.getBlock().setType(Material.BARRIER);
+
         Location loc = this.interfaceTeam.clone().add(0.5,0,0.5);
         ArmorStand armorStand = (ArmorStand) loc.getWorld().spawnEntity(loc,EntityType.ARMOR_STAND);
         armorStand.setPersistent(true);
@@ -97,7 +99,7 @@ public class Team implements Serializable {
     public void moveInterfaceGoal(int itemNumber,Location newLocation) {
         // supression last pos
         Location oldLoc = this.interfaceLocations.get(itemNumber);
-        ArmorStand oldArmorStand = (ArmorStand) oldLoc.getWorld().getNearbyEntities(oldLoc,3,3,3,entity -> entity.getScoreboardTags().contains("INTERFACE_"+this.name+"_"+itemNumber));
+        ArmorStand oldArmorStand = (ArmorStand) oldLoc.getWorld().getNearbyEntities(oldLoc,3,3,3,entity -> entity.getScoreboardTags().contains("INTERFACE_"+this.name+"_"+itemNumber)).toArray()[0];
         if (oldArmorStand != null) oldArmorStand.remove();
         oldLoc.getBlock().setType(Material.AIR);
 

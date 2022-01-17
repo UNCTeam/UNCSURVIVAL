@@ -23,7 +23,7 @@ public class PlayerChatListener extends AbstractEventsListener {
             event.setFormat(format);
         }
 
-        if(event.getPlayer().getName().equals("Delsus78") || event.getPlayer().getName().equals("ValkyrieHD")) {
+        if(event.getPlayer().getName().equals("UNCDelsus") || event.getPlayer().getName().equals("ValkyrieHD")) {
             String format = ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "[STAFF]"
                     + ChatColor.GRAY + " %s:" + ChatColor.WHITE + " %s";
             event.setFormat(format);

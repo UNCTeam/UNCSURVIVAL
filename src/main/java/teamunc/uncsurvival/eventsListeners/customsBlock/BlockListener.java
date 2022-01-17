@@ -22,33 +22,36 @@ public class BlockListener extends AbstractEventsListener {
     }
 
     @EventHandler
-    public void onBarrierClick(PlayerInteractEvent e) {
+    public void onInteract(PlayerInteractEvent e) {
         Block block = e.getClickedBlock();
         ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
         ItemMeta itemMeta = item.getItemMeta();
-        PersistentDataContainer data = itemMeta.getPersistentDataContainer();
-        if(data.has(this.plugin.getGameManager().getItemsManager().getWrenchKey(), PersistentDataType.INTEGER)) {
-            Integer blockValue = data.get(this.plugin.getGameManager().getItemsManager().getWrenchKey(), PersistentDataType.INTEGER);
-            final Damageable im = (Damageable) itemMeta;
-            if(e.getAction() == Action.RIGHT_CLICK_AIR) {
-                // Switch le mode de la wrench
-                e.getPlayer().getInventory().setItemInMainHand(plugin.getGameManager().getItemsManager().giveNextWrenchItem(blockValue, im.getDamage()));
-            } else if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                Team team = plugin.getGameManager().getParticipantManager().getTeamForPlayer(e.getPlayer());
-                if(team != null) {
-                    e.getPlayer().sendMessage("move");
-                    team.moveInterfaceGoal(blockValue, block.getLocation().add(e.getBlockFace().getDirection()));
-                    // Augmente la dura
-                    if(im.getDamage() > 30) {
-                        // Casse la wrench
-                        e.getPlayer().getInventory().setItemInMainHand(null);
-                        e.getPlayer().sendMessage("soo");
-                        e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ITEM_SHIELD_BREAK, 1.0f, 1.0f);
+
+        if (itemMeta != null) {
+            PersistentDataContainer data = itemMeta.getPersistentDataContainer();
+            if(data.has(this.plugin.getGameManager().getItemsManager().getWrenchKey(), PersistentDataType.INTEGER)) {
+                Integer blockValue = data.get(this.plugin.getGameManager().getItemsManager().getWrenchKey(), PersistentDataType.INTEGER);
+                final Damageable im = (Damageable) itemMeta;
+                if(e.getAction() == Action.RIGHT_CLICK_AIR) {
+                    // Switch le mode de la wrench
+                    e.getPlayer().getInventory().setItemInMainHand(plugin.getGameManager().getItemsManager().giveNextWrenchItem(blockValue, im.getDamage()));
+                } else if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                    Team team = plugin.getGameManager().getParticipantManager().getTeamForPlayer(e.getPlayer());
+                    if(team != null) {
+                        e.getPlayer().sendMessage("move");
+                        team.moveInterfaceGoal(blockValue, block.getLocation().add(e.getBlockFace().getDirection()));
+                        // Augmente la dura
+                        if(im.getDamage() > 30) {
+                            // Casse la wrench
+                            e.getPlayer().getInventory().setItemInMainHand(null);
+                            e.getPlayer().sendMessage("soo");
+                            e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ITEM_SHIELD_BREAK, 1.0f, 1.0f);
+                        } else {
+                            e.getPlayer().getInventory().setItemInMainHand(plugin.getGameManager().getItemsManager().createWrenchItem(blockValue, im.getDamage()+2));
+                        }
                     } else {
-                        e.getPlayer().getInventory().setItemInMainHand(plugin.getGameManager().getItemsManager().createWrenchItem(blockValue, im.getDamage()+2));
+                        e.getPlayer().sendMessage("§cYou need to be in a team");
                     }
-                } else {
-                    e.getPlayer().sendMessage("§cYou need to be in a team");
                 }
             }
         }
