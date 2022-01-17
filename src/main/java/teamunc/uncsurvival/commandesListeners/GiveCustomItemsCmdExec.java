@@ -15,19 +15,21 @@ public class GiveCustomItemsCmdExec extends AbstractCommandExecutor implements C
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
-        switch(label) {
-            case"givediamondapple":
+        if(label.equalsIgnoreCase("givecustomitem")) {
+            if(args.length > 0) {
                 if (sender instanceof Player ) {
                     Player p = (Player) sender;
-
-                    ItemStack item = this.plugin.getGameManager().getItemsManager().createDiamondApple();
-
-                    p.getInventory().addItem(item);
+                    switch (args[0]) {
+                        case "diamondapple":
+                            p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createDiamondApple());
+                            break;
+                        case "wrench":
+                            p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createWrenchItem(0));
+                            break;
+                    }
                 }
-                break;
+            }
         }
-
         return true;
     }
 }
