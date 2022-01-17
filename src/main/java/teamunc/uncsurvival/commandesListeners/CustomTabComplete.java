@@ -1,5 +1,6 @@
 package teamunc.uncsurvival.commandesListeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -39,6 +40,15 @@ public class CustomTabComplete implements TabCompleter {
                     for (String team : teams) {
                         if (team.toLowerCase().startsWith(strings[0].toLowerCase())) {
                             result.add(team);
+                        }
+                    }
+                } else if(strings.length == 2) {
+                    List<String> players = Bukkit.getOnlinePlayers().stream()
+                            .map(player -> player.getName())
+                            .collect(Collectors.toList());
+                    for (String name : players) {
+                        if (name.toLowerCase().startsWith(strings[1].toLowerCase())) {
+                            result.add(name);
                         }
                     }
                 }
