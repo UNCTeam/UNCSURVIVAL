@@ -67,6 +67,11 @@ public class TimeManager extends AbstractManager{
         // Actualise Water Level Display
         ThirstActualiser.getInstance().actualiseDisplay();
 
+        // Check items
+        this.plugin.getGameManager().getTeamsManager().getAllTeams().forEach(team -> {
+            team.ConsumeAllGoalItems();
+        });
+
         // damage due to Water
         if (this.secondes%5 == 0) ThirstActualiser.getInstance().damageAllnoWater();
     }

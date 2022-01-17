@@ -53,7 +53,7 @@ public class UNCSurvival extends JavaPlugin {
     private void postLoad() {
         // register des interface teams
         this.gameManager.getTeamsManager().getAllTeams().forEach(team -> {
-            team.initInterfaceBlock();
+            team.registerInterfaces();
         });
     }
 
