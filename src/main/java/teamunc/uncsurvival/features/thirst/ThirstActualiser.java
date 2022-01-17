@@ -35,7 +35,7 @@ public class ThirstActualiser {
     }
 
     public void decreaseWaterIfConnected(int waterToRemove, GamePlayer player) {
-        if (player.getBukkitPlayer().isOnline()) {
+        if (player.isOneline()) {
             int actualWater = player.getWaterLevel();
 
             // set to 0 if lower than 0
@@ -48,7 +48,7 @@ public class ThirstActualiser {
 
     public void damageAllnoWater() {
         for (GamePlayer player : this.gameManager.getParticipantManager().getGamePlayers()) {
-            if (player.getBukkitPlayer() != null && player.getWaterLevel() == 0) {
+            if (player.isOneline() && player.getWaterLevel() == 0) {
                 player.getBukkitPlayer().damage(1);
             }
         }
@@ -64,7 +64,6 @@ public class ThirstActualiser {
      * (i.e. waterPlayer = 10 + 14 from waterToAdd = 20 cause max and return true)
      * (i.e. waterPlayer = 20 + 14 from waterToAdd = 20 cause max and return false)
      * @param waterToAdd
-     * @param playerName
      * @return false if water is full
      */
     public boolean increaseWater(int waterToAdd, GamePlayer player) {

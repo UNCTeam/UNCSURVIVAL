@@ -65,17 +65,6 @@ public class GameManager extends AbstractManager {
         this.gameStats = this.plugin.getFileManager().loadGameStats();
     }
 
-
-    public Set<Player> getPlayersInGame() {
-        Set<Player> set = new HashSet<>();
-
-        for (GamePlayer p : this.participantManager.getGamePlayers()) {
-            set.add(p.getBukkitPlayer());
-        }
-
-        return set;
-    }
-
     public World getMainWorld() {
         return Bukkit.getWorlds().get(0);
     }
@@ -123,10 +112,12 @@ public class GameManager extends AbstractManager {
 
         // set Attributes
         this.participantManager.getGamePlayers().forEach(gamePlayer -> {
-            Player p = gamePlayer.getBukkitPlayer();
-            p.setGameMode(GameMode.SURVIVAL);
-            p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(14);
-            p.getInventory().clear();
+            if(gamePlayer.isOneline()) {
+                Player p = gamePlayer.getBukkitPlayer();
+                p.setGameMode(GameMode.SURVIVAL);
+                p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(14);
+                p.getInventory().clear();
+            }
         });
 
         // Gamerules

@@ -23,7 +23,7 @@ public class ThirstDisplay {
     public void ActualiseDisplayForPlayers() {
         ArrayList<GamePlayer> players = UNCSurvival.getInstance().getGameManager().getParticipantManager().getGamePlayers();
         players.forEach(player -> {
-            if (player.getBukkitPlayer() != null) {
+            if (player.isOneline()) {
                 String actionBarText = "thirst.normal." + player.getWaterLevel();
                 player.getBukkitPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TranslatableComponent(actionBarText));
             }

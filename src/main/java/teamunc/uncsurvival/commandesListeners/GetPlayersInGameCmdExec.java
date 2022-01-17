@@ -21,7 +21,7 @@ public class GetPlayersInGameCmdExec extends AbstractCommandExecutor implements 
         if(command.getName().equalsIgnoreCase("getplayersingame")) {
             String playerList = "Players : ";
             for(Map.Entry<GamePlayer, Team> mapentry : this.plugin.getGameManager().getParticipantManager().getPlayersByTeam().entrySet()) {
-                playerList += mapentry.getValue().getChatColor() + mapentry.getKey().getBukkitPlayer().getDisplayName() + ChatColor.WHITE + ", ";
+                playerList += mapentry.getValue().getChatColor() + mapentry.getKey().getOfflinePlayer().getName() + ChatColor.WHITE + ", ";
             }
             sender.sendMessage(playerList);
         } else if(command.getName().equalsIgnoreCase("getplayersinteam")) {

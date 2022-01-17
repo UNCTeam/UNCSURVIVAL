@@ -113,7 +113,7 @@ public class ParticipantManager extends AbstractManager{
     public GamePlayer getGamePlayer(String name) {
         for (Map.Entry<GamePlayer, Team> entry : getPlayersByTeam().entrySet()) {
             GamePlayer player = entry.getKey();
-            if(player.getBukkitPlayer().getName().equals(name)) {
+            if(player.getOfflinePlayer().getName().equals(name)) {
                 return player;
             }
         }
@@ -140,8 +140,9 @@ public class ParticipantManager extends AbstractManager{
      * Renvoi la liste des joueurs sous forme de liste Player bukkit
      * @return
      */
-    public List<Player> getBukkitPlayers() {
+    public List<Player> getOnelinePlayers() {
         return this.getGamePlayers().stream()
+                .filter(gamePlayer -> gamePlayer.isOneline())
                 .map(gamePlayer -> gamePlayer.getBukkitPlayer())
                 .collect(Collectors.toList());
     }

@@ -1,6 +1,8 @@
 package teamunc.uncsurvival.logic.player;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import teamunc.uncsurvival.utils.scoreboards.FastBoard;
 
@@ -10,20 +12,26 @@ import java.util.UUID;
 
 public class GamePlayer implements Serializable {
     private final UUID uuid;
-    private final Player bukkitPlayer;
     private int waterLevel;
 
     public GamePlayer(Player bukkitPlayer) {
-        this.bukkitPlayer = bukkitPlayer;
-        this.uuid = this.bukkitPlayer.getUniqueId();
+        this.uuid = bukkitPlayer.getUniqueId();
     }
 
     public UUID getUUID() {
         return uuid;
     }
 
+    public Boolean isOneline() {
+        return getOfflinePlayer().isOnline();
+    }
+
     public Player getBukkitPlayer() {
-        return bukkitPlayer;
+        return Bukkit.getPlayer(this.uuid);
+    }
+
+    public OfflinePlayer getOfflinePlayer() {
+        return Bukkit.getOfflinePlayer(this.uuid);
     }
 
     public int getWaterLevel() {
