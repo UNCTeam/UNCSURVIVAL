@@ -36,7 +36,7 @@ public class CustomTabComplete implements TabCompleter {
             case "addplayertoteam":
                 if (strings.length == 1) {
                     List<String> teams = plugin.getGameManager().getTeamsManager().getAllTeams().stream()
-                            .map(team -> team.getName()).collect(Collectors.toList());
+                            .map(team -> team.getChatColor().name()).collect(Collectors.toList());
                     for (String team : teams) {
                         if (team.toLowerCase().startsWith(strings[0].toLowerCase())) {
                             result.add(team);
