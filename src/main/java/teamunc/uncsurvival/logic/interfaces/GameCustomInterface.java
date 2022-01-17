@@ -19,22 +19,22 @@ public abstract class GameCustomInterface {
     public GameCustomInterface(int titleNumber) {
         this.itemNumber = titleNumber;
         switch (titleNumber) {
-            case 1:
+            case 0:
                 this.name = ChatColor.WHITE +"\uF80B本";
                 break;
-            case 2:
+            case 1:
                 this.name = ChatColor.WHITE +"\uF80B北";
                 break;
-            case 3:
+            case 2:
                 this.name = ChatColor.WHITE +"\uF80B被";
                 break;
-            case 4:
+            case 3:
                 this.name = ChatColor.WHITE +"\uF80B背";
                 break;
-            case 5:
+            case 4:
                 this.name = ChatColor.WHITE +"\uF80B备";
                 break;
-            case 6:
+            case 5:
                 this.name = ChatColor.WHITE +"\uF80B鼻";
                 break;
         }

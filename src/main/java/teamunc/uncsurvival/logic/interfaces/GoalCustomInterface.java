@@ -19,8 +19,8 @@ public class GoalCustomInterface extends GameCustomInterface{
 
     @Override
     public Inventory update() {
-        int itemPrice = UNCSurvival.getInstance().getGameManager().getItemsManager().getGoalItemPrice(this.itemNumber-1);
-        int itemNumbers = this.team.getItemsProduction(this.itemNumber-1);
+        int itemPrice = UNCSurvival.getInstance().getGameManager().getItemsManager().getGoalItemPrice(this.itemNumber);
+        int itemNumbers = this.team.getItemsProduction(this.itemNumber);
 
         String itemPriceStr = this.reduceAt(21) + "       " + translateInInterfaceDisplay(""+ itemPrice,1);
         String itemNumberStr = this.reduceAt(4) + translateInInterfaceDisplay(""+ itemNumbers,4);
