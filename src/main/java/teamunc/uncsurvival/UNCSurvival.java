@@ -38,8 +38,10 @@ public class UNCSurvival extends JavaPlugin {
         // register commands
         this.getCommand("startuncsurvival").setExecutor(new StartCmdExec(this));
         this.getCommand("getplayersingame").setExecutor(new GetPlayersInGameCmdExec(this));
-        this.getCommand("givediamondapple").setExecutor(new GiveCustomItemsCmdExec(this));
+        this.getCommand("givecustomitem").setExecutor(new GiveCustomItemsCmdExec(this));
+        this.getCommand("givecustomitem").setTabCompleter(new CustomTabComplete(this));
         this.getCommand("addplayertoteam").setExecutor(new TeamCmdExec(this));
+        this.getCommand("addplayertoteam").setTabCompleter(new CustomTabComplete(this));
         this.getCommand("removeplayertoteam").setExecutor(new TeamCmdExec(this));
         this.getCommand("removeteam").setExecutor(new TeamCmdExec(this));
         this.getCommand("addteam").setExecutor(new TeamCmdExec(this));
@@ -53,7 +55,7 @@ public class UNCSurvival extends JavaPlugin {
     private void postLoad() {
         // register des interface teams
         this.gameManager.getTeamsManager().getAllTeams().forEach(team -> {
-            team.registerInterfaces();
+            team.postLoad();
         });
     }
 
@@ -81,5 +83,10 @@ public class UNCSurvival extends JavaPlugin {
     public void onDisable() {
         // Save
         this.gameManager.save();
+
+        // each team armor stand
+        this.gameManager.getTeamsManager().getAllTeams().forEach(team -> {
+            team.onDisable();
+        });
     }
 }

@@ -3,11 +3,13 @@ package teamunc.uncsurvival.logic.team;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.interfaces.CustomBlock;
 import teamunc.uncsurvival.logic.interfaces.GoalCustomInterface;
 import teamunc.uncsurvival.logic.interfaces.TeamCustomInterface;
 import teamunc.uncsurvival.logic.player.GamePlayer;
@@ -24,7 +26,7 @@ public class Team implements Serializable {
     private ArrayList<Integer> itemsProduction = new ArrayList<>(Arrays.asList(0,0,0,0,0));
     private int bonusScore = 0;
     private Location spawnPoint;
-    private ArrayList<Location> interfaceLocations = new ArrayList<>();
+    private ArrayList<CustomBlock> customBlocks = new ArrayList<>();
     private Location interfaceTeam;
     private int range = 10;
     private Region region;
@@ -49,39 +51,43 @@ public class Team implements Serializable {
     }
 
     public void initInterfaceBlockAtStart() {
-        // calculs des locations interface goal
-        this.interfaceLocations = new ArrayList<>(
-                Arrays.asList(
-                    new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()+8,spawnPoint.getBlockY(),spawnPoint.getBlockZ()),
-                    new Location(spawnPoint.getWorld(),spawnPoint.getBlockX(),spawnPoint.getBlockY(),spawnPoint.getBlockZ()+8),
-                    new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()+6,spawnPoint.getBlockY(),spawnPoint.getBlockZ()+6),
-                    new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()-6,spawnPoint.getBlockY(),spawnPoint.getBlockZ()+6),
-                        new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()-8,spawnPoint.getBlockY(),spawnPoint.getBlockZ())
-            )
-        );
-        // placement des block
-        for (int i = 0; i < this.interfaceLocations.size(); i++) {
-            this.interfaceLocations.get(i).getBlock().setType(Material.BARRIER);
-        }
-
-        // adding custom block style
+        // block texture
         ItemStack texture = new ItemStack(Material.DROPPER, 1);
         ItemMeta textMeta = texture.getItemMeta();
         textMeta.setCustomModelData(2);
         texture.setItemMeta(textMeta);
 
-        for (int i = 0; i < this.interfaceLocations.size(); i++) {
-            Location loc = this.interfaceLocations.get(i).clone().add(0.5,0,0.5);
+        // calculs des locations interface goal
+        ArrayList<Location> locationTemp = new ArrayList<>();
+
+        locationTemp.add(new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()+8,spawnPoint.getBlockY(),spawnPoint.getBlockZ()));
+        locationTemp.add(new Location(spawnPoint.getWorld(),spawnPoint.getBlockX(),spawnPoint.getBlockY(),spawnPoint.getBlockZ()+8));
+        locationTemp.add(new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()+6,spawnPoint.getBlockY(),spawnPoint.getBlockZ()+6));
+        locationTemp.add(new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()-6,spawnPoint.getBlockY(),spawnPoint.getBlockZ()+6));
+        locationTemp.add(new Location(spawnPoint.getWorld(),spawnPoint.getBlockX()-8,spawnPoint.getBlockY(),spawnPoint.getBlockZ()));
+
+        // placement des block
+        for (int i = 0; i < locationTemp.size(); i++) {
+            locationTemp.get(i).getBlock().setType(Material.BARRIER);
+        }
+
+        // creating/assembling custom block
+        for (int i = 0; i < locationTemp.size(); i++) {
+            Location loc = locationTemp.get(i).clone().add(0.5,0,0.5);
             ArmorStand armorStand = (ArmorStand) loc.getWorld().spawnEntity(loc,EntityType.ARMOR_STAND);
             armorStand.setPersistent(true);
             armorStand.setVisible(false);
             armorStand.setMarker(true);
             armorStand.addScoreboardTag("INTERFACE_"+this.name+"_"+i);
             armorStand.getEquipment().setHelmet(texture);
+
+            this.customBlocks.add(new CustomBlock(locationTemp.get(i),armorStand));
         }
 
         // interface team
         this.interfaceTeam = new Location(spawnPoint.getWorld(),spawnPoint.getBlockX(),spawnPoint.getBlockY(),spawnPoint.getBlockZ()-8);
+        this.interfaceTeam.getBlock().setType(Material.BARRIER);
+
         Location loc = this.interfaceTeam.clone().add(0.5,0,0.5);
         ArmorStand armorStand = (ArmorStand) loc.getWorld().spawnEntity(loc,EntityType.ARMOR_STAND);
         armorStand.setPersistent(true);
@@ -96,19 +102,18 @@ public class Team implements Serializable {
 
     public void moveInterfaceGoal(int itemNumber,Location newLocation) {
         // supression last pos
-        Location oldLoc = this.interfaceLocations.get(itemNumber);
-        ArmorStand oldArmorStand = (ArmorStand) oldLoc.getWorld().getNearbyEntities(oldLoc,3,3,3,entity -> entity.getScoreboardTags().contains("INTERFACE_"+this.name+"_"+itemNumber));
+        CustomBlock cBlock = this.customBlocks.get(itemNumber);
+        Location oldLoc = cBlock.getLocation();
+        ArmorStand oldArmorStand = cBlock.getArmorStand();
         if (oldArmorStand != null) oldArmorStand.remove();
         oldLoc.getBlock().setType(Material.AIR);
+        oldLoc.getWorld().setChunkForceLoaded(oldLoc.getChunk().getX(), oldLoc.getChunk().getZ(), false);
 
         // nouvelle pos
-        this.interfaceLocations.set(itemNumber,newLocation);
-        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(this.interfaceLocations.get(itemNumber),new GoalCustomInterface(itemNumber,this));
-
         newLocation.getBlock().setType(Material.BARRIER);
 
         Location loc = newLocation.clone().add(0.5,0,0.5);
-
+        loc.getWorld().setChunkForceLoaded(loc.getChunk().getX(),loc.getChunk().getZ(),true);
         // adding custom block style
         ItemStack texture = new ItemStack(Material.DROPPER, 1);
         ItemMeta textMeta = texture.getItemMeta();
@@ -118,8 +123,10 @@ public class Team implements Serializable {
         armorStand.setPersistent(true);
         armorStand.setVisible(false);
         armorStand.setMarker(true);
-        armorStand.addScoreboardTag("INTERFACE_"+this.name+"_"+itemNumber);
         armorStand.getEquipment().setHelmet(texture);
+
+        this.customBlocks.set(itemNumber,new CustomBlock(newLocation,armorStand));
+        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(this.customBlocks.get(itemNumber).getLocation(),new GoalCustomInterface(itemNumber,this));
     }
 
     public void ConsumeAllGoalItems() {
@@ -191,9 +198,36 @@ public class Team implements Serializable {
     }
 
     public void registerInterfaces() {
-        for (int i = 0; i < this.interfaceLocations.size(); i++) {
-            UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(this.interfaceLocations.get(i),new GoalCustomInterface(i,this));
+        for (int i = 0; i < this.customBlocks.size(); i++) {
+            UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(this.customBlocks.get(i).getLocation(),new GoalCustomInterface(i,this));
         }
         UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(this.interfaceTeam,new TeamCustomInterface(this));
+    }
+
+    public void postLoad() {
+        registerInterfaces();
+        this.customBlocks.forEach(customBlock -> {
+            Location loc = customBlock.getLocation().clone().add(0.5,0,0.5);
+
+            // adding custom block style
+            ItemStack texture = new ItemStack(Material.DROPPER, 1);
+            ItemMeta textMeta = texture.getItemMeta();
+            textMeta.setCustomModelData(2);
+            texture.setItemMeta(textMeta);
+            ArmorStand armorStand = (ArmorStand) loc.getWorld().spawnEntity(loc,EntityType.ARMOR_STAND);
+            armorStand.setPersistent(true);
+            armorStand.setVisible(false);
+            armorStand.setMarker(true);
+            armorStand.getEquipment().setHelmet(texture);
+
+            customBlock.setArmorStand(armorStand);
+        });
+    }
+
+    public void onDisable() {
+        this.customBlocks.forEach(customBlock -> {
+            customBlock.getArmorStand().remove();
+            customBlock.setArmorStand(null);
+        });
     }
 }
