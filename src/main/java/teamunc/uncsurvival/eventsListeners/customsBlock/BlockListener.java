@@ -4,8 +4,10 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.Action;
+import org.bukkit.event.block.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -14,7 +16,10 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.eventsListeners.AbstractEventsListener;
+import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.team.Team;
+
+import java.util.ArrayList;
 
 public class BlockListener extends AbstractEventsListener {
     public BlockListener(UNCSurvival plugin) {
@@ -64,5 +69,31 @@ public class BlockListener extends AbstractEventsListener {
             }
         }
 
+    }
+
+    @EventHandler
+    public void onBreakEvent(BlockBreakEvent event) {
+        if(!this.plugin.getGameManager().getParticipantManager().hasPlayer(event.getPlayer()))
+            return;
+        this.handleTeamBlock(event, event.getPlayer(), event.getBlock());
+    }
+
+    @EventHandler
+    public void onPlaceBlockEvent(BlockPlaceEvent event) {
+        if(!this.plugin.getGameManager().getParticipantManager().hasPlayer(event.getPlayer()))
+            return;
+        this.handleTeamBlock(event, event.getPlayer(), event.getBlock());
+    }
+
+    public void handleTeamBlock(Cancellable event, Player player, Block block) {
+        Team teamPlayer = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(player);
+        ArrayList<Team> teams = (ArrayList<Team>) this.plugin.getGameManager().getTeamsManager().getAllTeams().clone();
+        teams.remove(teamPlayer);
+        for(Team team : teams) {
+            if(team.getRegion().contains(block.getLocation())) {
+                event.setCancelled(true);
+                player.sendMessage("§cVous n'avez pas le droit de poser ou casser des blocs dans la base adverse.");
+            }
+        }
     }
 }

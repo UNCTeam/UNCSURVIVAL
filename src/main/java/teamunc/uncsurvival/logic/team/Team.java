@@ -230,4 +230,8 @@ public class Team implements Serializable {
             customBlock.setArmorStand(null);
         });
     }
+
+    public Region getRegion() {
+        return region;
+    }
 }

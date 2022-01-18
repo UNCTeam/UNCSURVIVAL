@@ -9,7 +9,9 @@ import teamunc.uncsurvival.features.thirst.ThirstActualiser;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 import teamunc.uncsurvival.logic.configuration.GameRuleConfiguration;
 import teamunc.uncsurvival.logic.gameStats.GameStats;
+import teamunc.uncsurvival.logic.phase.PhaseList;
 import teamunc.uncsurvival.logic.player.GamePlayer;
+import teamunc.uncsurvival.logic.tasks.CountdownPhaseTask;
 import teamunc.uncsurvival.utils.scoreboards.InGameInfoScoreboard;
 
 import java.util.*;
@@ -101,6 +103,9 @@ public class GameManager extends AbstractManager {
 
         // save game started info
         this.gameStats.setGameStarted(true);
+
+        CountdownPhaseTask timerTask = new CountdownPhaseTask(PhaseList.PHASE1);
+        timerTask.runTaskTimer(this.plugin,0, 1);
         return true;
     }
 

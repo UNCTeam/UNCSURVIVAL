@@ -13,8 +13,6 @@ import java.util.stream.Collectors;
 
 public class ParticipantManager extends AbstractManager{
 
-    private HashMap<GamePlayer, Team> playersByTeam = new HashMap<>();
-
     public ParticipantManager(UNCSurvival plugin) {
         super(plugin);
     }
@@ -122,6 +120,10 @@ public class ParticipantManager extends AbstractManager{
 
     public Team getTeamForPlayer(Player player) {
         return this.getPlayersByTeam().get(new GamePlayer(player));
+    }
+
+    public boolean hasPlayer(Player player) {
+        return this.getPlayersByTeam().containsKey(new GamePlayer(player));
     }
 
     /**

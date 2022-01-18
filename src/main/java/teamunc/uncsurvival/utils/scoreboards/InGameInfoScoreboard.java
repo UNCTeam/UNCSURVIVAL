@@ -28,7 +28,8 @@ public class InGameInfoScoreboard extends VScoreboard{
                         ChatColor.BOLD + "" + ChatColor.GOLD + "-----------------",
                         " ",
                         ChatColor.BOLD + "" + ChatColor.GOLD +"- Phase Actuelle : " + ChatColor.AQUA + UNCSurvival.getInstance().getGameManager().getPhaseManager().getPhaseNumber(),
-                        " "
+                        " ",
+                        ChatColor.BOLD + "" + ChatColor.GOLD +"- Temps restant :"
                 )
         );
 

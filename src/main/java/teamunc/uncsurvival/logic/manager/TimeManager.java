@@ -1,6 +1,7 @@
 package teamunc.uncsurvival.logic.manager;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.features.thirst.ThirstActualiser;
@@ -62,7 +63,7 @@ public class TimeManager extends AbstractManager{
 
     public void actionsEachSeconds() {
         // place all events that can occur each seconds
-        plugin.getGameManager().getScoreboardManager().update();
+        //plugin.getGameManager().getScoreboardManager().update();
 
         // Actualise Water Level Display
         ThirstActualiser.getInstance().actualiseDisplay();
