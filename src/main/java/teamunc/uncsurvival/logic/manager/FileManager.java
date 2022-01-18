@@ -12,6 +12,7 @@ import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 import teamunc.uncsurvival.logic.configuration.GameRuleConfiguration;
 import teamunc.uncsurvival.logic.gameStats.GameStats;
+import teamunc.uncsurvival.logic.phase.PhaseList;
 import teamunc.uncsurvival.logic.team.TeamList;
 
 import java.io.*;
@@ -108,7 +109,7 @@ public class FileManager extends AbstractManager{
         } catch (NoSuchFileException e) {
             // Le fichier n'existe pas alors on l'init et le créer
             Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "Creation du fichier de gameStats");
-            GameStats gameStats = new GameStats(false,1);
+            GameStats gameStats = new GameStats(false, PhaseList.PHASE1);
             this.plugin.getFileManager().saveGameStats(gameStats);
             return gameStats;
         } catch (Exception e) {

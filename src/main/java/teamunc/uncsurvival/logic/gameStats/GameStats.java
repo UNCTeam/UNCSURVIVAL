@@ -1,14 +1,15 @@
 package teamunc.uncsurvival.logic.gameStats;
 
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.phase.PhaseList;
 
 import java.io.Serializable;
 
 public class GameStats implements Serializable {
     private boolean gameStarted;
-    private int actualPhase;
+    private PhaseList actualPhase;
 
-    public GameStats(boolean gameStarted, int actualPhase) {
+    public GameStats(boolean gameStarted, PhaseList actualPhase) {
         this.gameStarted = gameStarted;
         this.actualPhase = actualPhase;
     }
@@ -26,11 +27,11 @@ public class GameStats implements Serializable {
         this.saveStats();
     }
 
-    public int getActualPhase() {
+    public PhaseList getActualPhase() {
         return actualPhase;
     }
 
-    public void setActualPhase(int actualPhase) {
+    public void setActualPhase(PhaseList actualPhase) {
         this.actualPhase = actualPhase;
         this.saveStats();
     }
