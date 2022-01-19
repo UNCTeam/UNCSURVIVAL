@@ -20,6 +20,7 @@ public class EventsManager extends AbstractManager {
         this.eventsListeners.add(new ConsumeListenerCustom(this.plugin));
         this.eventsListeners.add(new BlockListener(this.plugin));
         this.eventsListeners.add(new PlayerChatListener(this.plugin));
+        this.eventsListeners.add(new PlayerConnectionListener(this.plugin));
 
         // register
         for (AbstractEventsListener evLi : this.eventsListeners)

@@ -183,7 +183,8 @@ public class GameManager extends AbstractManager {
     public void addInGameScoreboard() {
         for (GamePlayer p : this.participantManager.getGamePlayers()) {
             Player player = p.getBukkitPlayer();
-            this.scoreboardManager.addScoreboard(new InGameInfoScoreboard(player));
+            this.scoreboardManager.
+                    addScoreboard(new InGameInfoScoreboard(player));
         }
     }
 
