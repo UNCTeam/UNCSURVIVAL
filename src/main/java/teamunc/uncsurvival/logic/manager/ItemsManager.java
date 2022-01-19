@@ -1,10 +1,20 @@
 package teamunc.uncsurvival.logic.manager;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
+import net.minecraft.resources.MinecraftKey;
+import net.minecraft.world.item.crafting.IRecipe;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftShapelessRecipe;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -14,6 +24,8 @@ import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class ItemsManager extends AbstractManager {
 
@@ -39,6 +51,7 @@ public class ItemsManager extends AbstractManager {
         this.goalItemsPrices = gameConfiguration.getGoalItemsPrices();
         this.customItems.add("diamondApple");
         this.customItems.add("wrench");
+        this.initCraftingRecipe();
     }
 
     public ItemStack createDiamondApple() {
@@ -90,7 +103,6 @@ public class ItemsManager extends AbstractManager {
 
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
-        data.set(this.customitemKey, PersistentDataType.STRING,"DiamondApple");
         data.set(this.wrenchKey, PersistentDataType.INTEGER, id);
 
         meta.setCustomModelData(2);
@@ -112,6 +124,44 @@ public class ItemsManager extends AbstractManager {
         } else {
             return this.createWrenchItem(0, durability);
         }
+    }
+
+    public void initCraftingRecipe() {
+        // DIAMOND APPLE
+        ShapedRecipe diamondApple = new ShapedRecipe(new NamespacedKey(this.plugin,"craftDiamondApple"),this.createDiamondApple());
+        diamondApple.shape("***","*-*","***");
+        diamondApple.setIngredient('*',Material.DIAMOND);
+        diamondApple.setIngredient('-',Material.GOLDEN_APPLE);
+        this.plugin.getServer().addRecipe(diamondApple);
+
+        // WRENCH
+        ShapedRecipe wrench = new ShapedRecipe(new NamespacedKey(this.plugin,"craftWrench"),this.createWrenchItem(1,0));
+        wrench.shape("/*/","/-*",".//");
+        wrench.setIngredient('*',Material.IRON_INGOT);
+        wrench.setIngredient('-',Material.REDSTONE);
+        wrench.setIngredient('/',Material.AIR);
+        wrench.setIngredient('.',Material.IRON_BLOCK);
+        this.plugin.getServer().addRecipe(wrench);
+
+        // change recipe
+        // TODO if (GameStat#getPhase = 2)
+        Bukkit.getServer().removeRecipe(NamespacedKey.minecraft("oak_planks"));
+        Bukkit.getServer().removeRecipe(NamespacedKey.minecraft("spruce_planks"));
+        Bukkit.getServer().removeRecipe(NamespacedKey.minecraft("birch_planks"));
+        Bukkit.getServer().removeRecipe(NamespacedKey.minecraft("jungle_planks"));
+        Bukkit.getServer().removeRecipe(NamespacedKey.minecraft("acacia_planks"));
+        Bukkit.getServer().removeRecipe(NamespacedKey.minecraft("dark_oak_planks"));
+        Bukkit.getServer().removeRecipe(NamespacedKey.minecraft("crimson_planks"));
+        Bukkit.getServer().removeRecipe(NamespacedKey.minecraft("warped_planks"));
+
+        Bukkit.getServer().addRecipe(new ShapelessRecipe(NamespacedKey.minecraft("oak_planks"),new ItemStack(Material.OAK_PLANKS,2)).addIngredient(Material.OAK_LOG));
+        Bukkit.getServer().addRecipe(new ShapelessRecipe(NamespacedKey.minecraft("spruce_planks"),new ItemStack(Material.SPRUCE_PLANKS,2)).addIngredient(Material.SPRUCE_LOG));
+        Bukkit.getServer().addRecipe(new ShapelessRecipe(NamespacedKey.minecraft("birch_planks"),new ItemStack(Material.BIRCH_PLANKS,2)).addIngredient(Material.BIRCH_LOG));
+        Bukkit.getServer().addRecipe(new ShapelessRecipe(NamespacedKey.minecraft("jungle_planks"),new ItemStack(Material.JUNGLE_PLANKS,2)).addIngredient(Material.JUNGLE_LOG));
+        Bukkit.getServer().addRecipe(new ShapelessRecipe(NamespacedKey.minecraft("acacia_planks"),new ItemStack(Material.ACACIA_PLANKS,2)).addIngredient(Material.ACACIA_LOG));
+        Bukkit.getServer().addRecipe(new ShapelessRecipe(NamespacedKey.minecraft("dark_oak_planks"),new ItemStack(Material.DARK_OAK_PLANKS,2)).addIngredient(Material.DARK_OAK_LOG));
+        Bukkit.getServer().addRecipe(new ShapelessRecipe(NamespacedKey.minecraft("crimson_planks"),new ItemStack(Material.CRIMSON_PLANKS,2)).addIngredient(Material.CRIMSON_STEM));
+        Bukkit.getServer().addRecipe(new ShapelessRecipe(NamespacedKey.minecraft("warped_planks"),new ItemStack(Material.WARPED_PLANKS,2)).addIngredient(Material.WARPED_STEM));
     }
 
     public Material getItem(int itemNumber) {return this.goalItems.get(itemNumber);}

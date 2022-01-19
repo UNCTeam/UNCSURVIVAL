@@ -38,7 +38,6 @@ public class BlockListener extends AbstractEventsListener {
                 } else if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
                     Team team = plugin.getGameManager().getParticipantManager().getTeamForPlayer(e.getPlayer());
                     if(team != null) {
-                        e.getPlayer().sendMessage("move");
                         team.moveInterfaceGoal(blockValue, block.getLocation().add(e.getBlockFace().getDirection()));
                         // Augmente la dura
                         if(im.getDamage() > 30) {
