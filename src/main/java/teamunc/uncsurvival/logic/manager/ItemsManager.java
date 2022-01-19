@@ -1,9 +1,7 @@
 package teamunc.uncsurvival.logic.manager;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -12,7 +10,6 @@ import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ItemsManager extends AbstractManager {
@@ -92,8 +89,6 @@ public class ItemsManager extends AbstractManager {
 
         data.set(this.customitemKey, PersistentDataType.STRING,"DiamondApple");
         data.set(this.wrenchKey, PersistentDataType.INTEGER, id);
-
-        meta.setCustomModelData(2);
 
         item.setItemMeta(meta);
 

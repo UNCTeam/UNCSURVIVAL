@@ -9,12 +9,12 @@ import teamunc.uncsurvival.features.thirst.ThirstActualiser;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 import teamunc.uncsurvival.logic.configuration.GameRuleConfiguration;
 import teamunc.uncsurvival.logic.gameStats.GameStats;
-import teamunc.uncsurvival.logic.phase.PhaseList;
+import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.tasks.CountdownPhaseTask;
 import teamunc.uncsurvival.utils.scoreboards.InGameInfoScoreboard;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public class GameManager extends AbstractManager {
 
@@ -32,12 +32,15 @@ public class GameManager extends AbstractManager {
     private PhaseManager phaseManager;
     private InterfacesManager interfacesManager;
 
+    private CountdownPhaseTask timerTask;
+
     public GameManager(UNCSurvival plugin) {
         super(plugin);
 
         this.loadGameRuleConfiguration();
         this.loadGameConfiguration();
         this.loadGameStats();
+        this.loadTimer();
 
         this.itemsManager = new ItemsManager(plugin,gameConfiguration);
         this.participantManager = new ParticipantManager(plugin);
@@ -48,6 +51,23 @@ public class GameManager extends AbstractManager {
         this.interfacesManager = new InterfacesManager(plugin);
 
         this.afterReload();
+    }
+
+    public void loadTimer() {
+        switch (this.gameStats.getActualPhase()) {
+            case PHASE1:
+                this.timerTask = new CountdownPhaseTask(gameConfiguration.getDatePhase2());
+                timerTask.runTaskTimer(this.plugin,0, 20);
+                break;
+            case PHASE2:
+                this.timerTask = new CountdownPhaseTask(gameConfiguration.getDatePhase3());
+                timerTask.runTaskTimer(this.plugin,0, 20);
+                break;
+            case PHASE3:
+                this.timerTask = new CountdownPhaseTask(gameConfiguration.getDateFin());
+                timerTask.runTaskTimer(this.plugin,0, 20);
+                break;
+        }
     }
 
     public void afterReload() {
@@ -70,6 +90,8 @@ public class GameManager extends AbstractManager {
     public World getMainWorld() {
         return Bukkit.getWorlds().get(0);
     }
+
+    public CountdownPhaseTask getTimerTask() { return timerTask; }
 
     public boolean start(CommandSender sender) {
 
@@ -104,9 +126,38 @@ public class GameManager extends AbstractManager {
         // save game started info
         this.gameStats.setGameStarted(true);
 
-        CountdownPhaseTask timerTask = new CountdownPhaseTask(PhaseList.PHASE1);
-        timerTask.runTaskTimer(this.plugin,0, 1);
+        this.timerTask = new CountdownPhaseTask(PhaseEnum.LANCEMENT);
+        timerTask.runTaskTimer(this.plugin,0, 20);
         return true;
+    }
+
+    /**
+     * Lancement PHASE 1
+     */
+    public void startPhase1() {
+        this.timerTask = new CountdownPhaseTask(PhaseEnum.PHASE1);
+        timerTask.runTaskTimer(this.plugin,0, 20);
+    }
+
+    /**
+     * Lancement PHASE 2
+     */
+    public void startPhase2() {
+        // 20 tic = 1s
+        this.timerTask = new CountdownPhaseTask(PhaseEnum.PHASE2);
+        timerTask.runTaskTimer(UNCSurvival.getInstance(),0, 20);
+    }
+
+    /**
+     * Lancement PHASE 3
+     */
+    public void startPhase3() {
+        this.timerTask = new CountdownPhaseTask(PhaseEnum.PHASE3);
+        timerTask.runTaskTimer(UNCSurvival.getInstance(),0, 20);
+    }
+
+    public void startEnding() {
+
     }
 
     private void setSurvivalConditions() {

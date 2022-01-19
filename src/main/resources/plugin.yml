@@ -28,6 +28,16 @@ commands:
       /addteam <TeamName> <TeamColor>
     permission: uncsurvival.addteam
 
+  addtime:
+    description: Add time to timer
+    usage: Use /addtime [secondes] [minutes] [hours] [day]
+    permission: uncsurvival.addtime
+
+  removetime:
+    description: Remove time to timer
+    usage: Use /removetime [secondes] [minutes] [hours] [day]
+    permission: uncsurvival.addtime
+
   removeteam:
     description: Remove a team
     usage: /removeteam <TeamName>

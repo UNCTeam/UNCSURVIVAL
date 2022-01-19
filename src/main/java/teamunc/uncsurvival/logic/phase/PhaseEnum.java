@@ -1,16 +1,18 @@
 package teamunc.uncsurvival.logic.phase;
 
-public enum PhaseList {
+public enum PhaseEnum {
+    LANCEMENT(0,0,1),
     PHASE1(3,0,0),
     PHASE2(3,0,0),
-    PHASE3(3,0,0);
+    PHASE3(3,0,0),
+    FIN(0,0,0);
 
     private int jour;
     private int heure;
     private int minute;
-    private PhaseList nextPhase;
+    private PhaseEnum nextPhase;
 
-    PhaseList(int jour, int heure, int minute) {
+    PhaseEnum(int jour, int heure, int minute) {
         this.jour = jour;
         this.heure = heure;
         this.minute = minute;

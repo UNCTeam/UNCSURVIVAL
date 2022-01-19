@@ -1,20 +1,18 @@
 package teamunc.uncsurvival.logic.manager;
 
 import net.minecraft.network.chat.ChatComponentText;
-import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.server.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import teamunc.uncsurvival.UNCSurvival;
-import teamunc.uncsurvival.logic.manager.AbstractManager;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.team.Team;
 
-import java.lang.reflect.Field;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class TabManager extends AbstractManager {
 

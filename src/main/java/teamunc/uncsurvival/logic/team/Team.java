@@ -3,7 +3,6 @@ package teamunc.uncsurvival.logic.team;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -16,7 +15,10 @@ import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.utils.Region;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 public class Team implements Serializable {
 
