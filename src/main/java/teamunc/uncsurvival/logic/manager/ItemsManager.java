@@ -21,6 +21,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
+import teamunc.uncsurvival.logic.phase.PhaseEnum;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -141,8 +142,13 @@ public class ItemsManager extends AbstractManager {
         this.plugin.getServer().addRecipe(wrench);
 
         // change recipe
-        this.replaceCraftPhase2();
-        this.replaceCraftPhase3();
+        if (this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE2 || this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE3) {
+            this.replaceCraftPhase2();
+            if (this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE3) {
+                this.replaceCraftPhase3();
+            }
+        }
+
     }
 
     public void replaceCraftPhase2() {
