@@ -1,5 +1,6 @@
 package teamunc.uncsurvival.logic.team;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -146,9 +147,10 @@ public class Team implements Serializable {
             for (Block b : blocksToCheck) {
                 if ( b.getType() == Material.CHEST ) {
                     Chest block = (Chest) b.getState();
-                    for (ItemStack itemStack : block.getBlockInventory()) {
+                    for (ItemStack itemStack : block.getBlockInventory().getContents()) {
                         if (itemStack != null && itemStack.getType() == itemsManager.getItem(i)) {
                             this.itemsProduction.set(i,this.itemsProduction.get(i) + itemStack.getAmount());
+                            Bukkit.getConsoleSender().sendMessage("" + this.itemsProduction.get(i) + " add : " + itemStack.getAmount());
                             block.getBlockInventory().remove(itemStack);
                         }
                     }
