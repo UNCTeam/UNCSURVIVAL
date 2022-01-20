@@ -15,12 +15,24 @@ public class StartCmdExec extends AbstractCommandExecutor implements CommandExec
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        boolean res = this.plugin.getGameManager().start(sender);
 
-        if (res) {
-            this.messageTchatManager.sendMessageToPlayer("The Game has been started.",sender, ChatColor.GREEN);
+        // error if Game is already Running
+        if (this.plugin.getGameManager().getGameStats().isGameStarted()) {
+            this.messageTchatManager.sendMessageToPlayer("Game has already started !",sender, ChatColor.RED);
+            return false;
         }
 
-        return res;
+        // error if playersInGame < 1
+        if (this.plugin.getGameManager().getParticipantManager().getGamePlayers().size() < 1) {
+            this.messageTchatManager.sendMessageToPlayer("You need a minimum of 1 player in the game !", sender, ChatColor.RED);
+            return false;
+        }
+
+        this.messageTchatManager.sendMessageToPlayer("The Game has been started.",sender, ChatColor.GREEN);
+
+        // Lance le timer pour start
+        this.plugin.getGameManager().initStarting();
+
+        return true;
     }
 }

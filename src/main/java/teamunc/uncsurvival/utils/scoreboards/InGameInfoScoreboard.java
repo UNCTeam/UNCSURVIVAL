@@ -1,5 +1,6 @@
 package teamunc.uncsurvival.utils.scoreboards;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import teamunc.uncsurvival.UNCSurvival;
@@ -27,7 +28,7 @@ public class InGameInfoScoreboard extends VScoreboard{
                 Arrays.asList(
                         ChatColor.BOLD + "" + ChatColor.GOLD + "-----------------",
                         " ",
-                        ChatColor.BOLD + "" + ChatColor.GOLD +"- Phase Actuelle : " + ChatColor.AQUA + UNCSurvival.getInstance().getGameManager().getPhaseManager().getPhaseNumber(),
+                        ChatColor.BOLD + "" + ChatColor.GOLD +"- Phase Actuelle : " + ChatColor.AQUA + UNCSurvival.getInstance().getGameManager().getGameStats().getCurrentPhase().getNom(),
                         " ",
                         ChatColor.BOLD + "" + ChatColor.GOLD +"- Temps restant :"
                 )
@@ -61,7 +62,6 @@ public class InGameInfoScoreboard extends VScoreboard{
                         ChatColor.BOLD + "" + ChatColor.GOLD + "-----------------"
                 )
         );
-
         return lines;
     }
 

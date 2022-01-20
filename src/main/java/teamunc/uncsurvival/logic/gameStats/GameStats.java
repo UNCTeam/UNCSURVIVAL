@@ -7,11 +7,11 @@ import java.io.Serializable;
 
 public class GameStats implements Serializable {
     private boolean gameStarted;
-    private PhaseEnum actualPhase;
+    private PhaseEnum currentPhase;
 
-    public GameStats(boolean gameStarted, PhaseEnum actualPhase) {
+    public GameStats(boolean gameStarted, PhaseEnum currentPhase) {
         this.gameStarted = gameStarted;
-        this.actualPhase = actualPhase;
+        this.currentPhase = currentPhase;
     }
 
     private void saveStats() {
@@ -27,12 +27,12 @@ public class GameStats implements Serializable {
         this.saveStats();
     }
 
-    public PhaseEnum getActualPhase() {
-        return actualPhase;
+    public PhaseEnum getCurrentPhase() {
+        return currentPhase;
     }
 
-    public void setActualPhase(PhaseEnum actualPhase) {
-        this.actualPhase = actualPhase;
+    public void setCurrentPhase(PhaseEnum currentPhase) {
+        this.currentPhase = currentPhase;
         this.saveStats();
     }
 }

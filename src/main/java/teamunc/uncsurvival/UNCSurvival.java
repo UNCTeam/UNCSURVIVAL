@@ -1,6 +1,7 @@
 package teamunc.uncsurvival;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import teamunc.uncsurvival.commandesListeners.*;
 import teamunc.uncsurvival.eventsListeners.EventsManager;
@@ -59,6 +60,9 @@ public class UNCSurvival extends JavaPlugin {
         this.gameManager.getTeamsManager().getAllTeams().forEach(team -> {
             team.postLoad();
         });
+
+        this.gameManager.loadTimer();
+        this.gameManager.addInGameScoreboard();
     }
 
     public static UNCSurvival getInstance() {

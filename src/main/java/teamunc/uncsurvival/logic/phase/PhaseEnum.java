@@ -1,32 +1,20 @@
 package teamunc.uncsurvival.logic.phase;
 
 public enum PhaseEnum {
-    LANCEMENT(0,0,1),
-    PHASE1(3,0,0),
-    PHASE2(3,0,0),
-    PHASE3(3,0,0),
-    FIN(0,0,0);
+    INIT("Waiting"),
+    LANCEMENT("Lancement"),
+    PHASE1("Phase 1"),
+    PHASE2("Phase 2"),
+    PHASE3("Phase 3"),
+    FIN("Fin");
 
-    private int jour;
-    private int heure;
-    private int minute;
-    private PhaseEnum nextPhase;
+    private String nom;
 
-    PhaseEnum(int jour, int heure, int minute) {
-        this.jour = jour;
-        this.heure = heure;
-        this.minute = minute;
+    PhaseEnum(String nom) {
+        this.nom = nom;
     }
 
-    public int getJour() {
-        return jour;
-    }
-
-    public int getHeure() {
-        return heure;
-    }
-
-    public int getMinute() {
-        return minute;
+    public String getNom() {
+        return nom;
     }
 }

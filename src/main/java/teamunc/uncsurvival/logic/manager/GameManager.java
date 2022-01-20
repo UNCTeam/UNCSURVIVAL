@@ -29,7 +29,6 @@ public class GameManager extends AbstractManager {
     private ParticipantManager participantManager;
     private ScoreboardManager scoreboardManager;
     private TimeManager timeManager;
-    private PhaseManager phaseManager;
     private InterfacesManager interfacesManager;
 
     private CountdownPhaseTask timerTask;
@@ -40,13 +39,11 @@ public class GameManager extends AbstractManager {
         this.loadGameRuleConfiguration();
         this.loadGameConfiguration();
         this.loadGameStats();
-        this.loadTimer();
 
         this.itemsManager = new ItemsManager(plugin,gameConfiguration);
         this.participantManager = new ParticipantManager(plugin);
         this.scoreboardManager = new ScoreboardManager(plugin);
         this.timeManager = new TimeManager(plugin);
-        this.phaseManager = new PhaseManager(plugin);
         this.teamsManager = new TeamsManager(plugin);
         this.interfacesManager = new InterfacesManager(plugin);
 
@@ -54,7 +51,7 @@ public class GameManager extends AbstractManager {
     }
 
     public void loadTimer() {
-        switch (this.gameStats.getActualPhase()) {
+        switch (this.gameStats.getCurrentPhase()) {
             case PHASE1:
                 this.timerTask = new CountdownPhaseTask(gameConfiguration.getDatePhase2());
                 timerTask.runTaskTimer(this.plugin,0, 20);
@@ -71,8 +68,6 @@ public class GameManager extends AbstractManager {
     }
 
     public void afterReload() {
-        if (!gameStats.isGameStarted()) return;
-
         this.timeManager.startTimer();
     }
 
@@ -93,19 +88,17 @@ public class GameManager extends AbstractManager {
 
     public CountdownPhaseTask getTimerTask() { return timerTask; }
 
-    public boolean start(CommandSender sender) {
+    public GameStats getGameStats() { return gameStats; }
 
-        // error if Game is already Running
-        if (this.gameStats.isGameStarted()) {
-            this.messageTchatManager.sendMessageToPlayer("Game has already started !",sender, ChatColor.RED);
-            return false;
-        }
+    public GameRuleConfiguration getGameRuleConfiguration() { return gameRuleConfiguration; }
 
-        // error if playersInGame < 1
-        if (this.participantManager.getGamePlayers().size() < 1) {
-            this.messageTchatManager.sendMessageToPlayer("You need a minimum of 1 player in the game !", sender, ChatColor.RED);
-            return false;
-        }
+    public void initStarting() {
+        this.timerTask = new CountdownPhaseTask(1, 0, 0);
+        timerTask.runTaskTimer(this.plugin,0, 20);
+        this.getGameStats().setCurrentPhase(PhaseEnum.LANCEMENT);
+    }
+
+    public boolean start() {
 
         // start the timer
         this.getTimeManager().startTimer();
@@ -125,9 +118,9 @@ public class GameManager extends AbstractManager {
 
         // save game started info
         this.gameStats.setGameStarted(true);
+        this.gameStats.setCurrentPhase(PhaseEnum.PHASE1);
+        this.startPhase1();
 
-        this.timerTask = new CountdownPhaseTask(PhaseEnum.LANCEMENT);
-        timerTask.runTaskTimer(this.plugin,0, 20);
         return true;
     }
 
@@ -135,7 +128,8 @@ public class GameManager extends AbstractManager {
      * Lancement PHASE 1
      */
     public void startPhase1() {
-        this.timerTask = new CountdownPhaseTask(PhaseEnum.PHASE1);
+        this.getGameStats().setCurrentPhase(PhaseEnum.PHASE1);
+        this.timerTask = new CountdownPhaseTask(this.gameConfiguration.getDatePhase2());
         timerTask.runTaskTimer(this.plugin,0, 20);
     }
 
@@ -143,8 +137,8 @@ public class GameManager extends AbstractManager {
      * Lancement PHASE 2
      */
     public void startPhase2() {
-        // 20 tic = 1s
-        this.timerTask = new CountdownPhaseTask(PhaseEnum.PHASE2);
+        this.getGameStats().setCurrentPhase(PhaseEnum.PHASE2);
+        this.timerTask = new CountdownPhaseTask(this.gameConfiguration.getDatePhase3());
         timerTask.runTaskTimer(UNCSurvival.getInstance(),0, 20);
     }
 
@@ -152,12 +146,13 @@ public class GameManager extends AbstractManager {
      * Lancement PHASE 3
      */
     public void startPhase3() {
-        this.timerTask = new CountdownPhaseTask(PhaseEnum.PHASE3);
+        this.getGameStats().setCurrentPhase(PhaseEnum.PHASE3);
+        this.timerTask = new CountdownPhaseTask(this.gameConfiguration.getDateFin());
         timerTask.runTaskTimer(UNCSurvival.getInstance(),0, 20);
     }
 
     public void startEnding() {
-
+        this.getGameStats().setCurrentPhase(PhaseEnum.FIN);
     }
 
     private void setSurvivalConditions() {
@@ -210,9 +205,7 @@ public class GameManager extends AbstractManager {
     public ScoreboardManager getScoreboardManager() {
         return scoreboardManager;
     }
-    public PhaseManager getPhaseManager() {
-        return phaseManager;
-    }
+
     public TimeManager getTimeManager() {
         return timeManager;
     }

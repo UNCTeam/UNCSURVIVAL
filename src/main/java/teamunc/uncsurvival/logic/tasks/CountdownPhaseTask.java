@@ -30,13 +30,6 @@ public class CountdownPhaseTask extends BukkitRunnable {
         this.secondes = (int) ChronoUnit.SECONDS.between(today, date);
     }
 
-    public CountdownPhaseTask(PhaseEnum phase) {
-        this.minutes = phase.getMinute();
-        this.heures = phase.getHeure();
-        this.jours = phase.getJour();
-        this.phase = phase;
-    }
-
     @Override
     public void run() {
         if(heures <= 0 && jours != 0) {

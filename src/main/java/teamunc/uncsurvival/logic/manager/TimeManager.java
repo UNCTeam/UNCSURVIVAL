@@ -63,11 +63,11 @@ public class TimeManager extends AbstractManager{
     public void checkNewPhase() {
         CountdownPhaseTask timer = this.plugin.getGameManager().getTimerTask();
         if(timer != null) {
-            if(timer.getJours() == 0 && timer.getHeures() == 0 && timer.getMinutes() == 0 && timer.getSecondes() == 0) {
-                switch (timer.getPhase()) {
+            if(timer.getJours() <= 0 && timer.getHeures() <= 0 && timer.getMinutes() <= 0 && timer.getSecondes() <= 0) {
+                switch (plugin.getGameManager().getGameStats().getCurrentPhase()) {
                     case LANCEMENT:
                         timer.cancel();
-                        plugin.getGameManager().startPhase1();
+                        plugin.getGameManager().start();
                         break;
                     case PHASE1:
                         timer.cancel();
