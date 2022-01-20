@@ -145,23 +145,19 @@ public class ItemsManager extends AbstractManager {
 
         // change recipe
         // TODO if (GameStat#getPhase = 2)
-        Bukkit.getServer().removeRecipe(NamespacedKey.minecraft("oak_planks"));
-        Bukkit.getServer().removeRecipe(NamespacedKey.minecraft("spruce_planks"));
-        Bukkit.getServer().removeRecipe(NamespacedKey.minecraft("birch_planks"));
-        Bukkit.getServer().removeRecipe(NamespacedKey.minecraft("jungle_planks"));
-        Bukkit.getServer().removeRecipe(NamespacedKey.minecraft("acacia_planks"));
-        Bukkit.getServer().removeRecipe(NamespacedKey.minecraft("dark_oak_planks"));
-        Bukkit.getServer().removeRecipe(NamespacedKey.minecraft("crimson_planks"));
-        Bukkit.getServer().removeRecipe(NamespacedKey.minecraft("warped_planks"));
+        replaceCraft(new ShapelessRecipe(NamespacedKey.minecraft("oak_planks"),new ItemStack(Material.OAK_PLANKS,2)).addIngredient(Material.OAK_LOG),NamespacedKey.minecraft("oak_planks"));
+        replaceCraft(new ShapelessRecipe(NamespacedKey.minecraft("spruce_planks"),new ItemStack(Material.SPRUCE_PLANKS,2)).addIngredient(Material.SPRUCE_LOG),NamespacedKey.minecraft("spruce_planks"));
+        replaceCraft(new ShapelessRecipe(NamespacedKey.minecraft("birch_planks"),new ItemStack(Material.BIRCH_PLANKS,2)).addIngredient(Material.BIRCH_LOG),NamespacedKey.minecraft("birch_planks"));
+        replaceCraft(new ShapelessRecipe(NamespacedKey.minecraft("jungle_planks"),new ItemStack(Material.JUNGLE_PLANKS,2)).addIngredient(Material.JUNGLE_LOG),NamespacedKey.minecraft("jungle_planks"));
+        replaceCraft(new ShapelessRecipe(NamespacedKey.minecraft("acacia_planks"),new ItemStack(Material.ACACIA_PLANKS,2)).addIngredient(Material.ACACIA_LOG),NamespacedKey.minecraft("acacia_planks"));
+        replaceCraft(new ShapelessRecipe(NamespacedKey.minecraft("dark_oak_planks"),new ItemStack(Material.DARK_OAK_PLANKS,2)).addIngredient(Material.DARK_OAK_LOG),NamespacedKey.minecraft("dark_oak_planks"));
+        replaceCraft(new ShapelessRecipe(NamespacedKey.minecraft("crimson_planks"),new ItemStack(Material.CRIMSON_PLANKS,2)).addIngredient(Material.CRIMSON_STEM),NamespacedKey.minecraft("crimson_planks"));
+        replaceCraft(new ShapelessRecipe(NamespacedKey.minecraft("warped_planks"),new ItemStack(Material.WARPED_PLANKS,2)).addIngredient(Material.WARPED_STEM),NamespacedKey.minecraft("warped_planks"));
+    }
 
-        Bukkit.getServer().addRecipe(new ShapelessRecipe(NamespacedKey.minecraft("oak_planks"),new ItemStack(Material.OAK_PLANKS,2)).addIngredient(Material.OAK_LOG));
-        Bukkit.getServer().addRecipe(new ShapelessRecipe(NamespacedKey.minecraft("spruce_planks"),new ItemStack(Material.SPRUCE_PLANKS,2)).addIngredient(Material.SPRUCE_LOG));
-        Bukkit.getServer().addRecipe(new ShapelessRecipe(NamespacedKey.minecraft("birch_planks"),new ItemStack(Material.BIRCH_PLANKS,2)).addIngredient(Material.BIRCH_LOG));
-        Bukkit.getServer().addRecipe(new ShapelessRecipe(NamespacedKey.minecraft("jungle_planks"),new ItemStack(Material.JUNGLE_PLANKS,2)).addIngredient(Material.JUNGLE_LOG));
-        Bukkit.getServer().addRecipe(new ShapelessRecipe(NamespacedKey.minecraft("acacia_planks"),new ItemStack(Material.ACACIA_PLANKS,2)).addIngredient(Material.ACACIA_LOG));
-        Bukkit.getServer().addRecipe(new ShapelessRecipe(NamespacedKey.minecraft("dark_oak_planks"),new ItemStack(Material.DARK_OAK_PLANKS,2)).addIngredient(Material.DARK_OAK_LOG));
-        Bukkit.getServer().addRecipe(new ShapelessRecipe(NamespacedKey.minecraft("crimson_planks"),new ItemStack(Material.CRIMSON_PLANKS,2)).addIngredient(Material.CRIMSON_STEM));
-        Bukkit.getServer().addRecipe(new ShapelessRecipe(NamespacedKey.minecraft("warped_planks"),new ItemStack(Material.WARPED_PLANKS,2)).addIngredient(Material.WARPED_STEM));
+    public void replaceCraft(Recipe recipe, NamespacedKey namespacedKey) {
+        Bukkit.getServer().removeRecipe(namespacedKey);
+        Bukkit.getServer().addRecipe(recipe);
     }
 
     public Material getItem(int itemNumber) {return this.goalItems.get(itemNumber);}
