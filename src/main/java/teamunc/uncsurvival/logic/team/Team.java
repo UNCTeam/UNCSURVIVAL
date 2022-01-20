@@ -3,7 +3,8 @@ package teamunc.uncsurvival.logic.team;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -12,6 +13,7 @@ import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.interfaces.CustomBlock;
 import teamunc.uncsurvival.logic.interfaces.GoalCustomInterface;
 import teamunc.uncsurvival.logic.interfaces.TeamCustomInterface;
+import teamunc.uncsurvival.logic.manager.ItemsManager;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.utils.Region;
 
@@ -26,7 +28,7 @@ public class Team implements Serializable {
     private ArrayList<Integer> itemsProduction = new ArrayList<>(Arrays.asList(0,0,0,0,0));
     private int bonusScore = 0;
     private Location spawnPoint;
-    private ArrayList<CustomBlock> customBlocks = new ArrayList<>();
+    private ArrayList<CustomBlock> interfacesGoals = new ArrayList<>();
     private Location interfaceTeam;
     private int range = 10;
     private Region region;
@@ -81,7 +83,7 @@ public class Team implements Serializable {
             armorStand.addScoreboardTag("INTERFACE_"+this.name+"_"+i);
             armorStand.getEquipment().setHelmet(texture);
 
-            this.customBlocks.add(new CustomBlock(locationTemp.get(i),armorStand));
+            this.interfacesGoals.add(new CustomBlock(locationTemp.get(i),armorStand));
         }
 
         // interface team
@@ -102,7 +104,7 @@ public class Team implements Serializable {
 
     public void moveInterfaceGoal(int itemNumber,Location newLocation) {
         // supression last pos
-        CustomBlock cBlock = this.customBlocks.get(itemNumber);
+        CustomBlock cBlock = this.interfacesGoals.get(itemNumber);
         Location oldLoc = cBlock.getLocation();
         ArmorStand oldArmorStand = cBlock.getArmorStand();
         if (oldArmorStand != null) oldArmorStand.remove();
@@ -125,13 +127,34 @@ public class Team implements Serializable {
         armorStand.setMarker(true);
         armorStand.getEquipment().setHelmet(texture);
 
-        this.customBlocks.set(itemNumber,new CustomBlock(newLocation,armorStand));
-        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(this.customBlocks.get(itemNumber).getLocation(),new GoalCustomInterface(itemNumber,this));
+        this.interfacesGoals.set(itemNumber,new CustomBlock(newLocation,armorStand));
+        UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(this.interfacesGoals.get(itemNumber).getLocation(),new GoalCustomInterface(itemNumber,this));
     }
 
     public void ConsumeAllGoalItems() {
-        // TODO loc11.getBlock().getBlockData()
+        final ItemsManager itemsManager = UNCSurvival.getInstance().getGameManager().getItemsManager();
+        ArrayList<CustomBlock> goals = this.interfacesGoals;
+        for (int i = 0, goalsSize = goals.size(); i < goalsSize; i++) {
+            CustomBlock cBlock = goals.get(i);
+            ArrayList<Block> blocksToCheck = new ArrayList<>(Arrays.asList(
+                    cBlock.getLocation().clone().add(1, 0, 0).getBlock(),
+                    cBlock.getLocation().clone().add(0, 0, 1).getBlock(),
+                    cBlock.getLocation().clone().add(-1, 0, 0).getBlock(),
+                    cBlock.getLocation().clone().add(0, 0, -1).getBlock()
+            ));
 
+            for (Block b : blocksToCheck) {
+                if ( b.getType() == Material.CHEST ) {
+                    Chest block = (Chest) b.getState();
+                    for (ItemStack itemStack : block.getBlockInventory()) {
+                        if (itemStack != null && itemStack.getType() == itemsManager.getItem(i)) {
+                            this.itemsProduction.set(i,this.itemsProduction.get(i) + itemStack.getAmount());
+                            block.getBlockInventory().remove(itemStack);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public boolean hasMember(GamePlayer gamePlayer) {
@@ -198,15 +221,15 @@ public class Team implements Serializable {
     }
 
     public void registerInterfaces() {
-        for (int i = 0; i < this.customBlocks.size(); i++) {
-            UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(this.customBlocks.get(i).getLocation(),new GoalCustomInterface(i,this));
+        for (int i = 0; i < this.interfacesGoals.size(); i++) {
+            UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(this.interfacesGoals.get(i).getLocation(),new GoalCustomInterface(i,this));
         }
         UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(this.interfaceTeam,new TeamCustomInterface(this));
     }
 
     public void postLoad() {
         registerInterfaces();
-        this.customBlocks.forEach(customBlock -> {
+        this.interfacesGoals.forEach(customBlock -> {
             Location loc = customBlock.getLocation().clone().add(0.5,0,0.5);
 
             // adding custom block style
@@ -225,7 +248,7 @@ public class Team implements Serializable {
     }
 
     public void onDisable() {
-        this.customBlocks.forEach(customBlock -> {
+        this.interfacesGoals.forEach(customBlock -> {
             customBlock.getArmorStand().remove();
             customBlock.setArmorStand(null);
         });
