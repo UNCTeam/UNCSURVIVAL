@@ -150,7 +150,6 @@ public class Team implements Serializable {
                     for (ItemStack itemStack : block.getBlockInventory().getContents()) {
                         if (itemStack != null && itemStack.getType() == itemsManager.getItem(i)) {
                             this.itemsProduction.set(i,this.itemsProduction.get(i) + itemStack.getAmount());
-                            Bukkit.getConsoleSender().sendMessage("" + this.itemsProduction.get(i) + " add : " + itemStack.getAmount());
                             block.getBlockInventory().remove(itemStack);
                         }
                     }
