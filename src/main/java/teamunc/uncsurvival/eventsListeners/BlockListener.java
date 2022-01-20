@@ -1,4 +1,4 @@
-package teamunc.uncsurvival.eventsListeners.customsBlock;
+package teamunc.uncsurvival.eventsListeners;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;

@@ -1,4 +1,4 @@
-package teamunc.uncsurvival.eventsListeners.vanillaItems;
+package teamunc.uncsurvival.eventsListeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

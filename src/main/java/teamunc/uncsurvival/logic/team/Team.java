@@ -213,9 +213,9 @@ public class Team implements Serializable {
     }
 
     public int getScore() {
-        int total = 0;
-        for (int i: this.itemsProduction) {
-            total = UNCSurvival.getInstance().getGameManager().getItemsManager().getGoalItemPrice(i) * this.itemsProduction.get(i);
+        int total = this.bonusScore;
+        for (int j = 0; j < this.itemsProduction.size(); j++) {
+            total += UNCSurvival.getInstance().getGameManager().getItemsManager().getGoalItemPrice(j) * this.itemsProduction.get(j);
         }
         return total;
     }
