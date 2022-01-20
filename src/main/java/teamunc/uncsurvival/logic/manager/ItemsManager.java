@@ -51,7 +51,6 @@ public class ItemsManager extends AbstractManager {
         this.goalItemsPrices = gameConfiguration.getGoalItemsPrices();
         this.customItems.add("diamondApple");
         this.customItems.add("wrench");
-        this.initCraftingRecipe();
     }
 
     public ItemStack createDiamondApple() {

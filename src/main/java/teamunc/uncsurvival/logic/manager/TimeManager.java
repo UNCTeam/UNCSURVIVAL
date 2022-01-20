@@ -103,7 +103,7 @@ public class TimeManager extends AbstractManager{
 
         // Check items
         this.plugin.getGameManager().getTeamsManager().getAllTeams().forEach(team -> {
-            if (phase == PhaseEnum.FIN) team.ConsumeAllGoalItems();
+            if (phase != PhaseEnum.FIN) team.ConsumeAllGoalItems();
         });
 
         // damage due to Water

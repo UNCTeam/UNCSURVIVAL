@@ -63,6 +63,8 @@ public class UNCSurvival extends JavaPlugin {
 
         this.gameManager.loadTimer();
         this.gameManager.addInGameScoreboard();
+
+        this.getGameManager().getItemsManager().initCraftingRecipe();
     }
 
     public static UNCSurvival getInstance() {
