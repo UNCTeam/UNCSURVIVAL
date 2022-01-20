@@ -89,6 +89,7 @@ public class TimeManager extends AbstractManager{
     }
 
     public void actionsEachSeconds() {
+        PhaseEnum phase = plugin.getGameManager().getGameStats().getCurrentPhase();
         // Vérifi si une phase est terminé
         checkNewPhase();
 
@@ -98,9 +99,11 @@ public class TimeManager extends AbstractManager{
         // Actualise Water Level Display
         ThirstActualiser.getInstance().actualiseDisplay();
 
+
+
         // Check items
         this.plugin.getGameManager().getTeamsManager().getAllTeams().forEach(team -> {
-            team.ConsumeAllGoalItems();
+            if (phase == PhaseEnum.FIN) team.ConsumeAllGoalItems();
         });
 
         // damage due to Water
@@ -122,7 +125,7 @@ public class TimeManager extends AbstractManager{
         // place all events that can occur each minutes
 
         // dicrease Water Level of 1
-        ThirstActualiser.getInstance().decreaseWaterForAllRegisteredPlayers(1);
+        if (this.minutes%2 == 0) ThirstActualiser.getInstance().decreaseWaterForAllRegisteredPlayers(1);
     }
 
     public void actionsEachHours() {

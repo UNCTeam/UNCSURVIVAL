@@ -140,6 +140,7 @@ public class GameManager extends AbstractManager {
         this.getGameStats().setCurrentPhase(PhaseEnum.PHASE2);
         this.timerTask = new CountdownPhaseTask(this.gameConfiguration.getDatePhase3());
         timerTask.runTaskTimer(UNCSurvival.getInstance(),0, 20);
+        this.plugin.getGameManager().getItemsManager().replaceCraftPhase2();
     }
 
     /**
@@ -149,6 +150,7 @@ public class GameManager extends AbstractManager {
         this.getGameStats().setCurrentPhase(PhaseEnum.PHASE3);
         this.timerTask = new CountdownPhaseTask(this.gameConfiguration.getDateFin());
         timerTask.runTaskTimer(UNCSurvival.getInstance(),0, 20);
+        this.plugin.getGameManager().getItemsManager().replaceCraftPhase3();
     }
 
     public void startEnding() {

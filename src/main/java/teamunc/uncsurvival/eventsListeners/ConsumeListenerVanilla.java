@@ -25,7 +25,7 @@ public class ConsumeListenerVanilla extends AbstractEventsListener {
 
         switch (itemStack.getType()) {
             case POTION:
-                boolean notFull = ThirstActualiser.getInstance().increaseWater(3, this.plugin.getGameManager().getParticipantManager().getGamePlayer(player.getName()));
+                boolean notFull = ThirstActualiser.getInstance().increaseWater(4, this.plugin.getGameManager().getParticipantManager().getGamePlayer(player.getName()));
                 if (!notFull) {
                     e.setCancelled(true);
                     plugin.getMessageTchatManager().sendMessageToPlayer("You can't drink, you are full !",player, ChatColor.RED);
