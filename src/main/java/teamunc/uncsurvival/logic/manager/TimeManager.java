@@ -1,8 +1,11 @@
 package teamunc.uncsurvival.logic.manager;
 
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.features.thirst.ThirstActualiser;
+import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.tasks.CountdownPhaseTask;
 
 public class TimeManager extends AbstractManager{
@@ -102,6 +105,17 @@ public class TimeManager extends AbstractManager{
 
         // damage due to Water
         if (this.secondes%5 == 0) ThirstActualiser.getInstance().damageAllnoWater();
+
+        if(plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.LANCEMENT) {
+            for(Player player : this.plugin.getGameManager().getParticipantManager().getOnelinePlayers()) {
+                if(plugin.getGameManager().getTimerTask().getSecondes() == 13) {
+                    player.sendTitle("§bDébut du jeu dans : ", "", 20, 30, 20);
+                } else if(plugin.getGameManager().getTimerTask().getSecondes() <= 10){
+                    player.sendTitle(" §c§l" + plugin.getGameManager().getTimerTask().getSecondes(), "", 10, 20, 10);
+                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL,0.4F, 2);
+                }
+            }
+        }
     }
 
     public void actionsEachMinutes() {

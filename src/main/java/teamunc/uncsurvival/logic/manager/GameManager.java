@@ -93,7 +93,7 @@ public class GameManager extends AbstractManager {
     public GameRuleConfiguration getGameRuleConfiguration() { return gameRuleConfiguration; }
 
     public void initStarting() {
-        this.timerTask = new CountdownPhaseTask(1, 0, 0);
+        this.timerTask = new CountdownPhaseTask(15, 0, 0, 0);
         timerTask.runTaskTimer(this.plugin,0, 20);
         this.getGameStats().setCurrentPhase(PhaseEnum.LANCEMENT);
     }

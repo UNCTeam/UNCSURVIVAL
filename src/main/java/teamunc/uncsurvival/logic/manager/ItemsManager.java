@@ -101,6 +101,8 @@ public class ItemsManager extends AbstractManager {
 
         meta.setDisplayName("§8§lWrench - §f" + this.getGoalItemName(id) + " block");
 
+        meta.setCustomModelData(2);
+
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
         data.set(this.wrenchKey, PersistentDataType.INTEGER, id);

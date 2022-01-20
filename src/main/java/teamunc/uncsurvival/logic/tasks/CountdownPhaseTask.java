@@ -16,7 +16,8 @@ public class CountdownPhaseTask extends BukkitRunnable {
     private int heures;
     private int jours;
 
-    public CountdownPhaseTask(int minutes, int heures, int jours) {
+    public CountdownPhaseTask(int secondes, int minutes, int heures, int jours) {
+        this.secondes = secondes;
         this.minutes = minutes;
         this.heures = heures;
         this.jours = jours;
@@ -25,9 +26,9 @@ public class CountdownPhaseTask extends BukkitRunnable {
     public CountdownPhaseTask(LocalDateTime date) {
         LocalDateTime today = LocalDateTime.now();
         this.jours = (int) ChronoUnit.DAYS.between(today, date);
-        this.minutes = (int) ChronoUnit.MINUTES.between(today, date);
-        this.heures = (int) ChronoUnit.HOURS.between(today, date);
-        this.secondes = (int) ChronoUnit.SECONDS.between(today, date);
+        this.heures = (int) ChronoUnit.HOURS.between(today, date) % 24;
+        this.minutes = (int) ChronoUnit.MINUTES.between(today, date) % 60;
+        this.secondes = (int) ChronoUnit.SECONDS.between(today, date) % 60;
     }
 
     @Override
