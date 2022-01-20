@@ -1,10 +1,8 @@
 package teamunc.uncsurvival.logic.player;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import teamunc.uncsurvival.utils.scoreboards.FastBoard;
 
 import java.io.Serializable;
 import java.util.Objects;

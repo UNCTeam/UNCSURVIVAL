@@ -5,10 +5,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import teamunc.uncsurvival.UNCSurvival;
-import teamunc.uncsurvival.utils.scoreboards.InGameInfoScoreboard;
 import teamunc.uncsurvival.utils.scoreboards.VScoreboard;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;

@@ -1,9 +1,9 @@
 package teamunc.uncsurvival.logic.manager;
 
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.features.thirst.ThirstActualiser;
+import teamunc.uncsurvival.logic.tasks.CountdownPhaseTask;
 
 public class TimeManager extends AbstractManager{
 
@@ -60,8 +60,36 @@ public class TimeManager extends AbstractManager{
         this.scheduler.cancelTask(this.eachSecondsTimerID);
     }
 
+    public void checkNewPhase() {
+        CountdownPhaseTask timer = this.plugin.getGameManager().getTimerTask();
+        if(timer != null) {
+            if(timer.getJours() <= 0 && timer.getHeures() <= 0 && timer.getMinutes() <= 0 && timer.getSecondes() <= 0) {
+                switch (plugin.getGameManager().getGameStats().getCurrentPhase()) {
+                    case LANCEMENT:
+                        timer.cancel();
+                        plugin.getGameManager().start();
+                        break;
+                    case PHASE1:
+                        timer.cancel();
+                        plugin.getGameManager().startPhase2();
+                        break;
+                    case PHASE2:
+                        timer.cancel();
+                        plugin.getGameManager().startPhase3();
+                        break;
+                    case PHASE3:
+                        timer.cancel();
+                        plugin.getGameManager().startEnding();
+                        break; }
+            }
+        }
+    }
+
     public void actionsEachSeconds() {
-        // place all events that can occur each seconds
+        // Vérifi si une phase est terminé
+        checkNewPhase();
+
+        // Update les scoreboards
         plugin.getGameManager().getScoreboardManager().update();
 
         // Actualise Water Level Display

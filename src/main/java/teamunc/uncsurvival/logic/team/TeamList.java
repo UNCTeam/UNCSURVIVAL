@@ -1,12 +1,7 @@
 package teamunc.uncsurvival.logic.team;
 
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import teamunc.uncsurvival.UNCSurvival;
-
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class TeamList implements Serializable {
     private static transient final long serialVersionUID = -1681012206529286330L;

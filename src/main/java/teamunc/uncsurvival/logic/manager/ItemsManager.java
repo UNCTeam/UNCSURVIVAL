@@ -22,7 +22,6 @@ import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -104,8 +103,6 @@ public class ItemsManager extends AbstractManager {
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
         data.set(this.wrenchKey, PersistentDataType.INTEGER, id);
-
-        meta.setCustomModelData(2);
 
         item.setItemMeta(meta);
 

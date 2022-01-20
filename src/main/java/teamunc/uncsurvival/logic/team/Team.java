@@ -19,7 +19,10 @@ import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.utils.Region;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 public class Team implements Serializable {
 
@@ -253,5 +256,9 @@ public class Team implements Serializable {
             customBlock.getArmorStand().remove();
             customBlock.setArmorStand(null);
         });
+    }
+
+    public Region getRegion() {
+        return region;
     }
 }

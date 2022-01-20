@@ -1,19 +1,18 @@
 package teamunc.uncsurvival.logic.manager;
 
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.team.Team;
 
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ParticipantManager extends AbstractManager{
-
-    private HashMap<GamePlayer, Team> playersByTeam = new HashMap<>();
 
     public ParticipantManager(UNCSurvival plugin) {
         super(plugin);
@@ -122,6 +121,10 @@ public class ParticipantManager extends AbstractManager{
 
     public Team getTeamForPlayer(Player player) {
         return this.getPlayersByTeam().get(new GamePlayer(player));
+    }
+
+    public boolean hasPlayer(Player player) {
+        return this.getPlayersByTeam().containsKey(new GamePlayer(player));
     }
 
     /**

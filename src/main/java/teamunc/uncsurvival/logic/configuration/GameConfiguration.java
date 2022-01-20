@@ -1,33 +1,34 @@
 package teamunc.uncsurvival.logic.configuration;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 
 public class GameConfiguration implements Serializable {
-    private Date datePhase2;
-    private Date datePhase3;
+    private LocalDateTime datePhase2;
+    private LocalDateTime datePhase3;
+    private LocalDateTime dateFin;
     private ArrayList<Material> goalItems;
     private ArrayList<Integer> goalItemsPrices;
 
-    public GameConfiguration(Date datePhase2, Date datePhase3, ArrayList<Material> goalItems,ArrayList<Integer> goalItemsPrices) {
+    public GameConfiguration(LocalDateTime datePhase2, LocalDateTime datePhase3, LocalDateTime dateFin,
+                             ArrayList<Material> goalItems, ArrayList<Integer> goalItemsPrices) {
         this.datePhase2 = datePhase2;
         this.datePhase3 = datePhase3;
-
+        this.dateFin = dateFin;
         this.goalItems = goalItems;
         this.goalItemsPrices = goalItemsPrices;
-
     }
 
-    public Date getDatePhase2() {
+    public LocalDateTime getDateFin() { return dateFin; }
+
+    public LocalDateTime getDatePhase2() {
         return datePhase2;
     }
 
-    public Date getDatePhase3() {
+    public LocalDateTime getDatePhase3() {
         return datePhase3;
     }
 

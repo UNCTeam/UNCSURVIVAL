@@ -1,18 +1,14 @@
 package teamunc.uncsurvival.logic.manager;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.team.Team;
 import teamunc.uncsurvival.logic.team.TeamList;
 
-import java.io.*;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Optional;
 
 public class TeamsManager extends AbstractManager implements Serializable {

@@ -12,16 +12,19 @@ import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 import teamunc.uncsurvival.logic.configuration.GameRuleConfiguration;
 import teamunc.uncsurvival.logic.gameStats.GameStats;
+import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.team.TeamList;
+import teamunc.uncsurvival.utils.serializerAdapter.GameConfigurationDeserializer;
+import teamunc.uncsurvival.utils.serializerAdapter.GameConfigurationSerializer;
+import teamunc.uncsurvival.utils.serializerAdapter.LocalDateTimeSerializer;
 
 import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -61,8 +64,7 @@ public class FileManager extends AbstractManager{
         } catch (NoSuchFileException e) {
             // Le fichier n'existe pas alors on l'init et le créer
             Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "Creation du fichier de gameconfig");
-            Date phase1 = Date.from(Instant.now());
-            Date phase2 = Date.from(Instant.now());
+            LocalDateTime phase = LocalDateTime.now();
 
             ArrayList<Material> goalItems = new ArrayList<>();
             goalItems.add(Material.BRICK);
@@ -79,7 +81,7 @@ public class FileManager extends AbstractManager{
             goalItemsPrices.add(5);
 
 
-            GameConfiguration gameConfiguration = new GameConfiguration(phase2, phase1, goalItems,goalItemsPrices);
+            GameConfiguration gameConfiguration = new GameConfiguration(phase, phase, phase, goalItems,goalItemsPrices);
             this.plugin.getFileManager().saveGameConfiguration(gameConfiguration);
             return gameConfiguration;
         } catch (Exception e) {
@@ -90,9 +92,6 @@ public class FileManager extends AbstractManager{
 
     public boolean saveGameConfiguration(GameConfiguration gameConfiguration) {
         try {
-            Gson gson = new Gson();
-            Bukkit.broadcastMessage(gameConfiguration.getDatePhase3().toString());
-            Bukkit.broadcastMessage(gson.toJson(gameConfiguration));
             this.saveJson(gameConfiguration, gameConfiguration_path);
             return true;
         } catch (Exception e) {
@@ -108,7 +107,7 @@ public class FileManager extends AbstractManager{
         } catch (NoSuchFileException e) {
             // Le fichier n'existe pas alors on l'init et le créer
             Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "Creation du fichier de gameStats");
-            GameStats gameStats = new GameStats(false,1);
+            GameStats gameStats = new GameStats(false, PhaseEnum.INIT);
             this.plugin.getFileManager().saveGameStats(gameStats);
             return gameStats;
         } catch (Exception e) {
@@ -195,23 +194,23 @@ public class FileManager extends AbstractManager{
 
     private void saveJson(Object o, String path) throws Exception {
         try (Writer writer = new FileWriter(path)) {
-            Gson gson = new GsonBuilder()
-                    .setPrettyPrinting()
-                    .setDateFormat("yyyy-MM-dd HH:mm:ss")
-                    .disableHtmlEscaping()
-                    .create();
-            gson.toJson(o, writer);
+
+            this.getGson().toJson(o, writer);
         }
+    }
+
+    public Gson getGson() {
+        return new GsonBuilder()
+                .setPrettyPrinting()
+                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer())
+                .disableHtmlEscaping()
+                .create();
     }
 
     private <T> T loadJson(String path, Type type) throws Exception {
         Reader reader = Files.newBufferedReader(Paths.get(path));
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .setDateFormat("yyyy-MM-dd HH:mm:ss")
-                .disableHtmlEscaping()
-                .create();
-        T object = gson.fromJson(reader, type);
+        T object = this.getGson().fromJson(reader, type);
         reader.close();
         return object;
     }

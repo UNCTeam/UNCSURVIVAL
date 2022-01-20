@@ -1,6 +1,7 @@
 package teamunc.uncsurvival;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import teamunc.uncsurvival.commandesListeners.*;
 import teamunc.uncsurvival.eventsListeners.EventsManager;
@@ -45,6 +46,8 @@ public class UNCSurvival extends JavaPlugin {
         this.getCommand("removeplayertoteam").setExecutor(new TeamCmdExec(this));
         this.getCommand("removeteam").setExecutor(new TeamCmdExec(this));
         this.getCommand("addteam").setExecutor(new TeamCmdExec(this));
+        this.getCommand("addtime").setExecutor(new TimerCmdExec(this));
+        this.getCommand("removetime").setExecutor(new TimerCmdExec(this));
 
         this.getCommand("reloadconfig").setExecutor(new ReloadConfigurationCmdExec(this));
     }
@@ -57,6 +60,9 @@ public class UNCSurvival extends JavaPlugin {
         this.gameManager.getTeamsManager().getAllTeams().forEach(team -> {
             team.postLoad();
         });
+
+        this.gameManager.loadTimer();
+        this.gameManager.addInGameScoreboard();
     }
 
     public static UNCSurvival getInstance() {
