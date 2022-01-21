@@ -26,6 +26,9 @@ public class GiveCustomItemsCmdExec extends AbstractCommandExecutor implements C
                         case "wrench":
                             p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createWrenchItem(0, 0));
                             break;
+                        case "healpatch":
+                            p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createHealPatch());
+                            break;
                     }
                 }
             }

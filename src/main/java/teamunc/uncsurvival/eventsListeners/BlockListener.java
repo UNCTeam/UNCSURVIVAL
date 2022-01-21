@@ -29,6 +29,9 @@ public class BlockListener extends AbstractEventsListener {
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         Block block = e.getClickedBlock();
+
+        if (block == null) return;
+
         ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
         ItemMeta itemMeta = item.getItemMeta();
 
