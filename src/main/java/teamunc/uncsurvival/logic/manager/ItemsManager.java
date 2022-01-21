@@ -105,6 +105,7 @@ public class ItemsManager extends AbstractManager {
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
         data.set(this.wrenchKey, PersistentDataType.INTEGER, id);
+        data.set(this.customitemKey, PersistentDataType.STRING, "Wrench");
 
         item.setItemMeta(meta);
 
@@ -178,4 +179,15 @@ public class ItemsManager extends AbstractManager {
 
         return this.goalItemsPrices.get(itemNumber);
     }
+
+    public boolean isWrenchItem(ItemStack itemStack) {
+        return (itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING) != null &&
+                itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING).equals("Wrench"));
+    }
+
+    public boolean isDiamondAppleItem(ItemStack itemStack) {
+        return (itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING) != null &&
+                itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING).equals("DiamondApple"));
+    }
+
 }
