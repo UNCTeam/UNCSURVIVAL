@@ -261,4 +261,9 @@ public class Team implements Serializable {
     public Region getRegion() {
         return region;
     }
+
+    public void resetScore() {
+        this.itemsProduction = new ArrayList<>(Arrays.asList(0,0,0,0,0));
+        this.bonusScore = 0;
+    }
 }

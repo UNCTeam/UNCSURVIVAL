@@ -12,6 +12,7 @@ import teamunc.uncsurvival.logic.gameStats.GameStats;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.tasks.CountdownPhaseTask;
+import teamunc.uncsurvival.logic.team.Team;
 import teamunc.uncsurvival.utils.scoreboards.InGameInfoScoreboard;
 
 import java.util.ArrayList;
@@ -120,6 +121,11 @@ public class GameManager extends AbstractManager {
         this.gameStats.setGameStarted(true);
         this.gameStats.setCurrentPhase(PhaseEnum.PHASE1);
         this.startPhase1();
+
+        // reset team score
+        for (Team t : this.teamsManager.getAllTeams()) {
+            t.resetScore();
+        }
 
         return true;
     }
