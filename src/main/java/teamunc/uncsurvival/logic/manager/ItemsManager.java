@@ -3,20 +3,15 @@ package teamunc.uncsurvival.logic.manager;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.world.item.crafting.IRecipe;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftShapelessRecipe;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
@@ -53,22 +48,6 @@ public class ItemsManager extends AbstractManager {
         this.customItems.add("wrench");
     }
 
-    public ItemStack createDiamondApple() {
-        ItemStack item = new ItemStack(Material.APPLE,1);
-
-        ItemMeta meta = item.getItemMeta();
-
-        meta.setCustomModelData(1);
-
-        PersistentDataContainer data = meta.getPersistentDataContainer();
-
-        data.set(this.customitemKey, PersistentDataType.STRING,"DiamondApple");
-
-        item.setItemMeta(meta);
-
-        return item;
-    }
-
     public String getGoalItemName(Integer id) {
         String res = "";
         switch (id) {
@@ -94,6 +73,42 @@ public class ItemsManager extends AbstractManager {
         return res;
     }
 
+    public ItemStack createDiamondApple() {
+        ItemStack item = new ItemStack(Material.APPLE,1);
+
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setCustomModelData(1);
+
+        meta.setDisplayName("§bDiamond Apple");
+
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+
+        data.set(this.customitemKey, PersistentDataType.STRING,"DiamondApple");
+
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
+    public ItemStack createHealPatch() {
+        ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK,1);
+
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setCustomModelData(3);
+
+        meta.setDisplayName("§bHeal Patch");
+
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+
+        data.set(this.customitemKey, PersistentDataType.STRING,"HealPatch");
+
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
     public ItemStack createWrenchItem(Integer id, Integer durability) {
         ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK,1);
         ItemMeta meta = item.getItemMeta();
@@ -114,6 +129,24 @@ public class ItemsManager extends AbstractManager {
         int damage = durability;
         im.setDamage(damage);
         item.setItemMeta(im);
+
+        return item;
+    }
+
+    public ItemStack createAlcool() {
+        ItemStack item = new ItemStack(Material.POTION,1);
+
+        PotionMeta meta = (PotionMeta) item.getItemMeta();
+
+        meta.setColor(Color.BLACK);
+
+        meta.setDisplayName("§bZombie Alcool");
+
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+
+        data.set(this.customitemKey, PersistentDataType.STRING,"Alcool");
+
+        item.setItemMeta(meta);
 
         return item;
     }
@@ -143,6 +176,20 @@ public class ItemsManager extends AbstractManager {
         wrench.setIngredient('.',Material.IRON_BLOCK);
         this.plugin.getServer().addRecipe(wrench);
 
+        // ALCOOL
+        ShapedRecipe alcool = new ShapedRecipe(new NamespacedKey(this.plugin,"craftAlcool"),this.createAlcool());
+        alcool.shape("***","*-*","***");
+        alcool.setIngredient('*',Material.ROTTEN_FLESH);
+        alcool.setIngredient('-',Material.GLASS_BOTTLE);
+        this.plugin.getServer().addRecipe(alcool);
+
+        // HEAL PATCH
+        ShapedRecipe heal_patch = new ShapedRecipe(new NamespacedKey(this.plugin,"craftHealPatch"),this.createHealPatch());
+        heal_patch.shape("***","*-*","***");
+        heal_patch.setIngredient('*',Material.PAPER);
+        heal_patch.setIngredient('-',new RecipeChoice.ExactChoice(this.createAlcool()));
+        this.plugin.getServer().addRecipe(heal_patch);
+
         // change recipe
         if (this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE2 || this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE3) {
             this.replaceCraftPhase2();
@@ -150,7 +197,6 @@ public class ItemsManager extends AbstractManager {
                 this.replaceCraftPhase3();
             }
         }
-
     }
 
     public void replaceCraftPhase2() {
@@ -189,5 +235,4 @@ public class ItemsManager extends AbstractManager {
         return (itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING) != null &&
                 itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING).equals("DiamondApple"));
     }
-
 }

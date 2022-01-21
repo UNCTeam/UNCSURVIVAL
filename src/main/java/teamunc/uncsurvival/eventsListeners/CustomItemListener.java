@@ -1,9 +1,12 @@
 package teamunc.uncsurvival.eventsListeners;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -12,9 +15,9 @@ import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.eventsListeners.AbstractEventsListener;
 
-public class ConsumeListenerCustom extends AbstractEventsListener {
+public class CustomItemListener extends AbstractEventsListener {
 
-    public ConsumeListenerCustom(UNCSurvival plugin) {
+    public CustomItemListener(UNCSurvival plugin) {
         super(plugin);
     }
 
@@ -50,5 +53,35 @@ public class ConsumeListenerCustom extends AbstractEventsListener {
                     break;
             }
         }
+    }
+
+    @EventHandler
+    public void onCustomItemUse(PlayerInteractEvent e) {
+        ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
+        ItemMeta itemMeta = item.getItemMeta();
+        Player player = e.getPlayer();
+
+        if (itemMeta == null) return;
+
+        if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            PersistentDataContainer data = itemMeta.getPersistentDataContainer();
+            String customType = data.get(this.plugin.getGameManager().getItemsManager().getCustomitemKey(), PersistentDataType.STRING);
+
+            switch(customType) {
+                case "HealPatch":
+                    boolean used = false;
+                    if (player.getHealth() + 2 <= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()) {
+                        player.setHealth(player.getHealth() + 2);
+                        used = true;
+                    } else if (player.getHealth() + 1 == player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()){
+                        player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+                        used = true;
+                    }
+                    if (used) item.setAmount(0);
+
+                    break;
+            }
+        }
+
     }
 }

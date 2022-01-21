@@ -13,7 +13,7 @@ public class EventsManager extends AbstractManager {
         super(plugin);
 
         this.eventsListeners.add(new ConsumeListenerVanilla(this.plugin));
-        this.eventsListeners.add(new ConsumeListenerCustom(this.plugin));
+        this.eventsListeners.add(new CustomItemListener(this.plugin));
         this.eventsListeners.add(new BlockListener(this.plugin));
         this.eventsListeners.add(new PlayerChatListener(this.plugin));
         this.eventsListeners.add(new PlayerConnectionListener(this.plugin));
