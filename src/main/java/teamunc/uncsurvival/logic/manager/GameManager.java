@@ -124,6 +124,26 @@ public class GameManager extends AbstractManager {
         return true;
     }
 
+    public void goNextPhase() {
+        switch (gameStats.getCurrentPhase()) {
+            case LANCEMENT:
+                this.timerTask.cancel();
+                plugin.getGameManager().start();
+                break;
+            case PHASE1:
+                this.timerTask.cancel();
+                plugin.getGameManager().startPhase2();
+                break;
+            case PHASE2:
+                this.timerTask.cancel();
+                plugin.getGameManager().startPhase3();
+                break;
+            case PHASE3:
+                this.timerTask.cancel();
+                plugin.getGameManager().startEnding();
+                break; }
+    }
+
     /**
      * Lancement PHASE 1
      */

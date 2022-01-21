@@ -53,6 +53,16 @@ public class CustomTabComplete implements TabCompleter {
                     }
                 }
                 break;
+            case "removetime":
+            case "addtime":
+                if (strings.length == 1) {
+                    result.add("jours");
+                    result.add("heures");
+                    result.add("minutes");
+                    result.add("secondes");
+                    return result;
+                }
+                break;
         }
         return result;
     }

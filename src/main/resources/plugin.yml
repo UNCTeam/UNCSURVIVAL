@@ -28,6 +28,11 @@ commands:
       /addteam <TeamName> <TeamColor>
     permission: uncsurvival.addteam
 
+  nextphase:
+    description: Go to next phase
+    usage: /nextphase
+    permission: uncsurival.nextphase
+
   addtime:
     description: Add time to timer
     usage: Use /addtime [secondes] [minutes] [hours] [day]
