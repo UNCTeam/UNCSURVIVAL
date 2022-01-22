@@ -84,6 +84,7 @@ public class TimeManager extends AbstractManager{
         ThirstActualiser.getInstance().actualiseDisplay();
 
 
+        this.plugin.getGameManager().getCustomBlockManager().actualiseBlocks();
 
         // Check items
         this.plugin.getGameManager().getTeamsManager().getAllTeams().forEach(team -> {

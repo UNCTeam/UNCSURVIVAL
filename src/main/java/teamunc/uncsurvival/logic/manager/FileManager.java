@@ -14,8 +14,6 @@ import teamunc.uncsurvival.logic.configuration.GameRuleConfiguration;
 import teamunc.uncsurvival.logic.gameStats.GameStats;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.team.TeamList;
-import teamunc.uncsurvival.utils.serializerAdapter.GameConfigurationDeserializer;
-import teamunc.uncsurvival.utils.serializerAdapter.GameConfigurationSerializer;
 import teamunc.uncsurvival.utils.serializerAdapter.LocalDateTimeSerializer;
 
 import java.io.*;

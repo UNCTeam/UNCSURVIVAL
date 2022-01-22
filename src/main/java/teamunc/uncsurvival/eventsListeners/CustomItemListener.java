@@ -66,7 +66,7 @@ public class CustomItemListener extends AbstractEventsListener {
         if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             PersistentDataContainer data = itemMeta.getPersistentDataContainer();
             String customType = data.get(this.plugin.getGameManager().getItemsManager().getCustomitemKey(), PersistentDataType.STRING);
-
+            
             switch(customType) {
                 case "HealPatch":
                     boolean used = false;

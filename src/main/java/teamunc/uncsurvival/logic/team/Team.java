@@ -1,6 +1,5 @@
 package teamunc.uncsurvival.logic.team;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,7 +10,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import teamunc.uncsurvival.UNCSurvival;
-import teamunc.uncsurvival.logic.interfaces.CustomBlock;
+import teamunc.uncsurvival.logic.customBlock.CustomBlock;
 import teamunc.uncsurvival.logic.interfaces.GoalCustomInterface;
 import teamunc.uncsurvival.logic.interfaces.TeamCustomInterface;
 import teamunc.uncsurvival.logic.manager.ItemsManager;
