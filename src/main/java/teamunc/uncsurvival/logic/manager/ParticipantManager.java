@@ -143,9 +143,9 @@ public class ParticipantManager extends AbstractManager{
      * Renvoi la liste des joueurs sous forme de liste Player bukkit
      * @return
      */
-    public List<Player> getOnelinePlayers() {
+    public List<Player> getOnlinePlayers() {
         return this.getGamePlayers().stream()
-                .filter(gamePlayer -> gamePlayer.isOneline())
+                .filter(gamePlayer -> gamePlayer.isOnline())
                 .map(gamePlayer -> gamePlayer.getBukkitPlayer())
                 .collect(Collectors.toList());
     }

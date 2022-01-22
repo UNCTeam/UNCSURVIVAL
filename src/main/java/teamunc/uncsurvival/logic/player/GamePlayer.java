@@ -11,6 +11,11 @@ import java.util.UUID;
 public class GamePlayer implements Serializable {
     private final UUID uuid;
     private int waterLevel;
+    /**
+     * si timeBeforeCovidExpansion == -1 alors pas de covid, sinon c'est le temps avant le prochain covid (en seconde)
+     * décrémenter dans timeManager#eachSecondes
+     */
+    private int timeBeforeCovidExpansion = -1;
 
     public GamePlayer(Player bukkitPlayer) {
         this.uuid = bukkitPlayer.getUniqueId();
@@ -20,7 +25,7 @@ public class GamePlayer implements Serializable {
         return uuid;
     }
 
-    public Boolean isOneline() {
+    public Boolean isOnline() {
         return getOfflinePlayer().isOnline();
     }
 
@@ -38,6 +43,28 @@ public class GamePlayer implements Serializable {
 
     public void setWaterLevel(int waterLevel) {
         this.waterLevel = waterLevel;
+    }
+
+    public boolean isCovided() {
+        return (this.timeBeforeCovidExpansion >= 0);
+    }
+
+    public void ActiveCovided() {
+        this.timeBeforeCovidExpansion = 4;
+    }
+
+    /**
+     * boucle de 4 à 0
+     * @return true si le temps est à 0 apres la seconde passer
+     */
+    public boolean passerUneSecondeCovid() {
+        if (this.timeBeforeCovidExpansion - 1 == -1) this.timeBeforeCovidExpansion = 4;
+        this.timeBeforeCovidExpansion -= 1;
+        return this.timeBeforeCovidExpansion == 0;
+    }
+
+    public void cureCovid() {
+        this.timeBeforeCovidExpansion = -1;
     }
 
     @Override

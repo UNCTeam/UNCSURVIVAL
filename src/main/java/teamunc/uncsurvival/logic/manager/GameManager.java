@@ -2,7 +2,6 @@ package teamunc.uncsurvival.logic.manager;
 
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.features.thirst.ThirstActualiser;
@@ -31,6 +30,7 @@ public class GameManager extends AbstractManager {
     private ScoreboardManager scoreboardManager;
     private TimeManager timeManager;
     private InterfacesManager interfacesManager;
+    private GameEventsManager gameEventsManager;
 
     private CountdownPhaseTask timerTask;
 
@@ -47,6 +47,7 @@ public class GameManager extends AbstractManager {
         this.timeManager = new TimeManager(plugin);
         this.teamsManager = new TeamsManager(plugin);
         this.interfacesManager = new InterfacesManager(plugin);
+        this.gameEventsManager = new GameEventsManager(plugin);
 
         this.afterReload();
     }
@@ -191,7 +192,7 @@ public class GameManager extends AbstractManager {
 
         // set Attributes
         this.participantManager.getGamePlayers().forEach(gamePlayer -> {
-            if(gamePlayer.isOneline()) {
+            if(gamePlayer.isOnline()) {
                 Player p = gamePlayer.getBukkitPlayer();
                 p.setGameMode(GameMode.SURVIVAL);
                 p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(14);
@@ -233,7 +234,9 @@ public class GameManager extends AbstractManager {
     public ScoreboardManager getScoreboardManager() {
         return scoreboardManager;
     }
-
+    public GameEventsManager getGameEventsManager() {
+        return gameEventsManager;
+    }
     public TimeManager getTimeManager() {
         return timeManager;
     }

@@ -80,21 +80,22 @@ public class TimeManager extends AbstractManager{
         // Update les scoreboards
         plugin.getGameManager().getScoreboardManager().update();
 
+        // damage due to Water
+        if (this.secondes%5 == 0) ThirstActualiser.getInstance().damageAllnoWater();
+
         // Actualise Water Level Display
         ThirstActualiser.getInstance().actualiseDisplay();
 
-
+        // Covid Application
+        this.plugin.getGameManager().getGameEventsManager().appliqueCovid();
 
         // Check items
         this.plugin.getGameManager().getTeamsManager().getAllTeams().forEach(team -> {
             if (phase != PhaseEnum.FIN) team.ConsumeAllGoalItems();
         });
 
-        // damage due to Water
-        if (this.secondes%5 == 0) ThirstActualiser.getInstance().damageAllnoWater();
-
         if(plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.LANCEMENT) {
-            for(Player player : this.plugin.getGameManager().getParticipantManager().getOnelinePlayers()) {
+            for(Player player : this.plugin.getGameManager().getParticipantManager().getOnlinePlayers()) {
                 if(plugin.getGameManager().getTimerTask().getSecondes() == 13) {
                     player.sendTitle("§bDébut du jeu dans : ", "", 20, 30, 20);
                 } else if(plugin.getGameManager().getTimerTask().getSecondes() <= 10){
@@ -110,6 +111,10 @@ public class TimeManager extends AbstractManager{
 
         // dicrease Water Level of 1
         if (this.minutes%2 == 0) ThirstActualiser.getInstance().decreaseWaterForAllRegisteredPlayers(1);
+
+        // covid ?
+        GameEventsManager gameEventsManager = this.plugin.getGameManager().getGameEventsManager();
+        if(gameEventsManager.isItTimeForCovid()) gameEventsManager.actionCovid();
     }
 
     public void actionsEachHours() {

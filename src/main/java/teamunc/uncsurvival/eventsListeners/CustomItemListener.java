@@ -14,6 +14,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.eventsListeners.AbstractEventsListener;
+import teamunc.uncsurvival.logic.player.GamePlayer;
 
 public class CustomItemListener extends AbstractEventsListener {
 
@@ -66,10 +67,10 @@ public class CustomItemListener extends AbstractEventsListener {
         if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             PersistentDataContainer data = itemMeta.getPersistentDataContainer();
             String customType = data.get(this.plugin.getGameManager().getItemsManager().getCustomitemKey(), PersistentDataType.STRING);
-
+            if (customType == null) return;
+            boolean used = false;
             switch(customType) {
                 case "HealPatch":
-                    boolean used = false;
                     if (player.getHealth() + 2 <= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()) {
                         player.setHealth(player.getHealth() + 2);
                         used = true;
@@ -79,6 +80,16 @@ public class CustomItemListener extends AbstractEventsListener {
                     }
                     if (used) item.setAmount(0);
 
+                    break;
+
+                case "Vaccin":
+                    GamePlayer gp = this.plugin.getGameManager().getParticipantManager().getGamePlayer(player.getName());
+
+                    if (gp.isCovided()) {
+                        gp.cureCovid();
+                        used = true;
+                    }
+                    if (used) item.setAmount(0);
                     break;
             }
         }
