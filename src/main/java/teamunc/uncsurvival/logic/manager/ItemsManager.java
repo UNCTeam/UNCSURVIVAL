@@ -46,6 +46,9 @@ public class ItemsManager extends AbstractManager {
         this.goalItemsPrices = gameConfiguration.getGoalItemsPrices();
         this.customItems.add("diamondApple");
         this.customItems.add("wrench");
+        this.customItems.add("healPatch");
+        this.customItems.add("alcool");
+        this.customItems.add("vaccin");
     }
 
     public String getGoalItemName(Integer id) {
@@ -151,6 +154,24 @@ public class ItemsManager extends AbstractManager {
         return item;
     }
 
+    public ItemStack createVaccin() {
+        ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK,1);
+
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setCustomModelData(4);
+
+        meta.setDisplayName("§b§lSARS-COV19 UNC-VAX");
+
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+
+        data.set(this.customitemKey, PersistentDataType.STRING,"Vaccin");
+
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
     public ItemStack giveNextWrenchItem(Integer id, Integer durability) {
         if(id != 4) {
             return this.createWrenchItem(id+1, durability);
@@ -226,13 +247,8 @@ public class ItemsManager extends AbstractManager {
         return this.goalItemsPrices.get(itemNumber);
     }
 
-    public boolean isWrenchItem(ItemStack itemStack) {
+    public boolean isCustomItem(ItemStack itemStack, String customNameCaseSensitive) {
         return (itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING) != null &&
-                itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING).equals("Wrench"));
-    }
-
-    public boolean isDiamondAppleItem(ItemStack itemStack) {
-        return (itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING) != null &&
-                itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING).equals("DiamondApple"));
+                itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING).equals(customNameCaseSensitive));
     }
 }

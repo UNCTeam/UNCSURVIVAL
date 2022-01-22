@@ -1,13 +1,10 @@
 package teamunc.uncsurvival.features.thirst;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.manager.GameManager;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ThirstActualiser {
     //# SINGLETON
@@ -35,7 +32,7 @@ public class ThirstActualiser {
     }
 
     public void decreaseWaterIfConnected(int waterToRemove, GamePlayer player) {
-        if (player.isOneline()) {
+        if (player.isOnline()) {
             int actualWater = player.getWaterLevel();
 
             // set to 0 if lower than 0
@@ -48,7 +45,7 @@ public class ThirstActualiser {
 
     public void damageAllnoWater() {
         for (GamePlayer player : this.gameManager.getParticipantManager().getGamePlayers()) {
-            if (player.isOneline() && player.getWaterLevel() == 0) {
+            if (player.isOnline() && player.getWaterLevel() == 0) {
                 player.getBukkitPlayer().damage(1);
             }
         }
