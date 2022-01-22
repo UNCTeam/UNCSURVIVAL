@@ -13,7 +13,7 @@ import teamunc.uncsurvival.logic.player.GamePlayer;
 import java.util.*;
 
 public class GameEventsManager extends AbstractManager{
-    private final int TAUX_COVID = 3;
+    private final int TAUX_COVID = 2;
 
     public GameEventsManager(UNCSurvival plugin) {
         super(plugin);
@@ -62,7 +62,7 @@ public class GameEventsManager extends AbstractManager{
 
             if (gp.isCovided()) {
                 // Application des effets du covid
-                gp.getBukkitPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,40,2,false,false));
+                gp.getBukkitPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,100,2,false,false));
                 gp.getBukkitPlayer().addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,40,1,false,false));
 
                 // Effect propagation et temps
@@ -70,7 +70,7 @@ public class GameEventsManager extends AbstractManager{
                 if (propagationAFaire) {
                     Collection<Entity> covidedList = gp.getBukkitPlayer().getWorld().getNearbyEntities(
                             gp.getBukkitPlayer().getLocation(),
-                            20, 20, 20,
+                            10, 10, 10,
                             entity ->
                                     entity.getType() == EntityType.PLAYER &&
                                             this.plugin.getGameManager().getParticipantManager().getGamePlayer(entity.getName()) != null &&
