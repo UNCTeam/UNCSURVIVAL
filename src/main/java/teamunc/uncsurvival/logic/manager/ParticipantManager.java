@@ -123,6 +123,10 @@ public class ParticipantManager extends AbstractManager{
         return this.getPlayersByTeam().get(new GamePlayer(player));
     }
 
+    public Team getTeamForPlayer(String playerName) {
+        return this.getPlayersByTeam().get(this.getGamePlayer(playerName));
+    }
+
     public boolean hasPlayer(Player player) {
         return this.getPlayersByTeam().containsKey(new GamePlayer(player));
     }

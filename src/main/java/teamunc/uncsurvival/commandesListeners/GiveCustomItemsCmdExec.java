@@ -20,13 +20,13 @@ public class GiveCustomItemsCmdExec extends AbstractCommandExecutor implements C
                 if (sender instanceof Player ) {
                     Player p = (Player) sender;
                     switch (args[0]) {
-                        case "diamondapple":
+                        case "diamondApple":
                             p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createDiamondApple());
                             break;
                         case "wrench":
                             p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createWrenchItem(0, 0));
                             break;
-                        case "healpatch":
+                        case "healPatch":
                             p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createHealPatch());
                             break;
                         case "vaccin":
@@ -35,8 +35,14 @@ public class GiveCustomItemsCmdExec extends AbstractCommandExecutor implements C
                         case "alcool":
                             p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createAlcool());
                             break;
+
+                        case "module":
+                            p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createModule());
+                            break;
+
                         case "mincer":
                             p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createMincerItemBlock());
+                            break;
                     }
                 }
             }

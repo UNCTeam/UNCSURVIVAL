@@ -5,6 +5,8 @@ import org.bukkit.entity.Player;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.interfaces.GameCustomInterface;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -14,6 +16,14 @@ public class InterfacesManager extends AbstractManager{
 
     public InterfacesManager(UNCSurvival plugin) {
         super(plugin);
+    }
+
+    public ArrayList<String> getAllSymboles() {
+        return new ArrayList<>(Arrays.asList(
+                "本", "北", "被", "背", "备",
+                "鼻",
+                "杯"
+        ));
     }
 
     public void addInterface(Location location,GameCustomInterface inventory) {

@@ -88,7 +88,7 @@ public class CustomItemListener extends AbstractEventsListener {
                 case "Vaccin":
                     GamePlayer gp = this.plugin.getGameManager().getParticipantManager().getGamePlayer(player.getName());
 
-                    if (gp.isCovided()) {
+                    if (gp != null || gp.isCovided()) {
                         gp.cureCovid();
                         used = true;
                     }

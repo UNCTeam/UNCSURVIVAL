@@ -18,10 +18,7 @@ import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.utils.Region;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Team implements Serializable {
 
@@ -90,6 +87,12 @@ public class Team implements Serializable {
         }
 
         // interface team
+
+        // block texture
+        ItemStack textureTeamInterface = new ItemStack(Material.DROPPER, 1);
+        ItemMeta textMetaTeamInterface = textureTeamInterface.getItemMeta();
+        textMetaTeamInterface.setCustomModelData(3);
+        textureTeamInterface.setItemMeta(textMetaTeamInterface);
         this.interfaceTeam = new Location(spawnPoint.getWorld(),spawnPoint.getBlockX(),spawnPoint.getBlockY(),spawnPoint.getBlockZ()-8);
         this.interfaceTeam.getBlock().setType(Material.BARRIER);
 
@@ -99,7 +102,7 @@ public class Team implements Serializable {
         armorStand.setVisible(false);
         armorStand.setMarker(true);
         armorStand.addScoreboardTag("MAIN_INTERFACE_"+this.name);
-        armorStand.getEquipment().setHelmet(texture);
+        armorStand.getEquipment().setHelmet(textureTeamInterface);
 
         // register for the first time
         this.registerInterfaces();
@@ -264,5 +267,18 @@ public class Team implements Serializable {
     public void resetScore() {
         this.itemsProduction = new ArrayList<>(Arrays.asList(0,0,0,0,0));
         this.bonusScore = 0;
+    }
+
+    public int getRange() {
+        return range;
+    }
+
+    public void addRange(int rangeAdded) {
+        this.range += rangeAdded;
+        this.region.addRange(rangeAdded);
+    }
+
+    public Location getInterfaceTeam() {
+        return interfaceTeam;
     }
 }
