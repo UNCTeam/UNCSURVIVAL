@@ -5,6 +5,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.bukkit.*;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import teamunc.uncsurvival.UNCSurvival;
@@ -49,19 +53,12 @@ public class FileManager extends AbstractManager{
 
     public GameConfiguration loadGameConfiguration() {
         try {
-            GameConfiguration gameConfiguration = (GameConfiguration) this.loadJson(this.pluginDataFile.getPath() + "/game-config.json", GameConfiguration.class);
+            GameConfiguration gameConfiguration = this.loadJson(this.pluginDataFile.getPath() + "/game-config.json", GameConfiguration.class);
             return gameConfiguration;
         } catch (NoSuchFileException e) {
             // Le fichier n'existe pas alors on l'init et le créer
             Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "Creation du fichier de gameconfig");
             LocalDateTime phase = LocalDateTime.now();
-
-            ArrayList<Material> goalItems = new ArrayList<>();
-            goalItems.add(Material.BRICK);
-            goalItems.add(Material.STONE);
-            goalItems.add(Material.STONE);
-            goalItems.add(Material.STONE);
-            goalItems.add(Material.STONE);
 
             ArrayList<Integer> goalItemsPrices = new ArrayList<>();
             goalItemsPrices.add(1);
@@ -71,7 +68,7 @@ public class FileManager extends AbstractManager{
             goalItemsPrices.add(5);
 
 
-            GameConfiguration gameConfiguration = new GameConfiguration(phase, phase, phase, goalItems,goalItemsPrices);
+            GameConfiguration gameConfiguration = new GameConfiguration(phase, phase, phase, goalItemsPrices);
             this.plugin.getFileManager().saveGameConfiguration(gameConfiguration);
             return gameConfiguration;
         } catch (Exception e) {

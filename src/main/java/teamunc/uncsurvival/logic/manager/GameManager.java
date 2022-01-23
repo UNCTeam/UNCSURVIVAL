@@ -82,6 +82,7 @@ public class GameManager extends AbstractManager {
 
     public void loadGameConfiguration() {
         this.gameConfiguration = this.plugin.getFileManager().loadGameConfiguration();
+        this.gameConfiguration.postLoad();
     }
     public void loadGameStats() {
         this.gameStats = this.plugin.getFileManager().loadGameStats();

@@ -28,7 +28,7 @@ public class ItemsManager extends AbstractManager {
 
     private NamespacedKey customitemKey = new NamespacedKey(this.plugin,"customitem");
     private NamespacedKey wrenchKey = new NamespacedKey(plugin, "wrenchID");
-    private ArrayList<Material> goalItems;
+    private ArrayList<ItemStack> goalItems;
     private ArrayList<Integer> goalItemsPrices;
     private List<String> customItems = new ArrayList<>();
 
@@ -46,32 +46,11 @@ public class ItemsManager extends AbstractManager {
         super(plugin);
         this.goalItems = gameConfiguration.getGoalItems();
         this.goalItemsPrices = gameConfiguration.getGoalItemsPrices();
-        this.customItems = List.of("diamondApple", "wrench", "mincer", "healPatch", "alcool", "vaccin","module");
+        this.customItems = List.of("diamondApple", "wrench", "mincer", "healPatch", "alcool", "vaccin","module","mincedMeat","burger","wheatFlour");
     }
 
     public String getGoalItemName(Integer id) {
-        String res = "";
-        switch (id) {
-            case 0:
-                res+="§f§b" + this.goalItems.get(id).name().replace("_"," ");
-                break;
-            case 1:
-                res+="§6§b" + this.goalItems.get(id).name().replace("_"," ");
-                break;
-            case 2:
-                res+="§2§b" + this.goalItems.get(id).name().replace("_"," ");
-                break;
-            case 3:
-                res+="§3§b" + this.goalItems.get(id).name().replace("_"," ");
-                break;
-            case 4:
-                res+="§9§b" + this.goalItems.get(id).name().replace("_"," ");
-                break;
-            case 5:
-                res+="§5§b" + this.goalItems.get(id).toString();
-                break;
-        }
-        return res;
+        return this.goalItems.get(id).getItemMeta().getDisplayName();
     }
 
     public ItemStack createDiamondApple() {
@@ -81,11 +60,11 @@ public class ItemsManager extends AbstractManager {
 
         meta.setCustomModelData(1);
 
-        meta.setDisplayName("§bDiamond Apple");
+        meta.setDisplayName("§r§l§cDiamond Apple");
 
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
-        data.set(this.customitemKey, PersistentDataType.STRING,"DiamondApple");
+        data.set(this.customitemKey, PersistentDataType.STRING,"DIAMONDAPPLE");
 
         item.setItemMeta(meta);
 
@@ -99,11 +78,11 @@ public class ItemsManager extends AbstractManager {
 
         meta.setCustomModelData(3);
 
-        meta.setDisplayName("§bHeal Patch");
+        meta.setDisplayName("§rHeal Patch");
 
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
-        data.set(this.customitemKey, PersistentDataType.STRING,"HealPatch");
+        data.set(this.customitemKey, PersistentDataType.STRING,"HEALPATCH");
 
         item.setItemMeta(meta);
 
@@ -121,7 +100,7 @@ public class ItemsManager extends AbstractManager {
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
         data.set(this.wrenchKey, PersistentDataType.INTEGER, id);
-        data.set(this.customitemKey, PersistentDataType.STRING, "Wrench");
+        data.set(this.customitemKey, PersistentDataType.STRING, "WRENCH");
 
         item.setItemMeta(meta);
 
@@ -141,11 +120,11 @@ public class ItemsManager extends AbstractManager {
 
         meta.setColor(Color.BLACK);
 
-        meta.setDisplayName("§bZombie Alcool");
+        meta.setDisplayName("§rZombie Alcool");
 
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
-        data.set(this.customitemKey, PersistentDataType.STRING,"Alcool");
+        data.set(this.customitemKey, PersistentDataType.STRING,"ALCOOL");
 
         item.setItemMeta(meta);
 
@@ -159,11 +138,11 @@ public class ItemsManager extends AbstractManager {
 
         meta.setCustomModelData(4);
 
-        meta.setDisplayName("§b§lSARS-COV19 UNC-VAX");
+        meta.setDisplayName("§b§cSARS-COV19 UNC-VAX");
 
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
-        data.set(this.customitemKey, PersistentDataType.STRING,"Vaccin");
+        data.set(this.customitemKey, PersistentDataType.STRING,"VACCIN");
 
         item.setItemMeta(meta);
 
@@ -181,7 +160,79 @@ public class ItemsManager extends AbstractManager {
 
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
-        data.set(this.customitemKey, PersistentDataType.STRING,"Module");
+        data.set(this.customitemKey, PersistentDataType.STRING,"MODULE");
+
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
+    public ItemStack createMincerItemBlock() {
+        ItemStack item = new ItemStack(Material.DROPPER,1);
+
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setCustomModelData(CustomBlockType.MINCER_BLOCK.getModel());
+
+        meta.setDisplayName("§rMincer");
+
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+
+        data.set(this.customitemKey, PersistentDataType.STRING, CustomBlockType.MINCER_BLOCK.name());
+
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
+    public ItemStack createMincedMeat() {
+        ItemStack item = new ItemStack(Material.COOKED_BEEF,1);
+
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setCustomModelData(2);
+
+        meta.setDisplayName("§rMinced meat");
+
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+
+        data.set(this.customitemKey, PersistentDataType.STRING, "MINCEDMEAT");
+
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
+    public ItemStack createBurger() {
+        ItemStack item = new ItemStack(Material.COOKED_BEEF,1);
+
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setCustomModelData(1);
+
+        meta.setDisplayName("§b§eBurger");
+
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+
+        data.set(this.customitemKey, PersistentDataType.STRING, "BURGER");
+
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
+    public ItemStack createWheatFlour() {
+        ItemStack item = new ItemStack(Material.WHEAT,1);
+
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setCustomModelData(1);
+
+        meta.setDisplayName("§rWheat Flour");
+
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+
+        data.set(this.customitemKey, PersistentDataType.STRING, "WHEATFLOUR");
 
         item.setItemMeta(meta);
 
@@ -227,6 +278,22 @@ public class ItemsManager extends AbstractManager {
         heal_patch.setIngredient('-',new RecipeChoice.ExactChoice(this.createAlcool()));
         this.plugin.getServer().addRecipe(heal_patch);
 
+        // BURGER
+        ShapedRecipe burger = new ShapedRecipe(new NamespacedKey(this.plugin,"craftBurger"),this.createBurger());
+        burger.shape(" * "," - "," * ");
+        burger.setIngredient('*',Material.BREAD);
+        burger.setIngredient('-',new RecipeChoice.ExactChoice(this.createMincedMeat()));
+        this.plugin.getServer().addRecipe(burger);
+
+        // WHEAT FLOUR
+        FurnaceRecipe wheat_flour = new FurnaceRecipe(new NamespacedKey(this.plugin,"craftWheatFlour"),this.createWheatFlour(),Material.WHEAT,1,200);
+        this.plugin.getServer().addRecipe(wheat_flour);
+
+        // BREAD
+        FurnaceRecipe bread = new FurnaceRecipe(new NamespacedKey(this.plugin,"craftBread"),new ItemStack(Material.BREAD,1),new RecipeChoice.ExactChoice(this.createWheatFlour()),1,200);
+        this.plugin.getServer().addRecipe(bread);
+
+
         // change recipe
         if (this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE2 || this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE3) {
             this.replaceCraftPhase2();
@@ -256,7 +323,7 @@ public class ItemsManager extends AbstractManager {
         Bukkit.getServer().addRecipe(recipe);
     }
 
-    public Material getItem(int itemNumber) {return this.goalItems.get(itemNumber);}
+    public ItemStack getGoalItem(int itemNumber) {return this.goalItems.get(itemNumber);}
 
     public int getGoalItemPrice(Integer itemNumber) {
 
@@ -266,46 +333,5 @@ public class ItemsManager extends AbstractManager {
     public boolean isCustomItem(ItemStack itemStack, String customNameCaseSensitive) {
         return (itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING) != null &&
                 itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING).equals(customNameCaseSensitive));
-    }
-
-    public boolean isDiamondAppleItem(ItemStack itemStack) {
-        return (itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING) != null &&
-                itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING).equals("DiamondApple"));
-    }
-
-    public ItemStack createMincerItemBlock() {
-        ItemStack item = new ItemStack(Material.DROPPER,1);
-
-        ItemMeta meta = item.getItemMeta();
-
-        meta.setCustomModelData(CustomBlockType.MINCER_BLOCK.getModel());
-
-        meta.setDisplayName("§bMincer");
-
-        PersistentDataContainer data = meta.getPersistentDataContainer();
-
-        data.set(this.customitemKey, PersistentDataType.STRING, CustomBlockType.MINCER_BLOCK.name());
-
-        item.setItemMeta(meta);
-
-        return item;
-    }
-
-    public ItemStack createMincedMeat() {
-        ItemStack item = new ItemStack(Material.COOKED_BEEF,1);
-
-        ItemMeta meta = item.getItemMeta();
-
-        meta.setCustomModelData(6);
-
-        meta.setDisplayName("§bMinced meat");
-
-        PersistentDataContainer data = meta.getPersistentDataContainer();
-
-        data.set(this.customitemKey, PersistentDataType.STRING, "mincedMeat");
-
-        item.setItemMeta(meta);
-
-        return item;
     }
 }
