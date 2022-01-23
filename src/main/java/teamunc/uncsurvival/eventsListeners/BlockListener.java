@@ -32,6 +32,8 @@ public class BlockListener extends AbstractEventsListener {
 
         if (block == null) return;
 
+        plugin.getGameManager().getCustomBlockManager().interactBlockEvent(e);
+
         ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
         ItemMeta itemMeta = item.getItemMeta();
 
@@ -75,6 +77,7 @@ public class BlockListener extends AbstractEventsListener {
 
     @EventHandler
     public void onBreakEvent(BlockBreakEvent event) {
+        this.plugin.getGameManager().getCustomBlockManager().breakCustomBlock(event);
         if(!this.plugin.getGameManager().getParticipantManager().hasPlayer(event.getPlayer()))
             return;
         this.handleTeamBlock(event, event.getPlayer(), event.getBlock());
@@ -82,6 +85,7 @@ public class BlockListener extends AbstractEventsListener {
 
     @EventHandler
     public void onPlaceBlockEvent(BlockPlaceEvent event) {
+        this.plugin.getGameManager().getCustomBlockManager().placeCustomBlock(event);
         if(!this.plugin.getGameManager().getParticipantManager().hasPlayer(event.getPlayer()))
             return;
         this.handleTeamBlock(event, event.getPlayer(), event.getBlock());

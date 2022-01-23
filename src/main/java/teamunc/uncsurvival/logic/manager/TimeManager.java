@@ -89,6 +89,8 @@ public class TimeManager extends AbstractManager{
         // Covid Application
         this.plugin.getGameManager().getGameEventsManager().appliqueCovid();
 
+        this.plugin.getGameManager().getCustomBlockManager().actualiseBlocks();
+
         // Check items
         this.plugin.getGameManager().getTeamsManager().getAllTeams().forEach(team -> {
             if (phase != PhaseEnum.FIN) team.ConsumeAllGoalItems();

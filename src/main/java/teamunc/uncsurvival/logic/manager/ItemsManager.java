@@ -16,6 +16,8 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
+import teamunc.uncsurvival.logic.customBlock.CustomBlockType;
+import teamunc.uncsurvival.logic.customBlock.customStorageBlock.MincerBlock;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
 
 import java.util.ArrayList;
@@ -28,9 +30,9 @@ public class ItemsManager extends AbstractManager {
     private NamespacedKey wrenchKey = new NamespacedKey(plugin, "wrenchID");
     private ArrayList<Material> goalItems;
     private ArrayList<Integer> goalItemsPrices;
-    private ArrayList<String> customItems = new ArrayList<>();
+    private List<String> customItems = new ArrayList<>();
 
-    public ArrayList<String> getCustomItems() {
+    public List<String> getCustomItems() {
         return customItems;
     }
 
@@ -44,12 +46,7 @@ public class ItemsManager extends AbstractManager {
         super(plugin);
         this.goalItems = gameConfiguration.getGoalItems();
         this.goalItemsPrices = gameConfiguration.getGoalItemsPrices();
-        this.customItems.add("diamondApple");
-        this.customItems.add("wrench");
-        this.customItems.add("healPatch");
-        this.customItems.add("alcool");
-        this.customItems.add("vaccin");
-        this.customItems.add("module");
+        this.customItems = List.of("diamondApple", "wrench", "mincer", "healPatch", "alcool", "vaccin","module");
     }
 
     public String getGoalItemName(Integer id) {
@@ -269,5 +266,46 @@ public class ItemsManager extends AbstractManager {
     public boolean isCustomItem(ItemStack itemStack, String customNameCaseSensitive) {
         return (itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING) != null &&
                 itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING).equals(customNameCaseSensitive));
+    }
+
+    public boolean isDiamondAppleItem(ItemStack itemStack) {
+        return (itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING) != null &&
+                itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING).equals("DiamondApple"));
+    }
+
+    public ItemStack createMincerItemBlock() {
+        ItemStack item = new ItemStack(Material.DROPPER,1);
+
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setCustomModelData(CustomBlockType.MINCER_BLOCK.getModel());
+
+        meta.setDisplayName("§bMincer");
+
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+
+        data.set(this.customitemKey, PersistentDataType.STRING, CustomBlockType.MINCER_BLOCK.name());
+
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
+    public ItemStack createMincedMeat() {
+        ItemStack item = new ItemStack(Material.COOKED_BEEF,1);
+
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setCustomModelData(6);
+
+        meta.setDisplayName("§bMinced meat");
+
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+
+        data.set(this.customitemKey, PersistentDataType.STRING, "mincedMeat");
+
+        item.setItemMeta(meta);
+
+        return item;
     }
 }
