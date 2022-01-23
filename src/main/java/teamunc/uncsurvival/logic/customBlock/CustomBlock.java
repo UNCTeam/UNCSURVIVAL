@@ -1,4 +1,4 @@
-package teamunc.uncsurvival.logic.interfaces;
+package teamunc.uncsurvival.logic.customBlock;
 
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;

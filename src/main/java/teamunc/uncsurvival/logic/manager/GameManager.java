@@ -3,6 +3,7 @@ package teamunc.uncsurvival.logic.manager;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.units.qual.C;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.features.thirst.ThirstActualiser;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
@@ -25,6 +26,7 @@ public class GameManager extends AbstractManager {
 
     /* Mananger */
     private TeamsManager teamsManager;
+    private CustomBlockManager customBlockManager;
     private ItemsManager itemsManager;
     private ParticipantManager participantManager;
     private ScoreboardManager scoreboardManager;
@@ -47,6 +49,7 @@ public class GameManager extends AbstractManager {
         this.timeManager = new TimeManager(plugin);
         this.teamsManager = new TeamsManager(plugin);
         this.interfacesManager = new InterfacesManager(plugin);
+        this.customBlockManager = new CustomBlockManager(plugin);
         this.gameEventsManager = new GameEventsManager(plugin);
 
         this.afterReload();
@@ -237,6 +240,7 @@ public class GameManager extends AbstractManager {
     public GameEventsManager getGameEventsManager() {
         return gameEventsManager;
     }
+    public CustomBlockManager getCustomBlockManager() { return customBlockManager; }
     public TimeManager getTimeManager() {
         return timeManager;
     }
@@ -249,5 +253,6 @@ public class GameManager extends AbstractManager {
 
     public void save() {
         this.getTeamsManager().saveTeams();
+        this.getCustomBlockManager().saveCustomBlock();
     }
 }
