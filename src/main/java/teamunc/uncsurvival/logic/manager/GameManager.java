@@ -249,5 +249,6 @@ public class GameManager extends AbstractManager {
 
     public void save() {
         this.getTeamsManager().saveTeams();
+        this.getCustomBlockManager().saveCustomBlock();
     }
 }

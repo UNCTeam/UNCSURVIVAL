@@ -2,35 +2,69 @@ package teamunc.uncsurvival.logic.customBlock.customStorageBlock;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.block.*;
-import org.bukkit.block.data.Directional;
-import org.bukkit.event.inventory.InventoryType;
-import teamunc.uncsurvival.logic.customBlock.CustomBlock;
+import org.bukkit.Material;
+import org.bukkit.block.Hopper;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.customBlock.CustomBlockType;
 
-import java.util.UUID;
+import java.util.Arrays;
 
 public class MincerBlock extends CustomStorageBlock {
 
     public MincerBlock(Location location, CustomBlockType customBlockType) {
         super(location, customBlockType);
+        this.processingDuration = 10;
     }
 
     @Override
     public void tickAction() {
         // Vérifi si le duration == 0
-        // Si oui
-            // Vérifi si il y a un output
-            // Si pas output -> return / ne fait rien
+        if(duration == 0) {
+            produceMincedMeat();
+        } else if(duration >= 0) {
+            duration--;
+        } else if(duration == -1) {
+            checkIfCanProduce();
+        }
+        fillFromInput();
+    }
 
-        //
+    public void checkIfCanProduce() {
+        for (int i = 0; i < inventory.getSize(); i++) {
+            ItemStack item = inventory.getItem(i);
+            if(item != null && item.getType().equals(Material.BEEF)) {
+                item.setAmount(item.getAmount()-1);
+                duration = this.getProcessingDuration();
+            }
+        }
+    }
 
-        // Check si il y a qqchose dans le storage
+    public void produceMincedMeat() {
+        if(this.hasOutput()) {
+            duration = -1;
+            Hopper input = this.getOutput();
+            Inventory outputInventory = input.getInventory();
+            // Check si y a de la place
+            if(outputInventory.firstEmpty() != -1) {
+                outputInventory.addItem(UNCSurvival.getInstance().getGameManager().getItemsManager().createMincedMeat());
+            } else {
+                duration = 0;
+            }
+        }
+    }
 
-        // Si oui prends un itemStack et decrement duration
-
-        // Check si input existant
-            // Si oui check si storage plein
-                // Si storage vide prends un itemstack
+    public void fillFromInput() {
+        if(!this.hasInput()) return;
+        Hopper input = this.getInput();
+        Inventory inputInventory = input.getInventory();
+        for (int i = 0;i<input.getInventory().getSize();i++) {
+            ItemStack item = inputInventory.getItem(i);
+            if(item != null && item.getType() == Material.BEEF) {
+                inventory.addItem(new ItemStack(Material.BEEF));
+                item.setAmount(item.getAmount()-1);
+            }
+        }
     }
 }

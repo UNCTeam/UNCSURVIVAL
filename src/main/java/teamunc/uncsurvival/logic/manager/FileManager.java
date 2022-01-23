@@ -2,19 +2,21 @@ package teamunc.uncsurvival.logic.manager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameRule;
-import org.bukkit.Material;
+import com.google.gson.reflect.TypeToken;
+import org.bukkit.*;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 import teamunc.uncsurvival.logic.configuration.GameRuleConfiguration;
+import teamunc.uncsurvival.logic.customBlock.customStorageBlock.CustomStorageBlock;
 import teamunc.uncsurvival.logic.gameStats.GameStats;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.team.TeamList;
 import teamunc.uncsurvival.utils.serializerAdapter.LocalDateTimeSerializer;
+import teamunc.uncsurvival.utils.serializerAdapter.LocationSerializer;
+import teamunc.uncsurvival.utils.serializerAdapter.SerializeInventory;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -24,6 +26,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -31,12 +34,8 @@ import java.util.zip.GZIPOutputStream;
  * S'occupe d'importer, de serializer et de sauvegarder tout données nécessaires
  */
 public class FileManager extends AbstractManager{
-    private String teamList_path;
-    private String gameRuleConfiguration_path;
+
     private String gameConfiguration_path;
-    private String gameStats_path;
-    private String playersInfos_path;
-    private String participants_path;
     private File pluginDataFile;
 
     public FileManager(UNCSurvival plugin) {
@@ -47,17 +46,12 @@ public class FileManager extends AbstractManager{
         }
 
         // init paths
-        this.teamList_path = this.pluginDataFile.getPath() + "/teams.unc_save";
-        this.gameRuleConfiguration_path = this.pluginDataFile.getPath() + "/gamerule-config.json";
         this.gameConfiguration_path = this.pluginDataFile.getPath() + "/game-config.json";
-        this.gameStats_path = this.pluginDataFile.getPath() + "/game-stats.json";
-        this.playersInfos_path = this.pluginDataFile.getPath() + "/players-infos.unc_save";
-        this.participants_path = this.pluginDataFile.getPath() + "/participants.unc_save";
     }
 
     public GameConfiguration loadGameConfiguration() {
         try {
-            GameConfiguration gameConfiguration = (GameConfiguration) this.loadJson(gameConfiguration_path, GameConfiguration.class);
+            GameConfiguration gameConfiguration = (GameConfiguration) this.loadJson(this.pluginDataFile.getPath() + "/game-config.json", GameConfiguration.class);
             return gameConfiguration;
         } catch (NoSuchFileException e) {
             // Le fichier n'existe pas alors on l'init et le créer
@@ -90,7 +84,28 @@ public class FileManager extends AbstractManager{
 
     public boolean saveGameConfiguration(GameConfiguration gameConfiguration) {
         try {
-            this.saveJson(gameConfiguration, gameConfiguration_path);
+            this.saveJson(gameConfiguration, this.pluginDataFile.getPath() + "/game-config.json");
+            return true;
+        } catch (Exception e) {
+            Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
+            return false;
+        }
+    }
+
+    public HashMap<Location, CustomStorageBlock> loadBlockManager() {
+        try {
+            Type typeOfHashMap = new TypeToken<HashMap<Location, CustomStorageBlock>>() { }.getType();
+            HashMap<Location, CustomStorageBlock> customBlocks = this.loadJson(this.pluginDataFile.getPath() + "/custom-blocks.json", typeOfHashMap);
+            return customBlocks;
+        } catch (Exception e) {
+            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + e.toString());
+            return null;
+        }
+    }
+
+    public boolean saveBlockManager(HashMap<Location, CustomStorageBlock> customBlocks) {
+        try {
+            this.saveJson(customBlocks, this.pluginDataFile.getPath() + "/custom-blocks.json");
             return true;
         } catch (Exception e) {
             Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
@@ -100,7 +115,7 @@ public class FileManager extends AbstractManager{
 
     public GameStats loadGameStats() {
         try {
-            GameStats gameStats = this.loadJson(gameStats_path, GameStats.class);
+            GameStats gameStats = this.loadJson(this.pluginDataFile.getPath() + "/game-stats.json", GameStats.class);
             return gameStats;
         } catch (NoSuchFileException e) {
             // Le fichier n'existe pas alors on l'init et le créer
@@ -117,7 +132,7 @@ public class FileManager extends AbstractManager{
     public boolean saveGameStats(GameStats gameStats) {
         try {
             Gson gson = new Gson();
-            this.saveJson(gameStats, gameStats_path);
+            this.saveJson(gameStats, this.pluginDataFile.getPath() + "/game-stats.json");
             return true;
         } catch (Exception e) {
             Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
@@ -129,7 +144,7 @@ public class FileManager extends AbstractManager{
         try {
             // Type utile pour save des hashmap
             //Type type = new TypeToken<HashMap<GameRule, Boolean>>(){}.getType();
-            GameRuleConfiguration gameRuleConfiguration = this.loadJson(this.gameRuleConfiguration_path, GameRuleConfiguration.class);
+            GameRuleConfiguration gameRuleConfiguration = this.loadJson(this.pluginDataFile.getPath() + "/gamerule-config.json", GameRuleConfiguration.class);
             return gameRuleConfiguration;
         } catch (NoSuchFileException e) {
             // Le fichier n'existe pas alors on l'init et le créer
@@ -149,7 +164,7 @@ public class FileManager extends AbstractManager{
 
     public boolean saveGameRuleConfiguration(GameRuleConfiguration gameRuleConfiguration) {
         try {
-            this.saveJson(gameRuleConfiguration.getGamerules(),gameRuleConfiguration_path);
+            this.saveJson(gameRuleConfiguration.getGamerules(),this.pluginDataFile.getPath() + "/gamerule-config.json");
             return true;
         } catch (Exception e) {
             Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + e.toString());
@@ -159,7 +174,7 @@ public class FileManager extends AbstractManager{
 
     public boolean saveTeams(TeamList teamList) {
         try {
-            this.save(teamList,teamList_path);
+            this.save(teamList,this.pluginDataFile.getPath() + "/teams.unc_save");
             return true;
         } catch (Exception e) {
             Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
@@ -169,7 +184,7 @@ public class FileManager extends AbstractManager{
 
     public TeamList loadTeams() {
         try {
-            TeamList teamList = (TeamList) this.load(teamList_path);
+            TeamList teamList = (TeamList) this.load(this.pluginDataFile.getPath() + "/teams.unc_save");
             return teamList;
         } catch (Exception e) {
             Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
@@ -201,6 +216,8 @@ public class FileManager extends AbstractManager{
         return new GsonBuilder()
                 .setPrettyPrinting()
                 .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .registerTypeAdapter(Inventory.class, new SerializeInventory())
+                .registerTypeAdapter(Location.class, new LocationSerializer())
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer())
                 .disableHtmlEscaping()
                 .create();

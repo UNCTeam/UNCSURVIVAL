@@ -3,23 +3,20 @@ package teamunc.uncsurvival.logic.customBlock.customStorageBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.Hopper;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import teamunc.uncsurvival.logic.customBlock.CustomBlock;
 import teamunc.uncsurvival.logic.customBlock.CustomBlockType;
 
 public abstract class CustomStorageBlock {
-    private Location location;
-    private Inventory inventory;
-    private CustomBlockType customBlockType;
-    private int duation = 100;
+    protected Location location;
+    protected Inventory inventory;
+    protected CustomBlockType customBlockType;
+    protected int duration = -1;
+    protected int processingDuration = 100;
 
     public CustomStorageBlock(Location location, CustomBlockType customBlockType) {
         this.customBlockType = customBlockType;
@@ -46,31 +43,40 @@ public abstract class CustomStorageBlock {
     public abstract void tickAction();
 
     public Hopper getOutput() {
-        if(this.location.add(0,-1,0).getBlock().getType() == Material.HOPPER) {
-            return (Hopper) this.location.add(0,-1,0).getBlock();
+        if(this.location.clone().add(0,-1,0).getBlock().getType() == Material.HOPPER) {
+            return (Hopper) this.location.clone().add(0,-1,0).getBlock().getState();
         }
         return null;
     }
 
     public Hopper getInput() {
-        if(this.location.add(0,1,0).getBlock().getType() == Material.HOPPER) {
-            return (Hopper) this.location.add(0,1,0).getBlock();
+        if(this.location.clone().add(0,1,0).getBlock().getType() == Material.HOPPER) {
+            Bukkit.broadcastMessage("HOPPER");
+            return (Hopper) this.location.clone().add(0,1,0).getBlock().getState();
         }
         return null;
     }
 
     public boolean hasInput() {
-        if(this.location.add(0,1,0).getBlock().getType() == Material.HOPPER) {
+        if(this.location.clone().add(0,1,0).clone().getBlock().getType() == Material.HOPPER) {
             return true;
         }
         return false;
     }
 
     public boolean hasOutput() {
-        if(this.location.add(0,-1,0).getBlock().getType() == Material.HOPPER) {
+        if(this.location.clone().add(0,-1,0).clone().getBlock().getType() == Material.HOPPER) {
             return true;
         }
         return false;
+    }
+
+    public int getProcessingDuration() {
+        return processingDuration;
+    }
+
+    public void setProcessingDuration(int processingDuration) {
+        this.processingDuration = processingDuration;
     }
 
     public Location getLocation() {
@@ -97,11 +103,11 @@ public abstract class CustomStorageBlock {
         this.customBlockType = customBlockType;
     }
 
-    public int getDuation() {
-        return duation;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setDuation(int duation) {
-        this.duation = duation;
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }

@@ -254,4 +254,22 @@ public class ItemsManager extends AbstractManager {
 
         return item;
     }
+
+    public ItemStack createMincedMeat() {
+        ItemStack item = new ItemStack(Material.COOKED_BEEF,1);
+
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setCustomModelData(6);
+
+        meta.setDisplayName("§bMinced meat");
+
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+
+        data.set(this.customitemKey, PersistentDataType.STRING, "mincedMeat");
+
+        item.setItemMeta(meta);
+
+        return item;
+    }
 }

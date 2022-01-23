@@ -34,6 +34,7 @@ public class CustomBlockManager extends AbstractManager {
 
     public CustomBlockManager(UNCSurvival plugin) {
         super(plugin);
+        this.loadCustomBlock();
     }
 
     public void actualiseBlocks() {
@@ -59,11 +60,15 @@ public class CustomBlockManager extends AbstractManager {
     }
 
     public void loadCustomBlock() {
-
+        this.customStorageBlockHashMap = this.plugin.getFileManager().loadBlockManager();
+        if(this.customStorageBlockHashMap == null) {
+            this.customStorageBlockHashMap = new HashMap<>();
+            Bukkit.broadcastMessage("aucun fichier");
+        }
     }
 
     public void saveCustomBlock() {
-
+        this.plugin.getFileManager().saveBlockManager(this.customStorageBlockHashMap);
     }
 
     public void breakCustomBlock(BlockBreakEvent event) {
@@ -118,6 +123,7 @@ public class CustomBlockManager extends AbstractManager {
     public void interactBlockEvent(PlayerInteractEvent event) {
         if(event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if(event.getClickedBlock().getType() != Material.SMOOTH_STONE) return;
+        if(event.getPlayer().isSneaking()) return;
 
         CustomStorageBlock customBlock = this.getCustomBlock(event.getClickedBlock().getLocation());
 
@@ -129,7 +135,9 @@ public class CustomBlockManager extends AbstractManager {
 
     public void placeCustomBlock(BlockPlaceEvent event) {
         if(event.getBlockAgainst().getType() == Material.SMOOTH_STONE) {
-            event.setCancelled(true);
+            if(!event.getPlayer().isSneaking()) {
+                event.setCancelled(true);
+            }
         }
 
         if(event.getItemInHand().getType() != Material.DROPPER) {
