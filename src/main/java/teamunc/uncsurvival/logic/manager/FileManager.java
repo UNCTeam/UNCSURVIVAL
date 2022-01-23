@@ -14,9 +14,7 @@ import teamunc.uncsurvival.logic.customBlock.customStorageBlock.CustomStorageBlo
 import teamunc.uncsurvival.logic.gameStats.GameStats;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.team.TeamList;
-import teamunc.uncsurvival.utils.serializerAdapter.LocalDateTimeSerializer;
-import teamunc.uncsurvival.utils.serializerAdapter.LocationSerializer;
-import teamunc.uncsurvival.utils.serializerAdapter.SerializeInventory;
+import teamunc.uncsurvival.utils.serializerAdapter.*;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -207,7 +205,6 @@ public class FileManager extends AbstractManager{
 
     private void saveJson(Object o, String path) throws Exception {
         try (Writer writer = new FileWriter(path)) {
-
             this.getGson().toJson(o, writer);
         }
     }
@@ -218,8 +215,10 @@ public class FileManager extends AbstractManager{
                 .setDateFormat("yyyy-MM-dd HH:mm:ss")
                 .registerTypeAdapter(Inventory.class, new SerializeInventory())
                 .registerTypeAdapter(Location.class, new LocationSerializer())
+                .registerTypeAdapter(CustomStorageBlock.class, new CustomStorageBlockInterfaceCreator())
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer())
                 .disableHtmlEscaping()
+                .enableComplexMapKeySerialization()
                 .create();
     }
 

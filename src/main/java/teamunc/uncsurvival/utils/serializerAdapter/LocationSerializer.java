@@ -12,10 +12,10 @@ public class LocationSerializer implements JsonSerializer<Location>, JsonDeseria
     @Override
     public Location deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         JsonObject jsonObject = jsonElement.getAsJsonObject();
-        String [] parts = jsonObject.getAsString().split(";"); //If you changed the semicolon you must change it here too
-        int x = Integer.parseInt(parts[0]);
-        int y = Integer.parseInt(parts[1]);
-        int z = Integer.parseInt(parts[2]);
+        String [] parts = jsonObject.get("loc").getAsString().split(";"); //If you changed the semicolon you must change it here too
+        double x = Double.parseDouble(parts[0]);
+        double y = Double.parseDouble(parts[1]);
+        double z = Double.parseDouble(parts[2]);
         UUID u = UUID.fromString(parts[3]);
         World world = Bukkit.getWorld(u);
         return new Location(world, x, y, z);

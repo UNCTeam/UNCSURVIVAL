@@ -11,7 +11,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import teamunc.uncsurvival.logic.customBlock.CustomBlockType;
 
-public abstract class CustomStorageBlock {
+import java.io.Serializable;
+
+public abstract class CustomStorageBlock implements Serializable {
     protected Location location;
     protected Inventory inventory;
     protected CustomBlockType customBlockType;
