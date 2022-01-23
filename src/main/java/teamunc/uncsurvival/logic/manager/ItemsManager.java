@@ -49,6 +49,7 @@ public class ItemsManager extends AbstractManager {
         this.customItems.add("healPatch");
         this.customItems.add("alcool");
         this.customItems.add("vaccin");
+        this.customItems.add("module");
     }
 
     public String getGoalItemName(Integer id) {
@@ -166,6 +167,24 @@ public class ItemsManager extends AbstractManager {
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
         data.set(this.customitemKey, PersistentDataType.STRING,"Vaccin");
+
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
+    public ItemStack createModule() {
+        ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK,1);
+
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setCustomModelData(5);
+
+        meta.setDisplayName("§b§lUpgrade Region Module");
+
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+
+        data.set(this.customitemKey, PersistentDataType.STRING,"Module");
 
         item.setItemMeta(meta);
 

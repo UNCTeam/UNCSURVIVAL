@@ -26,6 +26,13 @@ public class Region implements Serializable{
         maxZ = Math.max(z1, z2);
     }
 
+    public void addRange(int addedRange) {
+        this.minX -= addedRange;
+        this.maxX += addedRange;
+        this.minZ -= addedRange;
+        this.maxZ += addedRange;
+    }
+
     public World getWorld() {
         return UNCSurvival.getInstance().getGameManager().getMainWorld();
     }
