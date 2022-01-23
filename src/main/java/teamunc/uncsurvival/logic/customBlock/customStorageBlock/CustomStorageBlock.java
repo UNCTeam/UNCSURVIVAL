@@ -53,7 +53,6 @@ public abstract class CustomStorageBlock implements Serializable {
 
     public Hopper getInput() {
         if(this.location.clone().add(0,1,0).getBlock().getType() == Material.HOPPER) {
-            Bukkit.broadcastMessage("HOPPER");
             return (Hopper) this.location.clone().add(0,1,0).getBlock().getState();
         }
         return null;
