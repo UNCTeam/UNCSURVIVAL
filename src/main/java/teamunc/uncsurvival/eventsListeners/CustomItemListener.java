@@ -38,7 +38,7 @@ public class CustomItemListener extends AbstractEventsListener {
         String customType = data.get(this.plugin.getGameManager().getItemsManager().getCustomitemKey(), PersistentDataType.STRING);
         if (customType != null) {
             switch (customType) {
-                case "DiamondApple":
+                case "DIAMONDAPPLE":
                     double baseValue = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
 
                     if ( baseValue >= 40 ) {
@@ -51,6 +51,9 @@ public class CustomItemListener extends AbstractEventsListener {
                         }
                     }
 
+                    break;
+                case "BURGER":
+                    e.getPlayer().setFoodLevel(20);
                     break;
             }
         }
@@ -73,7 +76,7 @@ public class CustomItemListener extends AbstractEventsListener {
             if (customType == null) return;
             boolean used = false;
             switch(customType) {
-                case "HealPatch":
+                case "HEALPATCH":
                     if (player.getHealth() + 2 <= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()) {
                         player.setHealth(player.getHealth() + 2);
                         used = true;
@@ -85,7 +88,7 @@ public class CustomItemListener extends AbstractEventsListener {
 
                     break;
 
-                case "Vaccin":
+                case "VACCIN":
                     GamePlayer gp = this.plugin.getGameManager().getParticipantManager().getGamePlayer(player.getName());
 
                     if (gp != null || gp.isCovided()) {

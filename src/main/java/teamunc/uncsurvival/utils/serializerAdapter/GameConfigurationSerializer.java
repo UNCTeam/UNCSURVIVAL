@@ -3,6 +3,7 @@ package teamunc.uncsurvival.utils.serializerAdapter;
 import com.google.gson.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 
 import java.lang.reflect.Type;
@@ -16,19 +17,12 @@ public class GameConfigurationSerializer implements JsonSerializer<GameConfigura
         jsonGameConfiguration.addProperty("datePhase2", gameConfiguration.getDatePhase2().toString());
         jsonGameConfiguration.addProperty("datePhase3", gameConfiguration.getDatePhase3().toString());
         jsonGameConfiguration.addProperty("dateFin", gameConfiguration.getDateFin().toString());
-        JsonArray goalItems = new JsonArray();
-        for(Material item : gameConfiguration.getGoalItems()) {
-            goalItems.add(item.toString());
-        }
-        jsonGameConfiguration.add("goalItems", goalItems);
-
-        Bukkit.getConsoleSender().sendMessage("LALALA SERIALIZE");
 
         JsonArray priceItems = new JsonArray();
         for(Integer price : gameConfiguration.getGoalItemsPrices()) {
             priceItems.add(price);
         }
-        jsonGameConfiguration.add("goalItemsPrices", goalItems);
+
         return jsonGameConfiguration;
     }
 
@@ -39,19 +33,13 @@ public class GameConfigurationSerializer implements JsonSerializer<GameConfigura
         LocalDateTime datePhase3 = LocalDateTime.parse(gameConfirurationJson.get("datePhase3").getAsString());
         LocalDateTime dateFin = LocalDateTime.parse(gameConfirurationJson.get("dateFin").getAsString());
 
-        ArrayList<Material> materials = new ArrayList<>();
         ArrayList<Integer> prices = new ArrayList<>();
 
-        JsonArray goalItems = gameConfirurationJson.getAsJsonArray("goalItems");
-        for(int i = 0; i<goalItems.size();i++) {
-            materials.add(Material.valueOf(goalItems.get(i).getAsString()));
-        }
-
         JsonArray priceItems = gameConfirurationJson.getAsJsonArray("goalItemsPrices");
-        for(int i = 0; i<goalItems.size();i++) {
-            prices.add(priceItems.get(0).getAsInt());
+        for(int i = 0; i<priceItems.size();i++) {
+            prices.add(priceItems.get(i).getAsInt());
         }
-        GameConfiguration gameConfiguration = new GameConfiguration(datePhase2, datePhase3, dateFin, materials, prices);
+        GameConfiguration gameConfiguration = new GameConfiguration(datePhase2, datePhase3, dateFin, prices);
         return gameConfiguration;
     }
 }

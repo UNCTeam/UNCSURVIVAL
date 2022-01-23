@@ -153,7 +153,7 @@ public class Team implements Serializable {
                 if ( b.getType() == Material.CHEST ) {
                     Chest block = (Chest) b.getState();
                     for (ItemStack itemStack : block.getBlockInventory().getContents()) {
-                        if (itemStack != null && itemStack.getType() == itemsManager.getItem(i)) {
+                        if (itemStack != null && itemStack.isSimilar(itemsManager.getGoalItem(i))) {
                             this.itemsProduction.set(i,this.itemsProduction.get(i) + itemStack.getAmount());
                             block.getBlockInventory().remove(itemStack);
                         }

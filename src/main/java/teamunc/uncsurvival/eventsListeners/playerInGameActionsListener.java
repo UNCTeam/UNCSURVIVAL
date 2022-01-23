@@ -76,7 +76,7 @@ public class playerInGameActionsListener extends AbstractEventsListener {
                 NamespacedKey key = this.plugin.getGameManager().getItemsManager().getCustomitemKey();
 
                 if (itemStack != null) {
-                    if ( itemStack.hasItemMeta() && itemStack.getItemMeta().getPersistentDataContainer().has(key, PersistentDataType.STRING) && itemStack.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING).equals("Module") ) {
+                    if ( itemStack.hasItemMeta() && itemStack.getItemMeta().getPersistentDataContainer().has(key, PersistentDataType.STRING) && itemStack.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING).equals("MODULE") ) {
 
                         itemStack.setAmount(0);
                         this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(inventoryView.getPlayer().getName()).addRange(10);
