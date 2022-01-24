@@ -24,7 +24,8 @@ public class MincerBlock extends CustomStorageBlock {
         // Vérifi si le duration == 0
         if(duration == 0) {
             produceMincedMeat();
-        } else if(duration >= 0) {
+        } else if(duration > 0) {
+            updateProgressBar();
             duration--;
         } else if(duration == -1) {
             checkIfCanProduce();
@@ -41,6 +42,21 @@ public class MincerBlock extends CustomStorageBlock {
         }
     }
 
+    public void updateProgressBar() {
+        double pourcentage = (1 - (double) duration / processingDuration) * 100;
+        ItemStack progress = UNCSurvival.getInstance().getGameManager().getItemsManager().createProgresBar((int) pourcentage);
+        int nb = 5 - (duration / (processingDuration / 5));
+        for(int i = 0; i<nb; i++) {
+            inventory.setItem(20+i, progress);
+        }
+    }
+
+    public void clearProgressBar() {
+        for(int i = 0; i<5; i++) {
+            inventory.setItem(20+i, null);
+        }
+    }
+
     public void produceMincedMeat() {
         if(this.hasSpaceInOutput(Material.COOKED_BEEF)) {
             duration = -1;
@@ -50,6 +66,7 @@ public class MincerBlock extends CustomStorageBlock {
             } else {
                 inventory.setItem(15, UNCSurvival.getInstance().getGameManager().getItemsManager().createMincedMeat());
             }
+            clearProgressBar();
         } else {
             duration = 0;
         }
