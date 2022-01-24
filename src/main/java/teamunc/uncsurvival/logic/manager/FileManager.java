@@ -22,6 +22,7 @@ import teamunc.uncsurvival.utils.serializerAdapter.*;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
@@ -201,8 +202,9 @@ public class FileManager extends AbstractManager{
     }
 
     private void saveJson(Object o, String path) throws Exception {
-        try (Writer writer = new FileWriter(path)) {
-            this.getGson().toJson(o, writer);
+        try (FileOutputStream writer = new FileOutputStream(path)) {
+            byte[] objet = this.getGson().toJson(o).getBytes(StandardCharsets.UTF_8);
+            writer.write(objet);
         }
     }
 

@@ -102,6 +102,7 @@ public class playerInGameActionsListener extends AbstractEventsListener {
 
         } else {
             // OTHER INTERFACES
+            plugin.getGameManager().getCustomBlockManager().interfaceInterfact(event);
         }
 
     }
