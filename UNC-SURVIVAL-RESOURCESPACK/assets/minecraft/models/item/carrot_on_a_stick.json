@@ -5,5 +5,6 @@
   },
   "overrides": [
     { "predicate": { "custom_model_data": 1 }, "model": "unc:item/logo_unc" }
+    { "predicate": { "custom_model_data": 2 }, "model": "unc:item/mincer_load" }
   ]
 }

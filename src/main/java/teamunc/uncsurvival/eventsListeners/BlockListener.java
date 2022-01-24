@@ -53,7 +53,6 @@ public class BlockListener extends AbstractEventsListener {
                         if(im.getDamage() > 30) {
                             // Casse la wrench
                             e.getPlayer().getInventory().setItemInMainHand(null);
-                            e.getPlayer().sendMessage("soo");
                             e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ITEM_SHIELD_BREAK, 1.0f, 1.0f);
                         } else {
                             e.getPlayer().getInventory().setItemInMainHand(plugin.getGameManager().getItemsManager().createWrenchItem(blockValue, im.getDamage()+2));

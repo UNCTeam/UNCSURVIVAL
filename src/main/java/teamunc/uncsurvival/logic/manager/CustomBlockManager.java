@@ -1,6 +1,7 @@
 package teamunc.uncsurvival.logic.manager;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,7 +12,10 @@ import org.bukkit.entity.Item;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -120,6 +124,30 @@ public class CustomBlockManager extends AbstractManager {
         return itemStack;
     }
 
+    public void loadInventoriesTitles() {
+        for (Map.Entry<Location, CustomStorageBlock> entry : customStorageBlockHashMap.entrySet()) {
+            Inventory newInv = Bukkit.createInventory(null, 27, this.getTitle(entry.getValue().getCustomBlockType()));
+            newInv.setContents(entry.getValue().getInventory().getContents());
+            entry.getValue().setInventory(newInv);
+        }
+    }
+
+    public String getTitle(CustomBlockType blockType) {
+        String name = "";
+        switch (blockType) {
+            case GROWTH_BLOCK:
+                break;
+            case COOK_BLOCk:
+                break;
+            case MINCER_BLOCK:
+                name = ChatColor.WHITE +"\uF80B杯";
+                break;
+            case PROECTION_BLOCK:
+                break;
+        }
+        return name;
+    }
+
     public void interactBlockEvent(PlayerInteractEvent event) {
         if(event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if(event.getClickedBlock().getType() != Material.SMOOTH_STONE) return;
@@ -165,4 +193,19 @@ public class CustomBlockManager extends AbstractManager {
         }
     }
 
+    public void interfaceInterfact(InventoryClickEvent event) {
+        String title = event.getView().getTitle();
+        if(title.contains(this.getTitle(CustomBlockType.MINCER_BLOCK))) {
+            if((event.getRawSlot() < 27 && (event.getRawSlot() != 11 && event.getRawSlot() != 15))) {
+                event.setCancelled(true);
+                Bukkit.broadcastMessage("click type " + event.getClick() + " action " + event.getAction());
+                Bukkit.broadcastMessage("slot:"+event.getRawSlot());
+                return;
+            } else if((event.getRawSlot() > 27 && event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) ||
+                    event.getRawSlot() == 15 && event.getAction() == InventoryAction.PLACE_ALL) {
+                event.setCancelled(true);
+                return;
+            }
+        }
+    }
 }

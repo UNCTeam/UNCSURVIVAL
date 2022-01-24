@@ -9,9 +9,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.customBlock.CustomBlockType;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public abstract class CustomStorageBlock implements Serializable {
     protected Location location;
@@ -26,7 +28,7 @@ public abstract class CustomStorageBlock implements Serializable {
         location.getBlock().setType(Material.SMOOTH_STONE);
 
         // Init l'inventaire
-        this.inventory = Bukkit.createInventory(null, 27);
+        this.inventory = Bukkit.createInventory(null, 27, UNCSurvival.getInstance().getGameManager().getCustomBlockManager().getTitle(this.customBlockType));
 
         // Spawn Armorstand
         Location loc = location.clone().add(0.5,0,0.5);
@@ -89,7 +91,7 @@ public abstract class CustomStorageBlock implements Serializable {
     }
 
     public Inventory getInventory() {
-        return inventory;
+        return this.inventory;
     }
 
     public void setInventory(Inventory inventory) {

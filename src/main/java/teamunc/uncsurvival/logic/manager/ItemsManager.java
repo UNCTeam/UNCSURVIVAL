@@ -55,37 +55,23 @@ public class ItemsManager extends AbstractManager {
 
     public ItemStack createDiamondApple() {
         ItemStack item = new ItemStack(Material.APPLE,1);
-
         ItemMeta meta = item.getItemMeta();
-
         meta.setCustomModelData(1);
-
         meta.setDisplayName("§r§l§cDiamond Apple");
-
         PersistentDataContainer data = meta.getPersistentDataContainer();
-
         data.set(this.customitemKey, PersistentDataType.STRING,"DIAMONDAPPLE");
-
         item.setItemMeta(meta);
-
         return item;
     }
 
     public ItemStack createHealPatch() {
         ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK,1);
-
         ItemMeta meta = item.getItemMeta();
-
         meta.setCustomModelData(3);
-
         meta.setDisplayName("§rHeal Patch");
-
         PersistentDataContainer data = meta.getPersistentDataContainer();
-
         data.set(this.customitemKey, PersistentDataType.STRING,"HEALPATCH");
-
         item.setItemMeta(meta);
-
         return item;
     }
 
@@ -109,133 +95,100 @@ public class ItemsManager extends AbstractManager {
         int damage = durability;
         im.setDamage(damage);
         item.setItemMeta(im);
-
         return item;
     }
 
     public ItemStack createAlcool() {
         ItemStack item = new ItemStack(Material.POTION,1);
-
         PotionMeta meta = (PotionMeta) item.getItemMeta();
-
         meta.setColor(Color.BLACK);
-
         meta.setDisplayName("§rZombie Alcool");
-
         PersistentDataContainer data = meta.getPersistentDataContainer();
-
         data.set(this.customitemKey, PersistentDataType.STRING,"ALCOOL");
-
         item.setItemMeta(meta);
-
         return item;
     }
 
     public ItemStack createVaccin() {
         ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK,1);
-
         ItemMeta meta = item.getItemMeta();
-
         meta.setCustomModelData(4);
-
         meta.setDisplayName("§b§cSARS-COV19 UNC-VAX");
-
         PersistentDataContainer data = meta.getPersistentDataContainer();
-
         data.set(this.customitemKey, PersistentDataType.STRING,"VACCIN");
-
         item.setItemMeta(meta);
-
         return item;
     }
 
     public ItemStack createModule() {
         ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK,1);
-
         ItemMeta meta = item.getItemMeta();
-
         meta.setCustomModelData(5);
-
         meta.setDisplayName("§b§lUpgrade Region Module");
-
         PersistentDataContainer data = meta.getPersistentDataContainer();
-
         data.set(this.customitemKey, PersistentDataType.STRING,"MODULE");
-
         item.setItemMeta(meta);
-
         return item;
     }
 
     public ItemStack createMincerItemBlock() {
         ItemStack item = new ItemStack(Material.DROPPER,1);
-
         ItemMeta meta = item.getItemMeta();
-
         meta.setCustomModelData(CustomBlockType.MINCER_BLOCK.getModel());
-
         meta.setDisplayName("§rMincer");
-
         PersistentDataContainer data = meta.getPersistentDataContainer();
-
         data.set(this.customitemKey, PersistentDataType.STRING, CustomBlockType.MINCER_BLOCK.name());
-
         item.setItemMeta(meta);
-
         return item;
     }
 
     public ItemStack createMincedMeat() {
         ItemStack item = new ItemStack(Material.COOKED_BEEF,1);
-
         ItemMeta meta = item.getItemMeta();
-
         meta.setCustomModelData(2);
-
         meta.setDisplayName("§rMinced meat");
-
         PersistentDataContainer data = meta.getPersistentDataContainer();
-
         data.set(this.customitemKey, PersistentDataType.STRING, "MINCEDMEAT");
-
         item.setItemMeta(meta);
-
         return item;
     }
 
     public ItemStack createBurger() {
         ItemStack item = new ItemStack(Material.COOKED_BEEF,1);
-
         ItemMeta meta = item.getItemMeta();
-
         meta.setCustomModelData(1);
-
         meta.setDisplayName("§b§eBurger");
-
         PersistentDataContainer data = meta.getPersistentDataContainer();
-
         data.set(this.customitemKey, PersistentDataType.STRING, "BURGER");
-
         item.setItemMeta(meta);
-
         return item;
     }
 
     public ItemStack createWheatFlour() {
         ItemStack item = new ItemStack(Material.WHEAT,1);
-
         ItemMeta meta = item.getItemMeta();
-
         meta.setCustomModelData(1);
-
         meta.setDisplayName("§rWheat Flour");
-
         PersistentDataContainer data = meta.getPersistentDataContainer();
-
         data.set(this.customitemKey, PersistentDataType.STRING, "WHEATFLOUR");
-
         item.setItemMeta(meta);
+        return item;
+    }
 
+    public ItemStack createProgresBar(Integer pourcentage) {
+        ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK);
+        ItemMeta meta = item.getItemMeta();
+        meta.setCustomModelData(6);
+        meta.setDisplayName("§a" + pourcentage + "%");
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public ItemStack createAnimatedMincer() {
+        ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(" ");
+        item.setItemMeta(meta);
         return item;
     }
 
