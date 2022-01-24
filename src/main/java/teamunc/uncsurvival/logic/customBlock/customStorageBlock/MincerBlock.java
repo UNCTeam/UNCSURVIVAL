@@ -1,6 +1,7 @@
 package teamunc.uncsurvival.logic.customBlock.customStorageBlock;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Hopper;
@@ -16,6 +17,7 @@ public class MincerBlock extends CustomStorageBlock {
     public MincerBlock(Location location, CustomBlockType customBlockType) {
         super(location, customBlockType);
         this.processingDuration = 10;
+        this.inventory = Bukkit.createInventory(null, 27, ChatColor.WHITE +"\uF80B杯");
     }
 
     @Override
