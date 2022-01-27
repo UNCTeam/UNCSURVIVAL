@@ -39,6 +39,7 @@ public class MincerBlock extends CustomStorageBlock {
         if(item != null && (item.getType().equals(Material.COOKED_BEEF) || item.getType().equals(Material.BEEF))) {
             item.setAmount(item.getAmount()-1);
             duration = this.getProcessingDuration();
+            this.inventory.setItem(4,UNCSurvival.getInstance().getGameManager().getItemsManager().createAnimatedMincer());
         }
     }
 
@@ -67,6 +68,7 @@ public class MincerBlock extends CustomStorageBlock {
                 inventory.setItem(15, UNCSurvival.getInstance().getGameManager().getItemsManager().createMincedMeat());
             }
             clearProgressBar();
+            inventory.setItem(4, UNCSurvival.getInstance().getGameManager().getItemsManager().createFixedMincer());
         } else {
             duration = 0;
         }

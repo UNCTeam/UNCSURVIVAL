@@ -187,7 +187,17 @@ public class ItemsManager extends AbstractManager {
     public ItemStack createAnimatedMincer() {
         ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(" ");
+        meta.setCustomModelData(7);
+        meta.setDisplayName("§aProduction en cours");
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public ItemStack createFixedMincer() {
+        ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK);
+        ItemMeta meta = item.getItemMeta();
+        meta.setCustomModelData(8);
+        meta.setDisplayName("§cProduction en pause");
         item.setItemMeta(meta);
         return item;
     }
