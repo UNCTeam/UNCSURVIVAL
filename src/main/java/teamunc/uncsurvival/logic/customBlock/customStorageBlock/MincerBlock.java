@@ -17,6 +17,10 @@ public class MincerBlock extends CustomStorageBlock {
     public MincerBlock(Location location, CustomBlockType customBlockType) {
         super(location, customBlockType);
         this.processingDuration = 10;
+
+        // Init l'inventaire
+        this.inventory = Bukkit.createInventory(null, 27, UNCSurvival.getInstance().getGameManager().getCustomBlockManager().getTitle(this.customBlockType));
+        inventory.setItem(4, UNCSurvival.getInstance().getGameManager().getItemsManager().createFixedMincer());
     }
 
     @Override

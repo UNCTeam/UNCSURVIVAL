@@ -27,9 +27,6 @@ public abstract class CustomStorageBlock implements Serializable {
         this.location = location;
         location.getBlock().setType(Material.SMOOTH_STONE);
 
-        // Init l'inventaire
-        this.inventory = Bukkit.createInventory(null, 27, UNCSurvival.getInstance().getGameManager().getCustomBlockManager().getTitle(this.customBlockType));
-
         // Spawn Armorstand
         Location loc = location.clone().add(0.5,0,0.5);
         ItemStack texture = new ItemStack(Material.DROPPER, 1);
