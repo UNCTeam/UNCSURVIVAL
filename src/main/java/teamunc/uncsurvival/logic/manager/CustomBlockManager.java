@@ -6,11 +6,14 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Ageable;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -25,16 +28,15 @@ import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.customBlock.CustomBlock;
 import teamunc.uncsurvival.logic.customBlock.CustomBlockType;
 import teamunc.uncsurvival.logic.customBlock.customStorageBlock.CustomStorageBlock;
+import teamunc.uncsurvival.logic.customBlock.customStorageBlock.GrowthBlock;
 import teamunc.uncsurvival.logic.customBlock.customStorageBlock.MincerBlock;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class CustomBlockManager extends AbstractManager {
 
     private HashMap<Location, CustomStorageBlock> customStorageBlockHashMap = new HashMap<>();
+    private ArrayList<GrowthBlock> growthBlockArrayList = new ArrayList<>();
 
     public CustomBlockManager(UNCSurvival plugin) {
         super(plugin);
@@ -51,12 +53,66 @@ public class CustomBlockManager extends AbstractManager {
         return this.customStorageBlockHashMap.get(location);
     }
 
+    public ArrayList<GrowthBlock> getGrowthBlocks() {
+        ArrayList<GrowthBlock> list = new ArrayList<>();
+        for (Map.Entry<Location, CustomStorageBlock> mapentry: customStorageBlockHashMap.entrySet()) {
+            if(mapentry.getValue() instanceof GrowthBlock) {
+                list.add((GrowthBlock) mapentry.getValue());
+            }
+        }
+        Bukkit.broadcastMessage("List of growth blocks : " + list.toString());
+        return list;
+    }
+
+    public GrowthBlock getGrowthBlock(Location location) {
+        for(GrowthBlock block : this.getGrowthBlocks()) {
+            if(block.getRegion().contains(location)) {
+                Bukkit.broadcastMessage("Block in");
+                return block;
+            }
+        }
+        return null;
+    }
+
+    public void handleGrowthEvent(BlockGrowEvent event) {
+        Block block = event.getBlock();
+        GrowthBlock growthBlock = getGrowthBlock(block.getLocation());
+        if(growthBlock != null && growthBlock.getInventory().contains(Material.BONE_MEAL)) {
+            Bukkit.broadcastMessage(event.getNewState().getBlockData().toString());
+            if (event.getBlock().getBlockData() instanceof Ageable) {
+                Ageable ag = (Ageable) event.getBlock().getBlockData();
+                int oldAge = ag.getAge()+3;
+                if(oldAge <= ag.getMaximumAge()) {
+                    growthBlock.removeBoneMeal();
+                    new BukkitRunnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            ag.setAge(ag.getAge()+3);
+                            block.setBlockData(ag);
+                        }
+                    }.runTaskLater(plugin, 1);
+
+                    Bukkit.broadcastMessage(ChatColor.GREEN + "Bloc boosté, age = " + oldAge);
+                }
+            }
+        }
+    }
+
     public void addCustomBlock(CustomStorageBlock customBlock) {
         this.customStorageBlockHashMap.put(customBlock.getLocation(), customBlock);
+        if(customBlock.getCustomBlockType() == CustomBlockType.GROWTH_BLOCK) {
+            this.growthBlockArrayList.add((GrowthBlock) customBlock);
+        }
     }
 
     public boolean removeCustomBlock(Location location) {
         if(this.customStorageBlockHashMap.containsKey(location)) {
+            CustomStorageBlock customBlock = this.customStorageBlockHashMap.get(location);
+            if(customBlock.getCustomBlockType() == CustomBlockType.GROWTH_BLOCK) {
+                this.growthBlockArrayList.remove((GrowthBlock) customBlock);
+            }
             this.customStorageBlockHashMap.remove(location);
             return true;
         }
@@ -112,6 +168,7 @@ public class CustomBlockManager extends AbstractManager {
         ItemStack itemStack = null;
         switch (blockType) {
             case GROWTH_BLOCK:
+                itemStack = plugin.getGameManager().getItemsManager().createGrowthItemBlock();
                 break;
             case COOK_BLOCk:
                 break;
@@ -136,6 +193,7 @@ public class CustomBlockManager extends AbstractManager {
         String name = "";
         switch (blockType) {
             case GROWTH_BLOCK:
+                name = ChatColor.WHITE +"\uF80B抱";
                 break;
             case COOK_BLOCk:
                 break;
@@ -186,6 +244,7 @@ public class CustomBlockManager extends AbstractManager {
                 case PROECTION_BLOCK:
                     break;
                 case GROWTH_BLOCK:
+                    this.addCustomBlock(new GrowthBlock(loc, blockType));
                     break;
             }
         }
