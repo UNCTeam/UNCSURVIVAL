@@ -14,11 +14,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 import teamunc.uncsurvival.logic.customBlock.CustomBlockType;
 import teamunc.uncsurvival.logic.customBlock.customStorageBlock.MincerBlock;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
+import teamunc.uncsurvival.utils.alchemist.BrewingControler;
+import teamunc.uncsurvival.utils.alchemist.BrewingRecipe;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,6 +35,7 @@ public class ItemsManager extends AbstractManager {
     private ArrayList<ItemStack> goalItems;
     private ArrayList<Integer> goalItemsPrices;
     private List<String> customItems = new ArrayList<>();
+    private BrewingControler brewingControler;
 
     public List<String> getCustomItems() {
         return customItems;
@@ -46,7 +51,7 @@ public class ItemsManager extends AbstractManager {
         super(plugin);
         this.goalItems = gameConfiguration.getGoalItems();
         this.goalItemsPrices = gameConfiguration.getGoalItemsPrices();
-        this.customItems = List.of("diamondApple", "wrench", "mincer", "healPatch", "alcool", "vaccin","module","mincedMeat","burger","wheatFlour");
+        this.customItems = List.of("diamondApple", "wrench", "mincer", "healPatch", "alcool", "vaccin","module","mincedMeat","burger","wheatFlour","cactusJuice");
     }
 
     public String getGoalItemName(Integer id) {
@@ -210,7 +215,21 @@ public class ItemsManager extends AbstractManager {
         }
     }
 
+    public ItemStack createCactusJuice() {
+        ItemStack item = new ItemStack(Material.POTION,1);
+        PotionMeta meta = (PotionMeta) item.getItemMeta();
+        meta.setDisplayName("§b§eCactus Juice");
+        meta.setColor(Color.fromRGB(902144));
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(this.customitemKey, PersistentDataType.STRING,"CACTUS");
+        item.setItemMeta(meta);
+        return item;
+    }
+
     public void initCraftingRecipe() {
+        // potion craft manager
+        this.brewingControler = new BrewingControler(this.plugin);
+
         // DIAMOND APPLE
         ShapedRecipe diamondApple = new ShapedRecipe(new NamespacedKey(this.plugin,"craftDiamondApple"),this.createDiamondApple());
         diamondApple.shape("***","*-*","***");
@@ -256,6 +275,16 @@ public class ItemsManager extends AbstractManager {
         FurnaceRecipe bread = new FurnaceRecipe(new NamespacedKey(this.plugin,"craftBread"),new ItemStack(Material.BREAD,1),new RecipeChoice.ExactChoice(this.createWheatFlour()),1,200);
         this.plugin.getServer().addRecipe(bread);
 
+        // CACTUS JUICE
+        // creating water potion
+        ItemStack potion = new ItemStack(Material.POTION);
+        PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
+        potionMeta.setBasePotionData(new PotionData(PotionType.WATER));
+        potion.setItemMeta(potionMeta);
+
+        brewingControler.addRecipe(
+                new BrewingRecipe(new NamespacedKey(this.plugin,"craftCactusJuice"),this.createCactusJuice(),new ItemStack(Material.GREEN_DYE),potion)
+        );
 
         // change recipe
         if (this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE2 || this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE3) {
