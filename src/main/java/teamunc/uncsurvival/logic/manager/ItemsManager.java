@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.world.item.crafting.IRecipe;
 import org.bukkit.*;
+import org.bukkit.block.BrewingStand;
 import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftShapelessRecipe;
 import org.bukkit.enchantments.Enchantment;
@@ -14,13 +15,18 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 import teamunc.uncsurvival.logic.customBlock.CustomBlockType;
 import teamunc.uncsurvival.logic.customBlock.customStorageBlock.MincerBlock;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
+import teamunc.uncsurvival.utils.alchemist.BrewingControler;
+import teamunc.uncsurvival.utils.alchemist.BrewingRecipe;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -28,9 +34,10 @@ public class ItemsManager extends AbstractManager {
 
     private NamespacedKey customitemKey = new NamespacedKey(this.plugin,"customitem");
     private NamespacedKey wrenchKey = new NamespacedKey(plugin, "wrenchID");
-    private ArrayList<ItemStack> goalItems;
     private ArrayList<Integer> goalItemsPrices;
-    private List<String> customItems = new ArrayList<>();
+    private List<String> customItems;
+    private BrewingControler brewingControler;
+    private GameConfiguration gameConfiguration;
 
     public List<String> getCustomItems() {
         return customItems;
@@ -44,13 +51,28 @@ public class ItemsManager extends AbstractManager {
 
     public ItemsManager(UNCSurvival plugin, GameConfiguration gameConfiguration) {
         super(plugin);
-        this.goalItems = gameConfiguration.getGoalItems();
+        this.gameConfiguration = gameConfiguration;
+        this.gameConfiguration.setGoalItems(registerGoalItems());
         this.goalItemsPrices = gameConfiguration.getGoalItemsPrices();
-        this.customItems = List.of("diamondApple", "wrench", "mincer", "healPatch", "alcool", "vaccin","module","mincedMeat","burger","wheatFlour");
+        this.customItems = List.of("diamondApple", "wrench", "mincer", "healPatch", "alcool", "vaccin","module","mincedMeat","burger","wheatFlour","cactusJuice");
+    }
+
+    public ArrayList<ItemStack> registerGoalItems() {
+        ArrayList<ItemStack> res = new ArrayList<>(
+                Arrays.asList(
+                        new ItemStack(Material.BRICK),
+                        createBurger(),
+                        new ItemStack(Material.BOOKSHELF),
+                        createCactusJuice(),
+                        new ItemStack(Material.STONE)
+                )
+        );
+
+        return res;
     }
 
     public String getGoalItemName(Integer id) {
-        return this.goalItems.get(id).getItemMeta().getDisplayName();
+        return this.gameConfiguration.getGoalItems().get(id).getItemMeta().getDisplayName();
     }
 
     public ItemStack createDiamondApple() {
@@ -210,7 +232,21 @@ public class ItemsManager extends AbstractManager {
         }
     }
 
+    public ItemStack createCactusJuice() {
+        ItemStack item = new ItemStack(Material.POTION,1);
+        PotionMeta meta = (PotionMeta) item.getItemMeta();
+        meta.setDisplayName("§b§eCactus Juice");
+        meta.setColor(Color.fromRGB(902144));
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(this.customitemKey, PersistentDataType.STRING,"CACTUS");
+        item.setItemMeta(meta);
+        return item;
+    }
+
     public void initCraftingRecipe() {
+        // potion craft manager
+        this.brewingControler = new BrewingControler(this.plugin);
+
         // DIAMOND APPLE
         ShapedRecipe diamondApple = new ShapedRecipe(new NamespacedKey(this.plugin,"craftDiamondApple"),this.createDiamondApple());
         diamondApple.shape("***","*-*","***");
@@ -256,6 +292,15 @@ public class ItemsManager extends AbstractManager {
         FurnaceRecipe bread = new FurnaceRecipe(new NamespacedKey(this.plugin,"craftBread"),new ItemStack(Material.BREAD,1),new RecipeChoice.ExactChoice(this.createWheatFlour()),1,200);
         this.plugin.getServer().addRecipe(bread);
 
+        // CACTUS JUICE
+        // creating water potion
+        ItemStack potion = new ItemStack(Material.POTION);
+        PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
+        potionMeta.setBasePotionData(new PotionData(PotionType.WATER));
+        potion.setItemMeta(potionMeta);
+        brewingControler.addRecipe(
+                new BrewingRecipe(new NamespacedKey(this.plugin,"craftCactusJuice"),this.createCactusJuice(),new ItemStack(Material.GREEN_DYE),potion,1,100)
+        );
 
         // change recipe
         if (this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE2 || this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE3) {
@@ -286,7 +331,11 @@ public class ItemsManager extends AbstractManager {
         Bukkit.getServer().addRecipe(recipe);
     }
 
-    public ItemStack getGoalItem(int itemNumber) {return this.goalItems.get(itemNumber);}
+    public BrewingControler getBrewingControler() {
+        return brewingControler;
+    }
+
+    public ItemStack getGoalItem(int itemNumber) {return this.gameConfiguration.getGoalItems().get(itemNumber);}
 
     public int getGoalItemPrice(Integer itemNumber) {
 
@@ -296,5 +345,9 @@ public class ItemsManager extends AbstractManager {
     public boolean isCustomItem(ItemStack itemStack, String customNameCaseSensitive) {
         return (itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING) != null &&
                 itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING).equals(customNameCaseSensitive));
+    }
+
+    public void save() {
+        this.brewingControler.stop();
     }
 }

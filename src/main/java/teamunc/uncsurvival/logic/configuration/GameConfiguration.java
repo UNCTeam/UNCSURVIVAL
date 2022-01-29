@@ -28,42 +28,6 @@ public class GameConfiguration implements Serializable {
         this.goalItemsPrices = goalItemsPrices;
     }
 
-    public void postLoad() {
-        this.goalItems = registerGoalItems();
-    }
-
-    public ArrayList<ItemStack> registerGoalItems() {
-        ArrayList<ItemStack> res = new ArrayList<>(
-                Arrays.asList(
-                        new ItemStack(Material.BRICK),
-                        createBurger(),
-                        new ItemStack(Material.STONE),
-                        new ItemStack(Material.STONE),
-                        new ItemStack(Material.STONE)
-                )
-        );
-
-        return res;
-    }
-
-    private ItemStack createBurger() {
-        ItemStack item = new ItemStack(Material.COOKED_BEEF,1);
-
-        ItemMeta meta = item.getItemMeta();
-
-        meta.setCustomModelData(1);
-
-        meta.setDisplayName("§b§eBurger");
-
-        PersistentDataContainer data = meta.getPersistentDataContainer();
-
-        data.set(new NamespacedKey(UNCSurvival.getInstance(),"customitem"), PersistentDataType.STRING, "BURGER");
-
-        item.setItemMeta(meta);
-
-        return item;
-    }
-
     public LocalDateTime getDateFin() { return dateFin; }
 
     public LocalDateTime getDatePhase2() {
@@ -79,5 +43,9 @@ public class GameConfiguration implements Serializable {
     }
     public ArrayList<Integer> getGoalItemsPrices() {
         return goalItemsPrices;
+    }
+
+    public void setGoalItems(ArrayList<ItemStack> registeredGoalItems) {
+        this.goalItems = registeredGoalItems;
     }
 }

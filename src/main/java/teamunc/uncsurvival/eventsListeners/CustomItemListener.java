@@ -1,20 +1,27 @@
 package teamunc.uncsurvival.eventsListeners;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.eventsListeners.AbstractEventsListener;
 import teamunc.uncsurvival.logic.player.GamePlayer;
+import teamunc.uncsurvival.logic.team.Team;
+
+import java.util.ArrayList;
 
 public class CustomItemListener extends AbstractEventsListener {
 
@@ -64,6 +71,7 @@ public class CustomItemListener extends AbstractEventsListener {
         ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
         ItemMeta itemMeta = item.getItemMeta();
         Player player = e.getPlayer();
+        Block block = e.getClickedBlock();
 
         if (itemMeta == null) return;
 
@@ -97,8 +105,51 @@ public class CustomItemListener extends AbstractEventsListener {
                     }
                     if (used) item.setAmount(0);
                     break;
+
+                case "WRENCH":
+                        if(data.has(this.plugin.getGameManager().getItemsManager().getWrenchKey(), PersistentDataType.INTEGER)) {
+                            Integer blockValue = data.get(this.plugin.getGameManager().getItemsManager().getWrenchKey(), PersistentDataType.INTEGER);
+                            final Damageable im = (Damageable) itemMeta;
+                            if ( e.getAction() == Action.RIGHT_CLICK_AIR ) {
+                                // Switch le mode de la wrench
+                                e.getPlayer().getInventory().setItemInMainHand(plugin.getGameManager().getItemsManager().giveNextWrenchItem(blockValue, im.getDamage()));
+                            } else if ( e.getAction() == Action.RIGHT_CLICK_BLOCK && CanDoThisHere(player,block.getLocation())) {
+                                Team team = plugin.getGameManager().getParticipantManager().getTeamForPlayer(e.getPlayer());
+                                if ( team != null ) {
+                                    team.moveInterfaceGoal(blockValue, block.getLocation().add(e.getBlockFace().getDirection()));
+                                    // Augmente la dura
+                                    if ( im.getDamage() > 30 ) {
+                                        // Casse la wrench
+                                        e.getPlayer().getInventory().setItemInMainHand(null);
+                                        e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ITEM_SHIELD_BREAK, 1.0f, 1.0f);
+                                    } else {
+                                        e.getPlayer().getInventory().setItemInMainHand(plugin.getGameManager().getItemsManager().createWrenchItem(blockValue, im.getDamage() + 2));
+                                    }
+                                } else {
+                                    e.getPlayer().sendMessage("§cYou need to be in a team");
+                                }
+                            }
+                        }
+                    break;
             }
         }
 
+    }
+
+    public boolean CanDoThisHere(Player player, Location loc) {
+        boolean res = true;
+
+        if(this.plugin.getGameManager().getParticipantManager().hasPlayer(player)) {
+            Team teamPlayer = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(player);
+            ArrayList<Team> teams = (ArrayList<Team>) this.plugin.getGameManager().getTeamsManager().getAllTeams().clone();
+            teams.remove(teamPlayer);
+            for (Team team : teams) {
+                if ( team.getRegion().contains(loc) ) {
+                    player.sendMessage("§cVous n'avez pas le droit de poser ou casser des blocs dans la base adverse.");
+                    res = false;
+                }
+            }
+        }
+        return res;
     }
 }

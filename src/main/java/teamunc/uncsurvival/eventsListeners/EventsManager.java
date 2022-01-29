@@ -2,6 +2,8 @@ package teamunc.uncsurvival.eventsListeners;
 
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.manager.AbstractManager;
+import teamunc.uncsurvival.utils.alchemist.BrewingControler;
+import teamunc.uncsurvival.utils.alchemist.PotionEvent;
 
 import java.util.ArrayList;
 

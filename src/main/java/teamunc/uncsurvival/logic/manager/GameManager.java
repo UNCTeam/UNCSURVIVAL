@@ -82,7 +82,6 @@ public class GameManager extends AbstractManager {
 
     public void loadGameConfiguration() {
         this.gameConfiguration = this.plugin.getFileManager().loadGameConfiguration();
-        this.gameConfiguration.postLoad();
     }
     public void loadGameStats() {
         this.gameStats = this.plugin.getFileManager().loadGameStats();
@@ -211,8 +210,8 @@ public class GameManager extends AbstractManager {
     public void addInGameScoreboard() {
         for (GamePlayer p : this.participantManager.getGamePlayers()) {
             Player player = p.getBukkitPlayer();
-            this.scoreboardManager.
-                    addScoreboard(new InGameInfoScoreboard(player));
+            if(player != null)
+                this.scoreboardManager.addScoreboard(new InGameInfoScoreboard(player));
         }
     }
 
@@ -255,5 +254,6 @@ public class GameManager extends AbstractManager {
     public void save() {
         this.getTeamsManager().saveTeams();
         this.getCustomBlockManager().saveCustomBlock();
+        this.getItemsManager().save();
     }
 }
