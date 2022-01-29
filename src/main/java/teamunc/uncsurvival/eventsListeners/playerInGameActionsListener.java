@@ -92,10 +92,10 @@ public class playerInGameActionsListener extends AbstractEventsListener {
                 }
             }
 
-        } else if (inventoryView.getTitle().contains("本") &&
-                    inventoryView.getTitle().contains("北") &&
-                    inventoryView.getTitle().contains("被") &&
-                    inventoryView.getTitle().contains("背") &&
+        } else if (inventoryView.getTitle().contains("本") ||
+                    inventoryView.getTitle().contains("北") ||
+                    inventoryView.getTitle().contains("被") ||
+                    inventoryView.getTitle().contains("背") ||
                     inventoryView.getTitle().contains("备") ){
             // INTERFACE GOAL ITEM
             if (event.isShiftClick() || event.getRawSlot() < 27) event.setCancelled(true);
