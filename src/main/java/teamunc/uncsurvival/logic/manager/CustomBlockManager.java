@@ -64,42 +64,6 @@ public class CustomBlockManager extends AbstractManager {
         return list;
     }
 
-    public GrowthBlock getGrowthBlock(Location location) {
-        for(GrowthBlock block : this.getGrowthBlocks()) {
-            if(block.getRegion().contains(location)) {
-                Bukkit.broadcastMessage("Block in");
-                return block;
-            }
-        }
-        return null;
-    }
-
-    public void handleGrowthEvent(BlockGrowEvent event) {
-        Block block = event.getBlock();
-        GrowthBlock growthBlock = getGrowthBlock(block.getLocation());
-        if(growthBlock != null && growthBlock.getInventory().contains(Material.BONE_MEAL)) {
-            Bukkit.broadcastMessage(event.getNewState().getBlockData().toString());
-            if (event.getBlock().getBlockData() instanceof Ageable) {
-                Ageable ag = (Ageable) event.getBlock().getBlockData();
-                int oldAge = ag.getAge()+3;
-                if(oldAge <= ag.getMaximumAge()) {
-                    growthBlock.removeBoneMeal();
-                    new BukkitRunnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            ag.setAge(ag.getAge()+3);
-                            block.setBlockData(ag);
-                        }
-                    }.runTaskLater(plugin, 1);
-
-                    Bukkit.broadcastMessage(ChatColor.GREEN + "Bloc boosté, age = " + oldAge);
-                }
-            }
-        }
-    }
-
     public void addCustomBlock(CustomStorageBlock customBlock) {
         this.customStorageBlockHashMap.put(customBlock.getLocation(), customBlock);
         if(customBlock.getCustomBlockType() == CustomBlockType.GROWTH_BLOCK) {

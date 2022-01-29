@@ -58,17 +58,11 @@ public abstract class CustomStorageBlock implements Serializable {
     }
 
     public boolean hasInput() {
-        if(this.location.clone().add(0,1,0).clone().getBlock().getType() == Material.HOPPER) {
-            return true;
-        }
-        return false;
+        return this.location.clone().add(0,1,0).clone().getBlock().getType() == Material.HOPPER;
     }
 
     public boolean hasOutput() {
-        if(this.location.clone().add(0,-1,0).clone().getBlock().getType() == Material.HOPPER) {
-            return true;
-        }
-        return false;
+        return this.location.clone().add(0,-1,0).clone().getBlock().getType() == Material.HOPPER;
     }
 
     public int getProcessingDuration() {

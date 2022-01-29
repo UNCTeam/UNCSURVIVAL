@@ -61,11 +61,6 @@ public class BlockListener extends AbstractEventsListener {
     }
 
     @EventHandler
-    public void onGrowthBlockEvent(BlockGrowEvent event) {
-        this.plugin.getGameManager().getCustomBlockManager().handleGrowthEvent(event);
-    }
-
-    @EventHandler
     public void onBreakEvent(BlockBreakEvent event) {
         ItemsManager itemsManager = this.plugin.getGameManager().getItemsManager();
 
