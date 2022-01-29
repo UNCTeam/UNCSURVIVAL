@@ -44,6 +44,7 @@ public class BlockListener extends AbstractEventsListener {
                         break;
                     case SMOOTH_STONE:
                         plugin.getGameManager().getCustomBlockManager().interactBlockEvent(event);
+                        event.setCancelled(true);
                         break;
                 }
             } else {
@@ -69,6 +70,8 @@ public class BlockListener extends AbstractEventsListener {
                     this.plugin.getGameManager().getCustomBlockManager().breakCustomBlock(event);
                     break;
             }
+        } else {
+            event.setCancelled(true);
         }
     }
 
@@ -84,10 +87,12 @@ public class BlockListener extends AbstractEventsListener {
                 case BREWING_STAND:
                     itemsManager.getBrewingControler().addStand((BrewingStand) block.getState());
                     break;
-                case SMOOTH_STONE:
+                case DROPPER:
                     this.plugin.getGameManager().getCustomBlockManager().placeCustomBlock(event);
                     break;
             }
+        } else {
+            event.setCancelled(true);
         }
     }
 
