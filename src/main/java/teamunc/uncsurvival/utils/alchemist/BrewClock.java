@@ -1,7 +1,9 @@
 package teamunc.uncsurvival.utils.alchemist;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BrewingStand;
+import org.bukkit.block.Hopper;
 import org.bukkit.inventory.*;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -35,14 +37,15 @@ public class BrewClock extends BukkitRunnable {
     @Override
     public void run() {
         updateTime();
-
         if(brewTime < stopTime){
             brewTime++;
         }
         else{
-            BrewerInventory bInv = (BrewerInventory)stand.getInventory();
+            BrewerInventory bInv = stand.getInventory();
         
             ItemStack ing = bInv.getIngredient();
+
+            if (ing == null) return;
             int maxIng = 0;
 
             for(int i = 0; i < 3; i++){
@@ -57,7 +60,6 @@ public class BrewClock extends BukkitRunnable {
             ing.setAmount( ing.getAmount() - maxIng );
             if(ing.getAmount() == 0) ing = new ItemStack(Material.AIR);
             bInv.setIngredient(ing);
-
             this.cancel();
         }
     }
@@ -82,7 +84,7 @@ public class BrewClock extends BukkitRunnable {
 
     private void updateTime(){
         this.stand.setBrewingTime( (int)(400 * (1 - (double)brewTime / (double)stopTime)) );
-        // this.stand.update();
+        //this.stand.update();
     }
 
     public int getStopTime() {

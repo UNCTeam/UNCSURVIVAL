@@ -83,6 +83,9 @@ public class TimeManager extends AbstractManager{
         // damage due to Water
         if (this.secondes%5 == 0) ThirstActualiser.getInstance().damageAllnoWater();
 
+        // check hopper for brewingStands
+        this.plugin.getGameManager().getItemsManager().getBrewingControler().checkHopperForBrewingStand();
+
         // Actualise Water Level Display
         ThirstActualiser.getInstance().actualiseDisplay();
 

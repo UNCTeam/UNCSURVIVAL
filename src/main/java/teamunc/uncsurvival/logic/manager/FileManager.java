@@ -188,6 +188,26 @@ public class FileManager extends AbstractManager{
         }
     }
 
+    public ArrayList<Location> loadBrewingStands() {
+        try {
+            ArrayList<Location> res = (ArrayList<Location>) this.load(this.pluginDataFile.getPath() + "/brewingstands_locations.unc_save");
+            return res;
+        } catch (Exception e) {
+            Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
+            return new ArrayList<Location>();
+        }
+    }
+
+    public boolean saveBrewingStands(ArrayList<Location> locations) {
+        try {
+            this.save(locations,this.pluginDataFile.getPath() + "/brewingstands_locations.unc_save");
+            return true;
+        } catch (Exception e) {
+            Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
+            return false;
+        }
+    }
+
     private void save(Object o, String path) throws Exception{
             BukkitObjectOutputStream out = new BukkitObjectOutputStream(new GZIPOutputStream(new FileOutputStream(path)));
             out.writeObject(o);

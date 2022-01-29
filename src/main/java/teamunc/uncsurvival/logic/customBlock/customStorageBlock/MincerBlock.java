@@ -97,7 +97,6 @@ public class MincerBlock extends CustomStorageBlock {
             return false;
         }
         return true;
-
     }
 
     public void fillFromInput() {
@@ -111,7 +110,6 @@ public class MincerBlock extends CustomStorageBlock {
                     inventory.getItem(11).setAmount(inventory.getItem(11).getAmount()+1);
                     item.setAmount(item.getAmount()-1);
                 } else if(inventory.getItem(11) == null) {
-                    Bukkit.broadcastMessage("else");
                     inventory.setItem(11, new ItemStack(Material.COOKED_BEEF));
                     item.setAmount(item.getAmount()-1);
                 }

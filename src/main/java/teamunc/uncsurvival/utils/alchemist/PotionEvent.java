@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import org.bukkit.block.BrewingStand;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.*;
 import org.bukkit.plugin.Plugin;
@@ -23,12 +25,10 @@ public class PotionEvent implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onBrewingInventoryClickEvent(InventoryClickEvent event) {
-        Inventory inv = event.getClickedInventory();
+    public void onBrewingInventoryClickEvent(InventoryMoveItemEvent event) {
+        Inventory inv = event.getDestination();
 
         if (inv == null || inv.getType() != InventoryType.BREWING) return; // If not brewing stand
-
-        manageBrewerInventory(event);
 
         BrewerInventory bInv = (BrewerInventory)inv;
         
@@ -41,12 +41,9 @@ public class PotionEvent implements Listener {
         BrewingStand bStand = bInv.getHolder();
         BrewClock brewClock = activeBrews.get(bStand);
 
-        java.util.logging.Logger l = plugin.getLogger();
         int fuel = BrewingControler.totalFuelInBrewingStand(bStand);
 
         if(brewClock != null && !brewClock.isCancelled()) fuel += brewClock.getFuelUse();
-
-        l.info("totalFuel: " + fuel);
 
         for(int i = 0; i < 3; i++){
             ItemStack base = bInv.getItem(i);
@@ -55,38 +52,35 @@ public class PotionEvent implements Listener {
                 canBrew = true;
                 maxTime = Math.max(maxTime, r.getCookingTime());
                 maxFuel = Math.max(maxFuel, r.getFuelUse());
-                l.info(r.toString());
             }
         }
-        
-        l.info("canBrew: " + canBrew);
-
-        l.info(activeBrews.toString());
 
         if(brewClock != null && !brewClock.isCancelled()){
             if(!canBrew){
                 brewClock.cancel();
                 brewClock = null;
-                l.info("Stopped brew");
             }
             else{
                 if(brewClock.getFuelUse() != maxFuel)
                     brewClock.setFuelUse(maxFuel);
                 if(brewClock.getStopTime() != maxTime)
                     brewClock.setStopTime(maxTime);
-                l.info("Changed active brew");
             }
         }
         else{
             if(canBrew){
                 brewClock = new BrewClock(plugin, brewingControler,  bStand, maxTime, maxFuel);
                 activeBrews.put(bStand, brewClock);
-                l.info("Started new brew");
             }
         }
     }
-    
-    private void manageBrewerInventory(InventoryClickEvent event){
+
+    @EventHandler
+    private void onBrewerInventoryClick(InventoryClickEvent event){
+        Inventory inv = event.getClickedInventory();
+
+        if (inv == null || inv.getType() != InventoryType.BREWING) return;
+
         event.setCancelled(true);
 
         ClickType cl = event.getClick();

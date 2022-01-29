@@ -149,9 +149,7 @@ public class CustomBlockManager extends AbstractManager {
     }
 
     public void interactBlockEvent(PlayerInteractEvent event) {
-        if(event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if(event.getClickedBlock().getType() != Material.SMOOTH_STONE) return;
-        if(event.getPlayer().isSneaking()) return;
 
         CustomStorageBlock customBlock = this.getCustomBlock(event.getClickedBlock().getLocation());
 
@@ -198,8 +196,6 @@ public class CustomBlockManager extends AbstractManager {
         if(title.contains(this.getTitle(CustomBlockType.MINCER_BLOCK))) {
             if((event.getRawSlot() < 27 && (event.getRawSlot() != 11 && event.getRawSlot() != 15))) {
                 event.setCancelled(true);
-                Bukkit.broadcastMessage("click type " + event.getClick() + " action " + event.getAction());
-                Bukkit.broadcastMessage("slot:"+event.getRawSlot());
                 return;
             } else if((event.getRawSlot() > 27 && event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) ||
                     event.getRawSlot() == 15 && event.getAction() == InventoryAction.PLACE_ALL) {
