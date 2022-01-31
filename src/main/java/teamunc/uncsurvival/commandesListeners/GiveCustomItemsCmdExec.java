@@ -38,7 +38,6 @@ public class GiveCustomItemsCmdExec extends AbstractCommandExecutor implements C
                         case "alcool":
                             p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createAlcool());
                             break;
-
                         case "module":
                             p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createModule());
                             break;
@@ -53,6 +52,12 @@ public class GiveCustomItemsCmdExec extends AbstractCommandExecutor implements C
                             break;
                         case "burger":
                             p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createBurger());
+                            break;
+                        case "cactusJuice":
+                            p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createCactusJuice());
+                            break;
+                        case "wheatFlour":
+                            p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createWheatFlour());
                             break;
                     }
                 }
