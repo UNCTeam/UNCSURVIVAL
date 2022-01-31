@@ -4,7 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Hopper;
 import org.bukkit.block.data.Ageable;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.customBlock.CustomBlockType;
@@ -22,14 +25,19 @@ public class GrowthBlock extends CustomStorageBlock {
     }
 
     @Override
-    public void tickAction() {
+    public void tickAction(int seconds) {
         Location baseBlock = this.location.clone().add(-4, 0, -4);
+        int isGrowing = 0;
         for(int i = 0; i<9;i++) {
             for(int j = 0;j<9;j++) {
                 Block block = baseBlock.getBlock().getWorld().getBlockAt(baseBlock.getBlockX()+i, baseBlock.getBlockY(), baseBlock.getBlockZ()+j);
-                checkIfGrowthable(block);
+                isGrowing += checkIfGrowthable(block);
             }
         }
+        if((isGrowing > 0) && (seconds % 2 == 0)) {
+            this.removeBoneMeal();
+        }
+        fillFromInput();
     }
 
     public void growBockAbove(Block block, Material mat, int size) {
@@ -45,23 +53,25 @@ public class GrowthBlock extends CustomStorageBlock {
         }
     }
 
-    public void checkIfGrowthable(Block block) {
+    public int checkIfGrowthable(Block block) {
         if(this.inventory.contains(Material.BONE_MEAL)) {
             if (block.getBlockData() instanceof Ageable) {
                 Random ran = new Random();
-                int chance = ran.nextInt(50);
+                int chance = ran.nextInt(30);
                 if(chance == 0) {
                     if(block.getType() == Material.CACTUS) {
                         growBockAbove(block, Material.CACTUS, 3);
+                        return 1;
                     } else if(block.getType() == Material.SUGAR_CANE) {
                         growBockAbove(block, Material.SUGAR_CANE, 3);
+                        return 1;
                     } else if(block.getType() == Material.BAMBOO) {
                         growBockAbove(block, Material.BAMBOO, 12);
+                            return 1;
                     } else {
                         Ageable ag = (Ageable) block.getBlockData();
                         int newAge = ag.getAge()+1;
                         if(newAge <= ag.getMaximumAge()) {
-                            this.removeBoneMeal();
                             new BukkitRunnable()
                             {
                                 @Override
@@ -69,14 +79,16 @@ public class GrowthBlock extends CustomStorageBlock {
                                 {
                                     ag.setAge(ag.getAge()+1);
                                     block.setBlockData(ag);
+                                    Bukkit.broadcastMessage("wheat age +1");
                                 }
                             }.runTaskLater(UNCSurvival.getInstance(), 1);
+                            return 1;
                         }
                     }
-                    this.removeBoneMeal();
                 }
             }
         }
+        return 0;
     }
 
     public Region getRegion() {
@@ -90,5 +102,35 @@ public class GrowthBlock extends CustomStorageBlock {
                 return;
             }
         }
+    }
+
+    public void fillFromInput() {
+        if(!this.hasInput()) return;
+        Hopper input = this.getInput();
+        Inventory inputInventory = input.getInventory();
+        for (int i = 0;i<input.getInventory().getSize();i++) {
+            ItemStack item = inputInventory.getItem(i);
+            if(item != null && item.getType() == Material.BONE_MEAL) {
+                    addInGrowthStorage(Material.BONE_MEAL);
+                    item.setAmount(item.getAmount()-1);
+                    return;
+            }
+        }
+    }
+
+    public void addInGrowthStorage(Material item) {
+        for (int i = 3; i<22; i++) {
+            if(inventory.getItem(i) == null) {
+                inventory.setItem(i, new ItemStack(item));
+                return;
+            } else if((inventory.getItem(i).getAmount() < 64) && (inventory.getItem(i).getType() == item)) {
+                inventory.getItem(i).setAmount(inventory.getItem(i).getAmount()+1);
+                return;
+            }
+            if(i == 5 || i == 14) {
+                i+=7;
+            }
+        }
+
     }
 }

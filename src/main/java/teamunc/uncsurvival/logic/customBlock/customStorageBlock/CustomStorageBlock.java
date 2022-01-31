@@ -41,7 +41,7 @@ public abstract class CustomStorageBlock implements Serializable {
         armorStand.getEquipment().setHelmet(texture);
     }
 
-    public abstract void tickAction();
+    public abstract void tickAction(int seconds);
 
     public Hopper getOutput() {
         if(this.location.clone().add(0,-1,0).getBlock().getType() == Material.HOPPER) {

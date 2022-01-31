@@ -15,6 +15,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -43,9 +44,9 @@ public class CustomBlockManager extends AbstractManager {
         this.loadCustomBlock();
     }
 
-    public void actualiseBlocks() {
+    public void actualiseTickBlocks(int seconds) {
         for (Map.Entry<Location, CustomStorageBlock> mapentry: customStorageBlockHashMap.entrySet()) {
-            mapentry.getValue().tickAction();
+            mapentry.getValue().tickAction(seconds);
         }
     }
 
@@ -109,7 +110,7 @@ public class CustomBlockManager extends AbstractManager {
                 this.getDrops(customBlock.getCustomBlockType()));
 
         for(ItemStack item : customBlock.getInventory().getContents()) {
-            if(item != null) {
+            if(item != null && item.getType() != Material.CARROT_ON_A_STICK) {
                 event.getBlock().getLocation().getWorld().dropItemNaturally(event.getBlock().getLocation(),
                         item); // DROP L'inventaire
             }
@@ -216,12 +217,18 @@ public class CustomBlockManager extends AbstractManager {
 
     public void interfaceInterfact(InventoryClickEvent event) {
         String title = event.getView().getTitle();
+        int slot = event.getRawSlot();
         if(title.contains(this.getTitle(CustomBlockType.MINCER_BLOCK))) {
-            if((event.getRawSlot() < 27 && (event.getRawSlot() != 11 && event.getRawSlot() != 15))) {
+            if((slot < 27 && (slot != 11 && slot != 15))) {
                 event.setCancelled(true);
                 return;
             } else if((event.getRawSlot() > 27 && event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) ||
                     event.getRawSlot() == 15 && event.getAction() == InventoryAction.PLACE_ALL) {
+                event.setCancelled(true);
+                return;
+            }
+        } else if(title.contains(this.getTitle(CustomBlockType.GROWTH_BLOCK))) {
+            if(slot < 27 && !((slot > 2 && slot < 6) || (slot > 11 && slot < 15) || (slot > 20 && slot < 24))) {
                 event.setCancelled(true);
                 return;
             }
