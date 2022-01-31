@@ -304,6 +304,41 @@ public class ItemsManager extends AbstractManager {
         FurnaceRecipe bread = new FurnaceRecipe(new NamespacedKey(this.plugin,"craftBread"),new ItemStack(Material.BREAD,1),new RecipeChoice.ExactChoice(this.createWheatFlour()),1,200);
         this.plugin.getServer().addRecipe(bread);
 
+        // MINCER
+        ShapedRecipe mincer = new ShapedRecipe(new NamespacedKey(this.plugin,"craftMincer"),this.createMincerItemBlock());
+        mincer.shape("/*/","*^*","/-/");
+        mincer.setIngredient('*',Material.SHEARS);
+        mincer.setIngredient('/',Material.STONE);
+        mincer.setIngredient('^',Material.IRON_BLOCK);
+        mincer.setIngredient('-',Material.REDSTONE);
+        this.plugin.getServer().addRecipe(mincer);
+
+        // GROWTH
+        ShapedRecipe growth = new ShapedRecipe(new NamespacedKey(this.plugin,"craftGrowth"),this.createGrowthItemBlock());
+        growth.shape("***","^-^","///");
+        growth.setIngredient('*',Material.IRON_INGOT);
+        growth.setIngredient('/',new RecipeChoice.MaterialChoice(Material.JUNGLE_PLANKS,
+                Material.ACACIA_PLANKS,
+                Material.BIRCH_PLANKS,
+                Material.CRIMSON_PLANKS,
+                Material.OAK_PLANKS,
+                Material.SPRUCE_PLANKS,
+                Material.DARK_OAK_PLANKS,
+                Material.WARPED_PLANKS
+        ));
+        growth.setIngredient('^',Material.COMPOSTER);
+        growth.setIngredient('-',Material.REDSTONE_BLOCK);
+        this.plugin.getServer().addRecipe(growth);
+
+        // Module
+        ShapedRecipe module = new ShapedRecipe(new NamespacedKey(this.plugin,"craftModule"),this.createModule());
+        module.shape("*^*","^-^","*/*");
+        module.setIngredient('*',Material.COPPER_INGOT);
+        module.setIngredient('/',Material.GOLD_INGOT);
+        module.setIngredient('^',Material.DIAMOND);
+        module.setIngredient('-',Material.REDSTONE_TORCH);
+        this.plugin.getServer().addRecipe(module);
+
         // CACTUS JUICE
         // creating water potion
         ItemStack potion = new ItemStack(Material.POTION);
