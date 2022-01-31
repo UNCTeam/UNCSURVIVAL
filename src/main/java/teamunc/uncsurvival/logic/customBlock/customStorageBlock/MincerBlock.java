@@ -24,7 +24,7 @@ public class MincerBlock extends CustomStorageBlock {
     }
 
     @Override
-    public void tickAction() {
+    public void tickAction(int seconds) {
         // Vérifi si le duration == 0
         if(duration == 0) {
             produceMincedMeat();

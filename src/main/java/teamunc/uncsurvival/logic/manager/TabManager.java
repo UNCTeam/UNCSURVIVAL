@@ -41,7 +41,7 @@ public class TabManager extends AbstractManager {
                         header += ChatColor.GOLD + "Team : " + ChatColor.GRAY + "Spectator" + "\n";
                         player.setPlayerListName(ChatColor.GRAY + player.getName());
                     }
-                    header+=ChatColor.GOLD + "Phase : 0  \n";
+                    header+="§b" + plugin.getGameManager().getGameStats().getCurrentPhase().getNom() + "\n";
                     header+=ChatColor.GOLD + "Players : " + ChatColor.WHITE + Bukkit.getOnlinePlayers().size() + "\n" + spacer;
                     player.setPlayerListHeader(header);
                     DecimalFormat df = new DecimalFormat("#.##");

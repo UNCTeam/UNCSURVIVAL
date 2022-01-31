@@ -54,7 +54,8 @@ public class ItemsManager extends AbstractManager {
         this.gameConfiguration = gameConfiguration;
         this.gameConfiguration.setGoalItems(registerGoalItems());
         this.goalItemsPrices = gameConfiguration.getGoalItemsPrices();
-        this.customItems = List.of("diamondApple", "wrench", "mincer", "healPatch", "alcool", "vaccin","module","mincedMeat","burger","wheatFlour","cactusJuice");
+        this.customItems = List.of("diamondApple", "wrench", "mincer", "healPatch", "alcool",
+                "vaccin","module","mincedMeat","burger","wheatFlour", "growthBlock", "cactusJuice");
     }
 
     public ArrayList<ItemStack> registerGoalItems() {
@@ -160,6 +161,17 @@ public class ItemsManager extends AbstractManager {
         meta.setDisplayName("§rMincer");
         PersistentDataContainer data = meta.getPersistentDataContainer();
         data.set(this.customitemKey, PersistentDataType.STRING, CustomBlockType.MINCER_BLOCK.name());
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public ItemStack createGrowthItemBlock() {
+        ItemStack item = new ItemStack(Material.DROPPER,1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setCustomModelData(CustomBlockType.GROWTH_BLOCK.getModel());
+        meta.setDisplayName("§aGrowth block");
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(this.customitemKey, PersistentDataType.STRING, CustomBlockType.GROWTH_BLOCK.name());
         item.setItemMeta(meta);
         return item;
     }

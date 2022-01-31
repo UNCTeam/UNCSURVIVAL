@@ -3,6 +3,7 @@ package teamunc.uncsurvival.utils.serializerAdapter;
 import com.google.gson.*;
 import teamunc.uncsurvival.logic.customBlock.CustomBlockType;
 import teamunc.uncsurvival.logic.customBlock.customStorageBlock.CustomStorageBlock;
+import teamunc.uncsurvival.logic.customBlock.customStorageBlock.GrowthBlock;
 import teamunc.uncsurvival.logic.customBlock.customStorageBlock.MincerBlock;
 
 import java.lang.reflect.Type;
@@ -19,7 +20,7 @@ public class CustomStorageBlockInterfaceCreator implements JsonDeserializer<Cust
             case COOK_BLOCk:
                 return null;
             case GROWTH_BLOCK:
-                return null;
+                return jsonDeserializationContext.deserialize(jsonElement, GrowthBlock.class);
             case PROECTION_BLOCK:
                 return null;
         }

@@ -92,7 +92,7 @@ public class TimeManager extends AbstractManager{
         // Covid Application
         this.plugin.getGameManager().getGameEventsManager().appliqueCovid();
 
-        this.plugin.getGameManager().getCustomBlockManager().actualiseBlocks();
+        this.plugin.getGameManager().getCustomBlockManager().actualiseTickBlocks(this.secondes);
 
         // Check items
         this.plugin.getGameManager().getTeamsManager().getAllTeams().forEach(team -> {
