@@ -4,6 +4,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.world.item.crafting.IRecipe;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.BrewingStand;
 import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftShapelessRecipe;
@@ -12,6 +14,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -25,10 +28,7 @@ import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.utils.alchemist.BrewingControler;
 import teamunc.uncsurvival.utils.alchemist.BrewingRecipe;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class ItemsManager extends AbstractManager {
 
@@ -55,7 +55,7 @@ public class ItemsManager extends AbstractManager {
         this.gameConfiguration.setGoalItems(registerGoalItems());
         this.goalItemsPrices = gameConfiguration.getGoalItemsPrices();
         this.customItems = List.of("diamondApple", "wrench", "mincer", "healPatch", "alcool",
-                "vaccin","module","mincedMeat","burger","wheatFlour", "growthBlock", "cactusJuice");
+                "vaccin","module","mincedMeat","burger","wheatFlour", "growthBlock", "cactusJuice","amethystIngot");
     }
 
     public ArrayList<ItemStack> registerGoalItems() {
@@ -255,6 +255,98 @@ public class ItemsManager extends AbstractManager {
         return item;
     }
 
+    public ItemStack createAmethystIngot() {
+        ItemStack item = new ItemStack(Material.STRUCTURE_BLOCK,1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setCustomModelData(1);
+        meta.setDisplayName("§rAmethyst Ingot");
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(this.customitemKey, PersistentDataType.STRING, "AMETHYSTINGOT");
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public ItemStack createAmethystHelmet() {
+        ItemStack item = new ItemStack(Material.LEATHER_HELMET,1);
+        LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+        meta.setCustomModelData(1);
+        meta.setColor(Color.fromRGB(16777215));
+
+        meta.setLore(List.of("§rGive a bit of speed and a heart"));
+        meta.setUnbreakable(true);
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(),"generic.max_health",2, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.HEAD));
+        meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(),"generic.movement_speed",0.01, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.HEAD));
+        meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(),"generic.armor",3, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.HEAD));
+
+        meta.setDisplayName("§rAmethyst Helmet");
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(this.customitemKey, PersistentDataType.STRING, "AMETHYSTHELMET");
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public ItemStack createAmethystChestPlate() {
+        ItemStack item = new ItemStack(Material.LEATHER_CHESTPLATE,1);
+        LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+        meta.setCustomModelData(1);
+        meta.setColor(Color.fromRGB(16777215));
+
+        meta.setLore(List.of("§rGive a bit of speed and a heart"));
+        meta.setUnbreakable(true);
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(),"generic.max_health",2, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.CHEST));
+        meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(),"generic.movement_speed",0.01, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.CHEST));
+        meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(),"generic.armor",8, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.CHEST));
+
+        meta.setDisplayName("§rAmethyst ChestPlate");
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(this.customitemKey, PersistentDataType.STRING, "AMETHYSTCHESTPLATE");
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
+    public ItemStack createAmethystLeggings() {
+        ItemStack item = new ItemStack(Material.LEATHER_LEGGINGS,1);
+        LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+        meta.setCustomModelData(1);
+        meta.setColor(Color.fromRGB(16777215));
+
+        meta.setLore(List.of("§rGive a bit of speed and a heart"));
+        meta.setUnbreakable(true);
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(),"generic.max_health",2, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.LEGS));
+        meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(),"generic.movement_speed",0.01, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.LEGS));
+        meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(),"generic.armor",6, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.LEGS));
+
+        meta.setDisplayName("§rAmethyst Leggings");
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(this.customitemKey, PersistentDataType.STRING, "AMETHYSTLEGGINGS");
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public ItemStack createAmethystBoots() {
+        ItemStack item = new ItemStack(Material.LEATHER_BOOTS,1);
+        LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+        meta.setCustomModelData(1);
+        meta.setColor(Color.fromRGB(16777215));
+
+        meta.setLore(List.of("§rGive a bit of speed and a heart"));
+        meta.setUnbreakable(true);
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
+        meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(),"generic.max_health",2, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.FEET));
+        meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(),"generic.movement_speed",0.01, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.FEET));
+        meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(),"generic.armor",3, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.FEET));
+
+        meta.setDisplayName("§rAmethyst Boots");
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(this.customitemKey, PersistentDataType.STRING, "AMETHYSTBOOTS");
+        item.setItemMeta(meta);
+        return item;
+    }
+
     public void initCraftingRecipe() {
         // potion craft manager
         this.brewingControler = new BrewingControler(this.plugin);
@@ -300,6 +392,35 @@ public class ItemsManager extends AbstractManager {
         FurnaceRecipe wheat_flour = new FurnaceRecipe(new NamespacedKey(this.plugin,"craftWheatFlour"),this.createWheatFlour(),Material.WHEAT,1,200);
         this.plugin.getServer().addRecipe(wheat_flour);
 
+        // AMETHYST INGOT
+        ShapedRecipe amethystIngot = new ShapedRecipe(new NamespacedKey(this.plugin,"craftAmethystIngot"),this.createAmethystIngot());
+        amethystIngot.shape("*-*","*-*");
+        amethystIngot.setIngredient('*',Material.AMETHYST_BLOCK);
+        amethystIngot.setIngredient('-',Material.DIAMOND);
+        this.plugin.getServer().addRecipe(amethystIngot);
+
+        // AMETHYST ARMOR
+        // HELMET
+        ShapedRecipe amethystHelmet = new ShapedRecipe(new NamespacedKey(this.plugin,"craftAmethystHelmet"),this.createAmethystHelmet());
+        amethystHelmet.shape("***","* *");
+        amethystHelmet.setIngredient('*',new RecipeChoice.ExactChoice(this.createAmethystIngot()));
+        // LEGGING
+        ShapedRecipe amethystLegging = new ShapedRecipe(new NamespacedKey(this.plugin,"craftAmethystLeggings"),this.createAmethystLeggings());
+        amethystLegging.shape("***","* *","* *");
+        amethystLegging.setIngredient('*',new RecipeChoice.ExactChoice(this.createAmethystIngot()));
+        // CHESTPLATE
+        ShapedRecipe amethystChestPlate = new ShapedRecipe(new NamespacedKey(this.plugin,"craftAmethystChestPlate"),this.createAmethystChestPlate());
+        amethystChestPlate.shape("* *","***","***");
+        amethystChestPlate.setIngredient('*',new RecipeChoice.ExactChoice(this.createAmethystIngot()));
+        // BOOTS
+        ShapedRecipe amethystBoots = new ShapedRecipe(new NamespacedKey(this.plugin,"craftAmethystBoots"),this.createAmethystBoots());
+        amethystBoots.shape("* *","* *");
+        amethystBoots.setIngredient('*',new RecipeChoice.ExactChoice(this.createAmethystIngot()));
+
+        this.plugin.getServer().addRecipe(amethystHelmet);
+        this.plugin.getServer().addRecipe(amethystChestPlate);
+        this.plugin.getServer().addRecipe(amethystLegging);
+        this.plugin.getServer().addRecipe(amethystBoots);
         // BREAD
         FurnaceRecipe bread = new FurnaceRecipe(new NamespacedKey(this.plugin,"craftBread"),new ItemStack(Material.BREAD,1),new RecipeChoice.ExactChoice(this.createWheatFlour()),1,200);
         this.plugin.getServer().addRecipe(bread);
