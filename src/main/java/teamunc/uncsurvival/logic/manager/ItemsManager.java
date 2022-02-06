@@ -55,7 +55,7 @@ public class ItemsManager extends AbstractManager {
         this.gameConfiguration.setGoalItems(registerGoalItems());
         this.goalItemsPrices = gameConfiguration.getGoalItemsPrices();
         this.customItems = List.of("diamondApple", "wrench", "mincer", "healPatch", "alcool",
-                "vaccin","module","mincedMeat","burger","wheatFlour", "growthBlock", "cactusJuice","amethystIngot");
+                "vaccin","module","mincedMeat","burger","wheatFlour", "growthBlock", "cactusJuice","amethystIngot","amethystSword","amethystPickaxe");
     }
 
     public ArrayList<ItemStack> registerGoalItems() {
@@ -278,6 +278,7 @@ public class ItemsManager extends AbstractManager {
         meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(),"generic.max_health",2, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.HEAD));
         meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(),"generic.movement_speed",0.01, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.HEAD));
         meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(),"generic.armor",3, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.HEAD));
+        meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(),"generic.armor",2, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.HEAD));
 
         meta.setDisplayName("§rAmethyst Helmet");
         PersistentDataContainer data = meta.getPersistentDataContainer();
@@ -298,6 +299,7 @@ public class ItemsManager extends AbstractManager {
         meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(),"generic.max_health",2, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.CHEST));
         meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(),"generic.movement_speed",0.01, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.CHEST));
         meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(),"generic.armor",8, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.CHEST));
+        meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(),"generic.armor",2, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.CHEST));
 
         meta.setDisplayName("§rAmethyst ChestPlate");
         PersistentDataContainer data = meta.getPersistentDataContainer();
@@ -319,6 +321,7 @@ public class ItemsManager extends AbstractManager {
         meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(),"generic.max_health",2, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.LEGS));
         meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(),"generic.movement_speed",0.01, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.LEGS));
         meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(),"generic.armor",6, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.LEGS));
+        meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(),"generic.armor",2, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.LEGS));
 
         meta.setDisplayName("§rAmethyst Leggings");
         PersistentDataContainer data = meta.getPersistentDataContainer();
@@ -339,10 +342,43 @@ public class ItemsManager extends AbstractManager {
         meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(),"generic.max_health",2, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.FEET));
         meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier(UUID.randomUUID(),"generic.movement_speed",0.01, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.FEET));
         meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(),"generic.armor",3, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.FEET));
+        meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(),"generic.armor",2, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.FEET));
 
         meta.setDisplayName("§rAmethyst Boots");
         PersistentDataContainer data = meta.getPersistentDataContainer();
         data.set(this.customitemKey, PersistentDataType.STRING, "AMETHYSTBOOTS");
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public ItemStack createAmethystSword() {
+        ItemStack item = new ItemStack(Material.NETHERITE_SWORD,1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setCustomModelData(1);
+
+        meta.setLore(List.of("§b§oThe power in your hand..."));
+        meta.setUnbreakable(true);
+        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(),"generic.attack_damage",12, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.HAND));
+        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(),"generic.attack_damage",2, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.HAND));
+
+        meta.setDisplayName("§cAmethyst Sword");
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(this.customitemKey, PersistentDataType.STRING, "AMETHYSTSWORD");
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public ItemStack createAmethystPickaxe() {
+        ItemStack item = new ItemStack(Material.NETHERITE_PICKAXE,1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setCustomModelData(1);
+
+        meta.setLore(List.of("§b§oThe Ultimate Tool..."));
+        meta.setUnbreakable(true);
+
+        meta.setDisplayName("§cAmethyst Pickaxe");
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(this.customitemKey, PersistentDataType.STRING, "AMETHYSTPICKAXE");
         item.setItemMeta(meta);
         return item;
     }
@@ -421,6 +457,7 @@ public class ItemsManager extends AbstractManager {
         this.plugin.getServer().addRecipe(amethystChestPlate);
         this.plugin.getServer().addRecipe(amethystLegging);
         this.plugin.getServer().addRecipe(amethystBoots);
+
         // BREAD
         FurnaceRecipe bread = new FurnaceRecipe(new NamespacedKey(this.plugin,"craftBread"),new ItemStack(Material.BREAD,1),new RecipeChoice.ExactChoice(this.createWheatFlour()),1,200);
         this.plugin.getServer().addRecipe(bread);
@@ -471,9 +508,9 @@ public class ItemsManager extends AbstractManager {
         );
 
         // change recipe
-        if (this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE2 || this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE3) {
+        if (this.plugin.getGameManager().getGameStats().getCurrentPhase() != PhaseEnum.PHASE1) {
             this.replaceCraftPhase2();
-            if (this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE3) {
+            if (this.plugin.getGameManager().getGameStats().getCurrentPhase() != PhaseEnum.PHASE2) {
                 this.replaceCraftPhase3();
             }
         }
@@ -491,7 +528,20 @@ public class ItemsManager extends AbstractManager {
     }
 
     public void replaceCraftPhase3() {
+        // AMETHYST SWORD
+        ShapelessRecipe amethystSword = new ShapelessRecipe(new NamespacedKey(this.plugin,"craftAmethystSword"),this.createAmethystSword());
+        amethystSword.addIngredient(new RecipeChoice.ExactChoice(this.createAmethystIngot()));
+        amethystSword.addIngredient(new RecipeChoice.ExactChoice(this.createAmethystIngot()));
+        amethystSword.addIngredient(Material.DIAMOND_SWORD);
+        this.plugin.getServer().addRecipe(amethystSword);
 
+        // AMETHYST PICKAXE
+        ShapelessRecipe amethystPickaxe = new ShapelessRecipe(new NamespacedKey(this.plugin,"craftAmethystPickaxe"),this.createAmethystPickaxe());
+        amethystPickaxe.addIngredient(new RecipeChoice.ExactChoice(this.createAmethystIngot()));
+        amethystPickaxe.addIngredient(new RecipeChoice.ExactChoice(this.createAmethystIngot()));
+        amethystPickaxe.addIngredient(new RecipeChoice.ExactChoice(this.createAmethystIngot()));
+        amethystPickaxe.addIngredient(Material.DIAMOND_PICKAXE);
+        this.plugin.getServer().addRecipe(amethystPickaxe);
     }
 
     public void replaceCraft(Recipe recipe, NamespacedKey namespacedKey) {

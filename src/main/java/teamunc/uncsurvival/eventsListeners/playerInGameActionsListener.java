@@ -37,6 +37,7 @@ public class playerInGameActionsListener extends AbstractEventsListener {
 
     @EventHandler
     public void onToolsUse(PlayerItemDamageEvent e) {
+        // TODO PICKAXE AMETHYST 3 x 3
         ItemStack itemStack = e.getItem();
 
         if (this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE3) {
