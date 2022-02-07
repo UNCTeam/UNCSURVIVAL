@@ -48,13 +48,13 @@ public class CustomItemListener extends AbstractEventsListener {
                 case "DIAMONDAPPLE":
                     double baseValue = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
 
-                    if ( baseValue >= 40 ) {
-                        this.plugin.getMessageTchatManager().sendMessageToPlayer(" Vous aviez déjà 2 barres de coeurs !", player, ChatColor.GOLD);
+                    if ( baseValue >= 32 ) {
+                        this.plugin.getMessageTchatManager().sendMessageToPlayer(" Vous ne pouvez avoir plus de coeurs !", player, ChatColor.GOLD);
                         e.setCancelled(true);
                     } else {
                         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(baseValue + 2);
-                        if ( (baseValue + 2) == 40 ) {
-                            this.plugin.getMessageTchatManager().sendMessageToPlayer(" Vous avez maintenant votre vie au max !", player, ChatColor.GOLD);
+                        if ( (baseValue + 2) == 32 ) {
+                            this.plugin.getMessageTchatManager().sendMessageToPlayer(" Vous avez maintenant votre vie au max ! Compléter votre vie avec l'armure en améthyste !", player, ChatColor.GOLD);
                         }
                     }
 
