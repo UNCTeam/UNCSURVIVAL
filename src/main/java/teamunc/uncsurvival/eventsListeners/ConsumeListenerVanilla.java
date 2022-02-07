@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.eventsListeners.AbstractEventsListener;
 import teamunc.uncsurvival.features.thirst.ThirstActualiser;
+import teamunc.uncsurvival.logic.manager.GameEventsManager;
 
 public class ConsumeListenerVanilla extends AbstractEventsListener {
 
@@ -32,5 +33,9 @@ public class ConsumeListenerVanilla extends AbstractEventsListener {
                 }
                 break;
         }
+
+        // covid ?
+        GameEventsManager gameEventsManager = this.plugin.getGameManager().getGameEventsManager();
+        if(gameEventsManager.isItTimeForCovid()) gameEventsManager.actionCovid();
     }
 }

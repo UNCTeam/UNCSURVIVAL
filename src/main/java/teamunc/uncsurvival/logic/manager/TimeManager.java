@@ -116,10 +116,6 @@ public class TimeManager extends AbstractManager{
 
         // dicrease Water Level of 1
         if (this.minutes%2 == 0) ThirstActualiser.getInstance().decreaseWaterForAllRegisteredPlayers(1);
-
-        // covid ?
-        GameEventsManager gameEventsManager = this.plugin.getGameManager().getGameEventsManager();
-        if(gameEventsManager.isItTimeForCovid()) gameEventsManager.actionCovid();
     }
 
     public void actionsEachHours() {
