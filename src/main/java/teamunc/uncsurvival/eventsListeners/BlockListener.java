@@ -84,7 +84,7 @@ public class BlockListener extends AbstractEventsListener {
 
             if (itemMeta != null) {
                 PersistentDataContainer data = itemMeta.getPersistentDataContainer();
-                if (data != null) {
+                if (data != null && data.has(this.plugin.getGameManager().getItemsManager().getCustomitemKey(), PersistentDataType.STRING)) {
                     switch (data.get(this.plugin.getGameManager().getItemsManager().getCustomitemKey(), PersistentDataType.STRING)) {
                         case "AMETHYSTPICKAXE" :
                             if (!player.isSneaking()) {
@@ -124,13 +124,15 @@ public class BlockListener extends AbstractEventsListener {
                                 for (Location loc : blocksLoc) {
                                     Block bl = loc.getBlock();
                                     if (bl.getType() == event.getBlock().getType() && CanDoThisHere(player,bl.getLocation())) {
-                                        bl.breakNaturally(item);
                                         switch (bl.getType()) {
                                             case BREWING_STAND:
                                                 itemsManager.getBrewingControler().removeStand(bl.getLocation());
                                                 break;
                                             case SMOOTH_STONE:
                                                 this.plugin.getGameManager().getCustomBlockManager().breakCustomBlock(bl);
+                                                break;
+                                            default:
+                                                bl.breakNaturally(item);
                                                 break;
                                         }
                                     }
