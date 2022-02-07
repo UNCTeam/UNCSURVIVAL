@@ -508,6 +508,15 @@ public class ItemsManager extends AbstractManager {
         );
 
         // change recipe
+        replaceCraft(
+                new ShapedRecipe(
+                        NamespacedKey.minecraft("amethyst_block"),
+                        new ItemStack(Material.AMETHYST_BLOCK,1))
+                        .shape("***","***","***")
+                        .setIngredient('*',Material.AMETHYST_SHARD),
+                NamespacedKey.minecraft("amethyst_block")
+        );
+
         if (this.plugin.getGameManager().getGameStats().getCurrentPhase() != PhaseEnum.PHASE1) {
             this.replaceCraftPhase2();
             if (this.plugin.getGameManager().getGameStats().getCurrentPhase() != PhaseEnum.PHASE2) {
