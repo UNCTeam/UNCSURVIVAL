@@ -96,29 +96,27 @@ public class CustomBlockManager extends AbstractManager {
         this.plugin.getFileManager().saveBlockManager(this.customStorageBlockHashMap);
     }
 
-    public void breakCustomBlock(BlockBreakEvent event) {
-        if(event.getBlock().getType() != Material.SMOOTH_STONE) return;
+    public void breakCustomBlock(Block bl) {
+        if(bl.getType() != Material.SMOOTH_STONE) return;
 
-        CustomStorageBlock customBlock = this.getCustomBlock(event.getBlock().getLocation());
+        CustomStorageBlock customBlock = this.getCustomBlock(bl.getLocation());
 
         if(customBlock == null) return;
 
         // Changement du loot
-
-        event.setDropItems(false);
-        event.getBlock().getLocation().getWorld().dropItemNaturally(event.getBlock().getLocation(),
+        bl.getLocation().getWorld().dropItemNaturally(bl.getLocation(),
                 this.getDrops(customBlock.getCustomBlockType()));
 
         for(ItemStack item : customBlock.getInventory().getContents()) {
             if(item != null && item.getType() != Material.CARROT_ON_A_STICK) {
-                event.getBlock().getLocation().getWorld().dropItemNaturally(event.getBlock().getLocation(),
+                bl.getLocation().getWorld().dropItemNaturally(bl.getLocation(),
                         item); // DROP L'inventaire
             }
         }
 
         // Suppression armorstand
 
-        Location loc = event.getBlock().getLocation();
+        Location loc = bl.getLocation();
         ArmorStand armorStand = (ArmorStand) Arrays.stream(loc.getWorld().getNearbyEntities(loc, 2, 2, 2, entity -> {
             return entity.getType().equals(EntityType.ARMOR_STAND)
                     && entity.getScoreboardTags().contains("CUSTOM_BLOCK_"+loc.getBlockX()+"_"+loc.getBlockY()+"_"+loc.getBlockZ());
@@ -127,6 +125,9 @@ public class CustomBlockManager extends AbstractManager {
             this.removeCustomBlock(loc);
             armorStand.remove();
         }
+
+        // pas de drop d'item vanilla
+        bl.setType(Material.AIR);
     }
 
     public ItemStack getDrops(CustomBlockType blockType) {
@@ -139,8 +140,6 @@ public class CustomBlockManager extends AbstractManager {
                 break;
             case MINCER_BLOCK:
                 itemStack = plugin.getGameManager().getItemsManager().createMincerItemBlock();
-                break;
-            case PROECTION_BLOCK:
                 break;
         }
         return itemStack;
