@@ -30,6 +30,7 @@ import teamunc.uncsurvival.logic.team.Team;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class BlockListener extends AbstractEventsListener {
     public BlockListener(UNCSurvival plugin) {
@@ -73,8 +74,73 @@ public class BlockListener extends AbstractEventsListener {
                     itemsManager.getBrewingControler().removeStand(block.getLocation());
                     break;
                 case SMOOTH_STONE:
-                    this.plugin.getGameManager().getCustomBlockManager().breakCustomBlock(event);
+                    this.plugin.getGameManager().getCustomBlockManager().breakCustomBlock(block);
                     break;
+            }
+
+            // test outil custom
+            ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
+            ItemMeta itemMeta = item.getItemMeta();
+
+            if (itemMeta != null) {
+                PersistentDataContainer data = itemMeta.getPersistentDataContainer();
+                if (data != null) {
+                    switch (data.get(this.plugin.getGameManager().getItemsManager().getCustomitemKey(), PersistentDataType.STRING)) {
+                        case "AMETHYSTPICKAXE" :
+                            if (!player.isSneaking()) {
+                                Location locationBlock = block.getLocation();
+
+                                ArrayList<Location> blocksLoc = new ArrayList<>(List.of(
+                                        locationBlock.clone().add(0, -1, 0),
+                                        locationBlock.clone().add(0, -1, 1),
+                                        locationBlock.clone().add(1, -1, 0),
+                                        locationBlock.clone().add(1, -1, 1),
+                                        locationBlock.clone().add(1, -1, -1),
+                                        locationBlock.clone().add(0, -1, -1),
+                                        locationBlock.clone().add(-1, -1, 0),
+                                        locationBlock.clone().add(-1, -1, 1),
+                                        locationBlock.clone().add(-1, -1, -1),
+
+                                        locationBlock.clone().add(0, 0, 1),
+                                        locationBlock.clone().add(1, 0, 0),
+                                        locationBlock.clone().add(1, 0, 1),
+                                        locationBlock.clone().add(1, 0, -1),
+                                        locationBlock.clone().add(0, 0, -1),
+                                        locationBlock.clone().add(-1, 0, 0),
+                                        locationBlock.clone().add(-1, 0, 1),
+                                        locationBlock.clone().add(-1, 0, -1),
+
+                                        locationBlock.clone().add(0, 1, 0),
+                                        locationBlock.clone().add(0, 1, 1),
+                                        locationBlock.clone().add(1, 1, 0),
+                                        locationBlock.clone().add(1, 1, 1),
+                                        locationBlock.clone().add(1, 1, -1),
+                                        locationBlock.clone().add(0, 1, -1),
+                                        locationBlock.clone().add(-1, 1, 0),
+                                        locationBlock.clone().add(-1, 1, 1),
+                                        locationBlock.clone().add(-1, 1, -1)
+                                ));
+
+                                for (Location loc : blocksLoc) {
+                                    Block bl = loc.getBlock();
+                                    if (bl.getType() == event.getBlock().getType() && CanDoThisHere(player,bl.getLocation())) {
+                                        bl.breakNaturally(item);
+                                        switch (bl.getType()) {
+                                            case BREWING_STAND:
+                                                itemsManager.getBrewingControler().removeStand(bl.getLocation());
+                                                break;
+                                            case SMOOTH_STONE:
+                                                this.plugin.getGameManager().getCustomBlockManager().breakCustomBlock(bl);
+                                                break;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
         } else {
             event.setCancelled(true);
