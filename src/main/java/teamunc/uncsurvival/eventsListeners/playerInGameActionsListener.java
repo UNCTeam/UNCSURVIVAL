@@ -51,7 +51,7 @@ public class playerInGameActionsListener extends AbstractEventsListener {
         if (this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE3) {
             // dont apply double damage for customItems
             if ( !this.plugin.getGameManager().getItemsManager().isCustomItem(itemStack,"Wrench") ) {
-                e.setDamage(e.getDamage() * 4);
+                e.setDamage(e.getDamage() * 3);
             }
         }
     }
