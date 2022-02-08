@@ -68,6 +68,8 @@ public class FileManager extends AbstractManager{
             goalItemsPrices.add(3);
             goalItemsPrices.add(4);
             goalItemsPrices.add(5);
+            goalItemsPrices.add(6);
+            goalItemsPrices.add(7);
 
 
             GameConfiguration gameConfiguration = new GameConfiguration(phase, phase, phase, goalItemsPrices);

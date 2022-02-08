@@ -43,7 +43,7 @@ public class GameManager extends AbstractManager {
         this.loadGameConfiguration();
         this.loadGameStats();
 
-        this.itemsManager = new ItemsManager(plugin,gameConfiguration);
+        this.itemsManager = new ItemsManager(plugin,gameConfiguration,this.gameStats);
         this.participantManager = new ParticipantManager(plugin);
         this.scoreboardManager = new ScoreboardManager(plugin);
         this.timeManager = new TimeManager(plugin);
@@ -151,7 +151,10 @@ public class GameManager extends AbstractManager {
             case PHASE3:
                 this.timerTask.cancel();
                 plugin.getGameManager().startEnding();
-                break; }
+                break;
+        }
+
+        this.getItemsManager().registerGoalItems(gameStats.getCurrentPhase());
     }
 
     /**
