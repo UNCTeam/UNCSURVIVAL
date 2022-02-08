@@ -3,6 +3,8 @@ package teamunc.uncsurvival.logic.interfaces;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
+import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.phase.PhaseEnum;
 
 public abstract class GameCustomInterface {
 
@@ -17,6 +19,11 @@ public abstract class GameCustomInterface {
      */
     public GameCustomInterface(int titleNumber) {
         this.itemNumber = titleNumber;
+        this.updateName(titleNumber);
+        this.inv = Bukkit.createInventory(null, 27,name);
+    }
+
+    public void updateName(int titleNumber) {
         switch (titleNumber) {
             case 0:
                 this.name = ChatColor.WHITE +"\uF80B本";
@@ -31,20 +38,26 @@ public abstract class GameCustomInterface {
                 this.name = ChatColor.WHITE +"\uF80B背";
                 break;
             case 4:
-                this.name = ChatColor.WHITE +"\uF80B备";
+                PhaseEnum phase = UNCSurvival.getInstance().getGameManager().getGameStats().getCurrentPhase();
+
+                switch (phase) {
+
+                    case INIT: case LANCEMENT: case PHASE1:
+                        this.name = ChatColor.WHITE +"\uF80B备";
+                        break;
+                    case PHASE2:
+                        this.name = ChatColor.WHITE +"\uF80B报";
+                        break;
+                    case PHASE3: case FIN:
+                        this.name = ChatColor.WHITE +"\uF80B爆";
+                        break;
+                }
+
                 break;
             case 5:
                 this.name = ChatColor.WHITE +"\uF80B鼻";
                 break;
         }
-
-
-        this.name = name;
-        this.inv = Bukkit.createInventory(null, 27,name);
-    }
-
-    public Inventory getInv() {
-        return inv;
     }
 
     public abstract Inventory update();

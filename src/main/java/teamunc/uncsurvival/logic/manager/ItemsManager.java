@@ -24,6 +24,7 @@ import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 import teamunc.uncsurvival.logic.customBlock.CustomBlockType;
 import teamunc.uncsurvival.logic.customBlock.customStorageBlock.MincerBlock;
+import teamunc.uncsurvival.logic.gameStats.GameStats;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.utils.alchemist.BrewingControler;
 import teamunc.uncsurvival.utils.alchemist.BrewingRecipe;
@@ -49,31 +50,52 @@ public class ItemsManager extends AbstractManager {
 
     public NamespacedKey getWrenchKey() { return wrenchKey; }
 
-    public ItemsManager(UNCSurvival plugin, GameConfiguration gameConfiguration) {
+    public ItemsManager(UNCSurvival plugin, GameConfiguration gameConfiguration, GameStats gameStats) {
         super(plugin);
         this.gameConfiguration = gameConfiguration;
-        this.gameConfiguration.setGoalItems(registerGoalItems());
+        registerGoalItems(gameStats.getCurrentPhase());
         this.goalItemsPrices = gameConfiguration.getGoalItemsPrices();
         this.customItems = List.of("diamondApple", "wrench", "mincer", "healPatch", "alcool",
                 "vaccin","module","mincedMeat","burger","wheatFlour", "growthBlock", "cactusJuice","amethystIngot","amethystSword","amethystPickaxe");
     }
 
-    public ArrayList<ItemStack> registerGoalItems() {
+    public void registerGoalItems(PhaseEnum phase) {
         ArrayList<ItemStack> res = new ArrayList<>(
                 Arrays.asList(
-                        new ItemStack(Material.BRICK),
+                        new ItemStack(Material.PUMPKIN_PIE),
                         createBurger(),
                         new ItemStack(Material.BOOKSHELF),
-                        createCactusJuice(),
-                        new ItemStack(Material.STONE)
+                        createCactusJuice()
                 )
         );
 
-        return res;
+        switch (phase) {
+
+            case INIT:
+            case LANCEMENT:
+            case PHASE1:
+                res.add(new ItemStack(Material.WHITE_WOOL));
+                break;
+            case PHASE2:
+                res.add(new ItemStack(Material.OBSIDIAN));
+                break;
+            case PHASE3:
+            case FIN:
+                res.add(new ItemStack(Material.RED_MUSHROOM_BLOCK));
+                break;
+        }
+
+        this.gameConfiguration.setGoalItems(res);
     }
 
     public String getGoalItemName(Integer id) {
-        return this.gameConfiguration.getGoalItems().get(id).getItemMeta().getDisplayName();
+        String res = "§b§e";
+        if (this.gameConfiguration.getGoalItems().get(id).getItemMeta().hasDisplayName()) {
+            res += this.gameConfiguration.getGoalItems().get(id).getItemMeta().getDisplayName();
+        } else {
+            res += this.gameConfiguration.getGoalItems().get(id).getType().name().toLowerCase(Locale.ROOT);
+        }
+        return res;
     }
 
     public ItemStack createDiamondApple() {
@@ -564,9 +586,28 @@ public class ItemsManager extends AbstractManager {
 
     public ItemStack getGoalItem(int itemNumber) {return this.gameConfiguration.getGoalItems().get(itemNumber);}
 
-    public int getGoalItemPrice(Integer itemNumber) {
+    public int getGoalItemPrice(Integer itemNumber,PhaseEnum phase) {
+        int res = 0;
+        if (itemNumber == 4) {
+            switch (phase) {
+                case INIT: case LANCEMENT: case PHASE1:
+                    res = this.goalItemsPrices.get(4);
+                    break;
+                case PHASE2:
+                    res = this.goalItemsPrices.get(5);
+                    break;
+                case PHASE3: case FIN:
+                    res = this.goalItemsPrices.get(6);
+                    break;
+            }
+        } else res = this.goalItemsPrices.get(itemNumber);
 
-        return this.goalItemsPrices.get(itemNumber);
+        return res;
+    }
+
+    public int getGoalItemPrice(Integer itemNumber) {
+        PhaseEnum phase = UNCSurvival.getInstance().getGameManager().getGameStats().getCurrentPhase();
+        return getGoalItemPrice(itemNumber,phase);
     }
 
     public boolean isCustomItem(ItemStack itemStack, String customNameCaseSensitive) {

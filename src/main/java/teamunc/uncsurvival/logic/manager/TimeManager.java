@@ -59,10 +59,6 @@ public class TimeManager extends AbstractManager{
                 );
     }
 
-    public void stopTimer() {
-        this.scheduler.cancelTask(this.eachSecondsTimerID);
-    }
-
     public void checkNewPhase() {
         CountdownPhaseTask timer = this.plugin.getGameManager().getTimerTask();
         if(timer != null) {
@@ -73,9 +69,9 @@ public class TimeManager extends AbstractManager{
     }
 
     public void actionsEachSeconds() {
-        PhaseEnum phase = plugin.getGameManager().getGameStats().getCurrentPhase();
         // Vérifi si une phase est terminé
         checkNewPhase();
+        PhaseEnum phase = plugin.getGameManager().getGameStats().getCurrentPhase();
 
         // Update les scoreboards
         plugin.getGameManager().getScoreboardManager().update();

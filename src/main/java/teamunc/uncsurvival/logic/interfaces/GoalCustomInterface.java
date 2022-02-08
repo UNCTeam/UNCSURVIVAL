@@ -3,6 +3,7 @@ package teamunc.uncsurvival.logic.interfaces;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.team.Team;
 
 public class GoalCustomInterface extends GameCustomInterface{
@@ -21,7 +22,7 @@ public class GoalCustomInterface extends GameCustomInterface{
     public Inventory update() {
         int itemPrice = UNCSurvival.getInstance().getGameManager().getItemsManager().getGoalItemPrice(this.itemNumber);
         int itemNumbers = this.team.getItemsProduction(this.itemNumber);
-
+        this.updateName(this.itemNumber);
         String itemPriceStr = this.reduceAt(21) + "       " + translateInInterfaceDisplay(""+ itemPrice,1);
         String itemNumberStr = this.reduceAt(4) + translateInInterfaceDisplay(""+ itemNumbers,4);
 
