@@ -36,6 +36,6 @@ public class ConsumeListenerVanilla extends AbstractEventsListener {
 
         // covid ?
         GameEventsManager gameEventsManager = this.plugin.getGameManager().getGameEventsManager();
-        if(gameEventsManager.isItTimeForCovid()) gameEventsManager.actionCovid();
+        if(gameEventsManager.isItTimeForCovid()) gameEventsManager.actionCovid(player);
     }
 }

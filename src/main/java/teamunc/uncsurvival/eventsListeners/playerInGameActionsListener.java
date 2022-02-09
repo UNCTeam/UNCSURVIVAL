@@ -1,6 +1,7 @@
 package teamunc.uncsurvival.eventsListeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -19,6 +20,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.manager.MessageTchatManager;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.team.Team;
 
@@ -51,7 +53,7 @@ public class playerInGameActionsListener extends AbstractEventsListener {
         if (this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE3) {
             // dont apply double damage for customItems
             if ( !this.plugin.getGameManager().getItemsManager().isCustomItem(itemStack,"Wrench") ) {
-                e.setDamage(e.getDamage() * 4);
+                e.setDamage(e.getDamage() * 3);
             }
         }
     }
@@ -87,16 +89,23 @@ public class playerInGameActionsListener extends AbstractEventsListener {
                 if (itemStack != null) {
                     if ( itemStack.hasItemMeta() && itemStack.getItemMeta().getPersistentDataContainer().has(key, PersistentDataType.STRING) && itemStack.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING).equals("MODULE") ) {
 
-                        itemStack.setAmount(0);
-                        this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(inventoryView.getPlayer().getName()).addRange(10);
+                        Team team = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(inventoryView.getPlayer().getName());
+                        if (team.getRange() < 105) team.addRange(10);
+                        else {
+                            UNCSurvival.getInstance().getMessageTchatManager().sendMessageToPlayer("Votre équipe possède déjà la protection maximale !",event.getWhoClicked(), ChatColor.RED);
+                            event.setCancelled(true);
+                        }
 
-                        Bukkit.getServer().getScheduler().runTask(this.plugin, () -> {
-                            inventoryView.getPlayer().closeInventory();
-                            this.plugin.getGameManager().getInterfacesManager().ouvrirInterface(
-                                    this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(inventoryView.getPlayer().getName()).getInterfaceTeam(),
-                                    Bukkit.getPlayerExact(inventoryView.getPlayer().getName())
-                            );
-                        });
+                        if (!event.isCancelled()) {
+                            itemStack.setAmount(0);
+                            Bukkit.getServer().getScheduler().runTask(this.plugin, () -> {
+                                inventoryView.getPlayer().closeInventory();
+                                this.plugin.getGameManager().getInterfacesManager().ouvrirInterface(
+                                        this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(inventoryView.getPlayer().getName()).getInterfaceTeam(),
+                                        Bukkit.getPlayerExact(inventoryView.getPlayer().getName())
+                                );
+                            });
+                        }
                     } else event.setCancelled(true);
                 }
             }

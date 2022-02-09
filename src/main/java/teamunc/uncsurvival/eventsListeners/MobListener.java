@@ -15,20 +15,40 @@ public class MobListener extends AbstractEventsListener{
 
     @EventHandler
     public void onMobSpawn(CreatureSpawnEvent e) {
-        if (this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE2 || this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE3) {
-            if ( e.getEntity().getType() != EntityType.ARMOR_STAND ) {
-                e.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(
-                        e.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * 1.5
-                );
+        PhaseEnum phase = this.plugin.getGameManager().getGameStats().getCurrentPhase();
+        boolean modifyNeeded = false;
+        String prefix = "";
+        double healthFact = 1;
+        double damageFact = 1;
 
-                e.getEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(
-                        e.getEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue() * 1.25
-                );
+        // modifications par phases
+        switch (phase) {
+            case PHASE2:
+                prefix = "§6§lSuper ";
+                healthFact = 1.5;
+                damageFact = 1.25;
+                modifyNeeded = true;
+                break;
+            case PHASE3: case FIN:
+                prefix = "§c§lMega-";
+                healthFact = 2;
+                damageFact = 1.75;
+                modifyNeeded = true;
+                break;
+        }
 
-                e.getEntity().setHealth(e.getEntity().getHealth() * 1.5);
-                e.getEntity().setCustomName("§6§lSuper " + e.getEntity().getName());
-                e.getEntity().setCustomNameVisible(true);
-            }
+        if (modifyNeeded && e.getEntity().getType() != EntityType.ARMOR_STAND ) {
+            e.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(
+                    e.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * healthFact
+            );
+
+            e.getEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(
+                    e.getEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue() * damageFact
+            );
+
+            e.getEntity().setHealth(e.getEntity().getHealth() * healthFact);
+            e.getEntity().setCustomName(prefix + e.getEntity().getName());
+            e.getEntity().setCustomNameVisible(true);
         }
     }
 }
