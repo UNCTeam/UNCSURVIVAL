@@ -53,6 +53,14 @@ public class Team implements Serializable {
         this.initInterfaceBlockAtStart();
     }
 
+    public void sendToEveryOnlinePlayer(String message) {
+        for (GamePlayer gp :
+                this.getMembers()) {
+            if ( gp.isOnline() )
+                gp.getBukkitPlayer().sendMessage(message);
+        }
+    }
+
     public Location getSpawnPoint() {
         return spawnPoint;
     }

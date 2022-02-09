@@ -54,7 +54,7 @@ public class CustomItemListener extends AbstractEventsListener {
                     } else {
                         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(baseValue + 2);
                         if ( (baseValue + 2) == 32 ) {
-                            this.plugin.getMessageTchatManager().sendMessageToPlayer(" Vous avez maintenant votre vie au max ! Compléter votre vie avec l'armure en améthyste !", player, ChatColor.GOLD);
+                            this.plugin.getMessageTchatManager().sendMessageToPlayer(" Vous avez maintenant votre vie au max ! Complétez votre vie avec l'armure en améthyste !", player, ChatColor.GOLD);
                         }
                     }
 
@@ -78,35 +78,32 @@ public class CustomItemListener extends AbstractEventsListener {
         if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             PersistentDataContainer data = itemMeta.getPersistentDataContainer();
 
-            if(!data.has(this.plugin.getGameManager().getItemsManager().getCustomitemKey(), PersistentDataType.STRING)) return;
+            if(data.has(this.plugin.getGameManager().getItemsManager().getCustomitemKey(), PersistentDataType.STRING)) {
+                String customType = data.get(this.plugin.getGameManager().getItemsManager().getCustomitemKey(), PersistentDataType.STRING);
+                if (customType == null) return;
+                boolean used = false;
+                switch(customType) {
+                    case "HEALPATCH":
+                        if (player.getHealth() + 2 <= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()) {
+                            player.setHealth(player.getHealth() + 2);
+                            used = true;
+                        } else if (player.getHealth() + 1 == player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()){
+                            player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+                            used = true;
+                        }
+                        break;
 
-            String customType = data.get(this.plugin.getGameManager().getItemsManager().getCustomitemKey(), PersistentDataType.STRING);
-            if (customType == null) return;
-            boolean used = false;
-            switch(customType) {
-                case "HEALPATCH":
-                    if (player.getHealth() + 2 <= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()) {
-                        player.setHealth(player.getHealth() + 2);
-                        used = true;
-                    } else if (player.getHealth() + 1 == player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()){
-                        player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
-                        used = true;
-                    }
-                    if (used) item.setAmount(0);
+                    case "VACCIN":
+                        GamePlayer gp = this.plugin.getGameManager().getParticipantManager().getGamePlayer(player.getName());
 
-                    break;
+                        if (gp != null && gp.isCovided()) {
+                            gp.cureCovid();
+                            used = true;
+                        }
 
-                case "VACCIN":
-                    GamePlayer gp = this.plugin.getGameManager().getParticipantManager().getGamePlayer(player.getName());
+                        break;
 
-                    if (gp != null || gp.isCovided()) {
-                        gp.cureCovid();
-                        used = true;
-                    }
-                    if (used) item.setAmount(0);
-                    break;
-
-                case "WRENCH":
+                    case "WRENCH":
                         if(data.has(this.plugin.getGameManager().getItemsManager().getWrenchKey(), PersistentDataType.INTEGER)) {
                             Integer blockValue = data.get(this.plugin.getGameManager().getItemsManager().getWrenchKey(), PersistentDataType.INTEGER);
                             final Damageable im = (Damageable) itemMeta;
@@ -126,12 +123,25 @@ public class CustomItemListener extends AbstractEventsListener {
                                         e.getPlayer().getInventory().setItemInMainHand(plugin.getGameManager().getItemsManager().createWrenchItem(blockValue, im.getDamage() + 2));
                                     }
                                 } else {
-                                    e.getPlayer().sendMessage("§cYou need to be in a team");
+                                    e.getPlayer().sendMessage("§cVous devez être dans une équipe !");
                                 }
                             }
                         }
-                    break;
+                        break;
+                    case "FAMINESOUP":
+                        Team team = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(player);
+
+                        if (team != null && team.isFamined()) {
+                            team.setFamined(false);
+                            team.sendToEveryOnlinePlayer("§6Votre Famine à été vaincu par " + player.getName() + "§6 !");
+                            used = true;
+                        }
+                        break;
+                }
+                if (used) item.setAmount(0);
+                e.setCancelled(true);
             }
+
         }
 
     }

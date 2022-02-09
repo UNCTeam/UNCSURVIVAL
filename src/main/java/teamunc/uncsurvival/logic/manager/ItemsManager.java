@@ -56,7 +56,7 @@ public class ItemsManager extends AbstractManager {
         registerGoalItems(gameStats.getCurrentPhase());
         this.goalItemsPrices = gameConfiguration.getGoalItemsPrices();
         this.customItems = List.of("diamondApple", "wrench", "mincer", "healPatch", "alcool",
-                "vaccin","module","mincedMeat","burger","wheatFlour", "growthBlock", "cactusJuice","amethystIngot","amethystSword","amethystPickaxe");
+                "vaccin","module","mincedMeat","burger","wheatFlour", "growthBlock", "cactusJuice","amethystIngot","amethystSword","amethystPickaxe","famineSoup");
     }
 
     public void registerGoalItems(PhaseEnum phase) {
@@ -227,6 +227,18 @@ public class ItemsManager extends AbstractManager {
         meta.setDisplayName("§rWheat Flour");
         PersistentDataContainer data = meta.getPersistentDataContainer();
         data.set(this.customitemKey, PersistentDataType.STRING, "WHEATFLOUR");
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public ItemStack createFamineSoup() {
+        ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK,1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setCustomModelData(9);
+        meta.setDisplayName("§rFamine Soup");
+        meta.setLore(List.of("§r§cUn remède puissant et très curatif de grand-mère..."));
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(this.customitemKey, PersistentDataType.STRING, "FAMINESOUP");
         item.setItemMeta(meta);
         return item;
     }
@@ -518,6 +530,16 @@ public class ItemsManager extends AbstractManager {
         module.setIngredient('^',Material.DIAMOND);
         module.setIngredient('-',Material.REDSTONE_TORCH);
         this.plugin.getServer().addRecipe(module);
+
+        // FAMINE SOUP
+        ShapedRecipe famineSoup = new ShapedRecipe(new NamespacedKey(this.plugin,"craftFamineSoup"),this.createFamineSoup());
+        famineSoup.shape(" ^ ","*-_"," / ");
+        famineSoup.setIngredient('*',Material.GLOW_INK_SAC);
+        famineSoup.setIngredient('/',new RecipeChoice.ExactChoice(this.createBurger()));
+        famineSoup.setIngredient('^',Material.GOLDEN_CARROT);
+        famineSoup.setIngredient('-',Material.BOWL);
+        famineSoup.setIngredient('_',Material.FERMENTED_SPIDER_EYE);
+        this.plugin.getServer().addRecipe(famineSoup);
 
         // CACTUS JUICE
         // creating water potion
