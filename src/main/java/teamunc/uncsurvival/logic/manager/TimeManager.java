@@ -85,13 +85,15 @@ public class TimeManager extends AbstractManager{
         // Actualise Water Level Display
         ThirstActualiser.getInstance().actualiseDisplay();
 
-        // Covid Application
+        // Events Application
         this.plugin.getGameManager().getGameEventsManager().appliqueCovid();
+        this.plugin.getGameManager().getGameEventsManager().appliqueFamine();
+
 
         this.plugin.getGameManager().getCustomBlockManager().actualiseTickBlocks(this.secondes);
 
-        // Check items
         this.plugin.getGameManager().getTeamsManager().getAllTeams().forEach(team -> {
+            // test items Goals Consumes
             if (phase != PhaseEnum.FIN) team.ConsumeAllGoalItems();
         });
 
@@ -109,9 +111,15 @@ public class TimeManager extends AbstractManager{
 
     public void actionsEachMinutes() {
         // place all events that can occur each minutes
+        this.plugin.getGameManager().getTeamsManager().getAllTeams().forEach(team -> {
+            // Famine test
+            if (this.plugin.getGameManager().getGameEventsManager().isItTimeForFamine(team))
+                this.plugin.getGameManager().getGameEventsManager().actionFamine(team);
+        });
 
         // dicrease Water Level of 1
         if (this.minutes%2 == 0) ThirstActualiser.getInstance().decreaseWaterForAllRegisteredPlayers(1);
+
     }
 
     public void actionsEachHours() {

@@ -1,19 +1,23 @@
 package teamunc.uncsurvival.logic.manager;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.gameStats.GameStats;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.player.GamePlayer;
+import teamunc.uncsurvival.logic.team.Team;
 
 import java.util.*;
 
 public class GameEventsManager extends AbstractManager{
     private final int TAUX_COVID = 2;
+    private final int TAUX_FAMINE = 100;
 
     public GameEventsManager(UNCSurvival plugin) {
         super(plugin);
@@ -21,8 +25,7 @@ public class GameEventsManager extends AbstractManager{
 
     public boolean isItTimeForCovid() {
         boolean result = false;
-        if (this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE2 ||
-                this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE3) {
+        if (this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE3) {
             Random r = new Random();
 
             int res = r.nextInt(100);
@@ -35,25 +38,13 @@ public class GameEventsManager extends AbstractManager{
     /**
      * Selection et application du covid a un joueur
      */
-    public void actionCovid() {
+    public void actionCovid(Player p) {
         ParticipantManager participantManager = this.plugin.getGameManager().getParticipantManager();
-        if (participantManager.getOnlinePlayers().size() == 0) return;
-
-        ArrayList<GamePlayer> gamePlayers = new ArrayList<>();
-        for (Player player : participantManager.getOnlinePlayers()) gamePlayers.add(participantManager.getGamePlayer(player.getName()));
-        // shuffle list
-        Collections.shuffle(gamePlayers);
-
-        Iterator<GamePlayer> gpIterator = gamePlayers.iterator();
-        boolean done = false;
-        while (gpIterator.hasNext() && !done) {
-            GamePlayer gp = gpIterator.next();
+        GamePlayer gp = participantManager.getGamePlayer(p.getName());
             if (!gp.isCovided()) {
                 gp.ActiveCovided();
                 gp.getBukkitPlayer().sendTitle("COVIDED",null,20,60,20);
-                done = true;
             }
-        }
     }
 
     public void appliqueCovid() {
@@ -63,7 +54,8 @@ public class GameEventsManager extends AbstractManager{
             if (gp.isCovided()) {
                 // Application des effets du covid
                 gp.getBukkitPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,100,2,false,false));
-                gp.getBukkitPlayer().addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,40,1,false,false));
+                gp.getBukkitPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW,40,1,false,false));
+                gp.getBukkitPlayer().addPotionEffect(new PotionEffect(PotionEffectType.HARM,40,1,false,false));
 
                 // Effect propagation et temps
                 boolean propagationAFaire = gp.passerUneSecondeCovid();
@@ -88,4 +80,50 @@ public class GameEventsManager extends AbstractManager{
             }
         }
     }
+
+
+    public boolean isItTimeForFamine(Team team) {
+        GameStats gameStats = this.plugin.getGameManager().getGameStats();
+        PhaseEnum phase = gameStats.getCurrentPhase();
+        boolean min1playerOfTeamOnline = team.getMembers().stream().anyMatch(gamePlayer -> gamePlayer.isOnline());
+        boolean result = false;
+
+        if ( (phase == PhaseEnum.PHASE2 || phase == PhaseEnum.PHASE3 ) && !team.isFamined() && min1playerOfTeamOnline ) {
+            Random r = new Random();
+
+            int res = r.nextInt(100);
+
+            result = (res <= TAUX_FAMINE);
+        }
+        return result;
+    }
+
+    /**
+     * Selection et application de la famine a une team
+     */
+    public void actionFamine(Team team) {
+        team.setFamined(true);
+        team.getMembers().forEach(gamePlayer ->
+                this.plugin.getMessageTchatManager().sendMessageToPlayer(
+                        "Une lourde famine s'abat sur votre équipe ! Coup dur... il vous faut craft un remède !",
+                        gamePlayer.getBukkitPlayer(),
+                        ChatColor.BOLD)
+        );
+
+    }
+
+    public void appliqueFamine() {
+        GameManager gameManager = this.plugin.getGameManager();
+        for (Team t : gameManager.getTeamsManager().getAllTeams()) {
+            if (t.isFamined()) {
+                t.getMembers().forEach(gamePlayer -> {
+                    if (gamePlayer.isOnline()) {
+                        Player p = gamePlayer.getBukkitPlayer();
+                        p.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,60,2,false,false));
+                    }
+                });
+            }
+        }
+    }
+
 }

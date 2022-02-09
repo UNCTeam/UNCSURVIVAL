@@ -5,8 +5,11 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
+import org.bukkit.block.data.type.Piston;
+import org.bukkit.block.data.type.Snow;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import teamunc.uncsurvival.UNCSurvival;
@@ -31,10 +34,11 @@ public class Team implements Serializable {
     private Location spawnPoint;
     private ArrayList<CustomBlock> interfacesGoals = new ArrayList<>();
     private Location interfaceTeam;
-    private int range = 10;
+    private int range = 5;
     private Region region;
 
     private final List<GamePlayer> members;
+    private boolean isFamined;
 
     public Team(String name, ChatColor chatColor, Location spawnPoint) {
         this.name = name;
@@ -281,5 +285,13 @@ public class Team implements Serializable {
 
     public Location getInterfaceTeam() {
         return interfaceTeam;
+    }
+
+    public boolean isFamined() {
+        return this.isFamined;
+    }
+
+    public void setFamined(boolean famined) {
+        isFamined = famined;
     }
 }
