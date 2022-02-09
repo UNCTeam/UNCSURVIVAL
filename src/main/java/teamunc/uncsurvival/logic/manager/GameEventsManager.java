@@ -17,7 +17,7 @@ import java.util.*;
 
 public class GameEventsManager extends AbstractManager{
     private final int TAUX_COVID = 2;
-    private final int TAUX_FAMINE = 100;
+    private final int TAUX_FAMINE = 1;
 
     public GameEventsManager(UNCSurvival plugin) {
         super(plugin);
