@@ -138,8 +138,10 @@ public class CustomItemListener extends AbstractEventsListener {
                         }
                         break;
                 }
-                if (used) item.setAmount(0);
-                e.setCancelled(true);
+                if (used) {
+                    e.setCancelled(true);
+                    item.setAmount(0);
+                }
             }
 
         }
