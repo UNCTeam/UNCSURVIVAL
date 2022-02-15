@@ -305,13 +305,20 @@ public class Team implements Serializable {
         StringBuilder statsBuild = new StringBuilder();
         statsBuild.append("§8--------------| §b§lStatistiques §8|---------------\n \n");
         statsBuild.append("§8----[§6Goal items§8]----\n");
-        for (int i = 0; i < this.itemsProduction.size(); i++) {
+        for (int i = 0; i < this.itemsProduction.size()-1; i++) {
             statsBuild
                     .append(UNCSurvival.getInstance().getGameManager().getItemsManager().getGoalItemName(i))
                     .append(": §6")
                     .append(this.itemsProduction.get(i))
                     .append("\n");
         }
+        // last ItemPhase show
+        statsBuild
+                .append("Items de phase")
+                .append(": §6")
+                .append(this.itemsProduction.get(this.itemsProduction.size()-1))
+                .append("\n");
+
         statsBuild.append("§8-----[§2Team§8]-----\n");
         statsBuild
                 .append("§aTaille de la base : §6" + this.range*2 + "x" + this.range*2 + "\n")
