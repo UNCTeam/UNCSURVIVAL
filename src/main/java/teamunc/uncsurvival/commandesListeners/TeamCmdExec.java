@@ -1,13 +1,11 @@
 package teamunc.uncsurvival.commandesListeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import teamunc.uncsurvival.UNCSurvival;
-import teamunc.uncsurvival.logic.manager.MessageTchatManager;
 import teamunc.uncsurvival.logic.team.Team;
 
 import java.util.ArrayList;
@@ -126,6 +124,15 @@ public class TeamCmdExec extends AbstractCommandExecutor{
 
                 if (commandValid) this.messageTchatManager.sendMessageToPlayer("Player(s) " + playersNameRemoved + "has been successfully removed from the team " + teamColorRemoved,sender, ChatColor.GREEN);
 
+                break;
+            case "teamstats":
+                if (sender instanceof Player ) {
+                    Player player = (Player) sender;
+                    if(this.plugin.getGameManager().getParticipantManager().isPlaying(player)) {
+                        Team playerTeam = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(player);
+                        player.sendMessage(playerTeam.getStats(player));
+                    }
+                }
                 break;
         }
         return commandValid;
