@@ -7,10 +7,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.manager.GameManager;
 import teamunc.uncsurvival.logic.manager.MessageTchatManager;
 import teamunc.uncsurvival.logic.team.Team;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class TeamCmdExec extends AbstractCommandExecutor{
     public TeamCmdExec(UNCSurvival plugin) {
@@ -19,6 +21,7 @@ public class TeamCmdExec extends AbstractCommandExecutor{
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        GameManager gameManager = this.plugin.getGameManager();
         boolean commandValid = true;
         switch ( label ) {
             case "addteam":
@@ -125,6 +128,101 @@ public class TeamCmdExec extends AbstractCommandExecutor{
                 }
 
                 if (commandValid) this.messageTchatManager.sendMessageToPlayer("Player(s) " + playersNameRemoved + "has been successfully removed from the team " + teamColorRemoved,sender, ChatColor.GREEN);
+
+                break;
+
+            case "addbonusscore":
+                final String teamColorBonusAdded = args[0];
+                final int addedBonusScore = Integer.parseInt(args[1]);
+
+                if(args.length == 2) {
+
+                    if ( gameManager.getTeamsManager().getTeam(ChatColor.valueOf(teamColorBonusAdded)) != null) {
+                        Team team = this.plugin.getGameManager().getTeamsManager().getTeam(ChatColor.valueOf(teamColorBonusAdded));
+                        team.addABonusScore(addedBonusScore);
+
+                    } else {
+                        commandValid = false;
+                        this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA",sender, ChatColor.RED);
+                    }
+                } else {
+                    commandValid = false;
+                    this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA and a number to add",sender, ChatColor.RED);
+                }
+
+                if (commandValid) this.messageTchatManager.sendMessageToPlayer("Added " + addedBonusScore + " as a bonus to the team " + teamColorBonusAdded,sender, ChatColor.GREEN);
+
+                break;
+
+            case "removebonusscore":
+                final String teamColorBonusRemove = args[0];
+                final int removedBonusScore = Integer.parseInt(args[1]);
+
+                if(args.length == 2) {
+
+                    if ( gameManager.getTeamsManager().getTeam(ChatColor.valueOf(teamColorBonusRemove)) != null) {
+                        Team team = this.plugin.getGameManager().getTeamsManager().getTeam(ChatColor.valueOf(teamColorBonusRemove));
+
+                        team.addABonusScore(-removedBonusScore);
+
+                    } else {
+                        commandValid = false;
+                        this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA",sender, ChatColor.RED);
+                    }
+                } else {
+                    commandValid = false;
+                    this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA and a number to add",sender, ChatColor.RED);
+                }
+
+                if (commandValid) this.messageTchatManager.sendMessageToPlayer("Removed " + removedBonusScore + " as a bonus to the team " + teamColorBonusRemove,sender, ChatColor.GREEN);
+
+                break;
+
+            case "addscore":
+                final String teamColorScoreAdded = args[0];
+                final int addedScore = Integer.parseInt(args[1]);
+
+                if(args.length == 2) {
+
+                    if ( gameManager.getTeamsManager().getTeam(ChatColor.valueOf(teamColorScoreAdded)) != null) {
+                        Team team = this.plugin.getGameManager().getTeamsManager().getTeam(ChatColor.valueOf(teamColorScoreAdded));
+
+                        team.addScore(addedScore);
+
+                    } else {
+                        commandValid = false;
+                        this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA",sender, ChatColor.RED);
+                    }
+                } else {
+                    commandValid = false;
+                    this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA and a number to add",sender, ChatColor.RED);
+                }
+
+                if (commandValid) this.messageTchatManager.sendMessageToPlayer("Added " + addedScore + " from the score of the team " + teamColorScoreAdded,sender, ChatColor.GREEN);
+
+                break;
+
+            case "removescore":
+                final String teamColorScoreRemoved = args[0];
+                final int removedScore = Integer.parseInt(args[1]);
+
+                if(args.length == 2) {
+
+                    if ( gameManager.getTeamsManager().getTeam(ChatColor.valueOf(teamColorScoreRemoved)) != null) {
+                        Team team = this.plugin.getGameManager().getTeamsManager().getTeam(ChatColor.valueOf(teamColorScoreRemoved));
+
+                        team.addScore(-removedScore);
+
+                    } else {
+                        commandValid = false;
+                        this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA",sender, ChatColor.RED);
+                    }
+                } else {
+                    commandValid = false;
+                    this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA and a number to remove",sender, ChatColor.RED);
+                }
+
+                if (commandValid) this.messageTchatManager.sendMessageToPlayer("Removed " + removedScore + " from the score of the team " + teamColorScoreRemoved,sender, ChatColor.GREEN);
 
                 break;
         }

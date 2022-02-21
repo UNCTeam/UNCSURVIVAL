@@ -62,3 +62,23 @@ commands:
     description: reload configuration
     usage: /reloadconfig
     permission: uncsurvival.reloadconfig
+
+  addBonusscore:
+    description: add a bonus score to a team
+    usage: /addbonusscore <TeamColor> <score>
+    permission: uncsurvival.addbonusscore
+
+  removebonusscore:
+    description: remove a bonus score to a team
+    usage: /removebonusscore <TeamColor> <score>
+    permission: uncsurvival.removebonusscore
+
+  addscore:
+    description: add a fix number to the score of a team
+    usage: /addscore <TeamColor> <score>
+    permission: uncsurvival.addscore
+
+  removescore:
+    description: remove a fix number to the score of a team
+    usage: /removescore <TeamColor> <score>
+    permission: uncsurvival.removescore

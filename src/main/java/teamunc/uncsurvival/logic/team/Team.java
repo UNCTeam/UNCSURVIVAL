@@ -36,11 +36,12 @@ public class Team implements Serializable {
     private Location interfaceTeam;
     private int range = 5;
     private Region region;
-
     private final List<GamePlayer> members;
     private boolean isFamined;
+    private int score;
 
     public Team(String name, ChatColor chatColor, Location spawnPoint) {
+        this.score = 0;
         this.name = name;
         this.chatColor = chatColor;
         this.members = new ArrayList<>();
@@ -152,6 +153,7 @@ public class Team implements Serializable {
 
     public void ConsumeAllGoalItems() {
         final ItemsManager itemsManager = UNCSurvival.getInstance().getGameManager().getItemsManager();
+        final PhaseEnum phase = UNCSurvival.getInstance().getGameManager().getGameStats().getCurrentPhase();
         ArrayList<CustomBlock> goals = this.interfacesGoals;
         for (int i = 0, goalsSize = goals.size(); i < goalsSize; i++) {
             CustomBlock cBlock = goals.get(i);
@@ -168,12 +170,17 @@ public class Team implements Serializable {
                     for (ItemStack itemStack : block.getBlockInventory().getContents()) {
                         if (itemStack != null && itemStack.isSimilar(itemsManager.getGoalItem(i))) {
                             this.itemsProduction.set(i,this.itemsProduction.get(i) + itemStack.getAmount());
+                            this.addScore(itemsManager.getGoalItemPrice(i,phase) * itemStack.getAmount());
                             block.getBlockInventory().remove(itemStack);
                         }
                     }
                 }
             }
         }
+    }
+
+    public void addScore(int score) {
+        this.score += score;
     }
 
     public boolean hasMember(GamePlayer gamePlayer) {
@@ -197,10 +204,6 @@ public class Team implements Serializable {
 
     public int getItemsProduction(int itemNumber) {
         return itemsProduction.get(itemNumber);
-    }
-
-    public void addItemsProduction(int itemNumber, int number) {
-        this.itemsProduction.set(itemNumber,this.itemsProduction.get(itemNumber) + number);
     }
 
     public UUID getUuid() {
@@ -228,11 +231,7 @@ public class Team implements Serializable {
     }
 
     public int getScore() {
-        int total = this.bonusScore;
-        for (int j = 0; j < this.itemsProduction.size(); j++) {
-            total += UNCSurvival.getInstance().getGameManager().getItemsManager().getGoalItemPrice(j) * this.itemsProduction.get(j);
-        }
-        return total;
+        return this.bonusScore + this.score;
     }
 
     public void addABonusScore(int score) {
@@ -280,6 +279,7 @@ public class Team implements Serializable {
     public void resetScore() {
         this.itemsProduction = new ArrayList<>(Arrays.asList(0,0,0,0,0));
         this.bonusScore = 0;
+        this.score = 0;
     }
 
     public int getRange() {
