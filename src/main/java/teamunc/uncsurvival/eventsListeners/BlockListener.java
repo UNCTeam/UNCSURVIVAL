@@ -1,35 +1,21 @@
 package teamunc.uncsurvival.eventsListeners;
 
-import org.bukkit.Bukkit;
-import org.bukkit.CropState;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Ageable;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.block.BrewingStand;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.*;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.Crops;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
-import teamunc.uncsurvival.eventsListeners.AbstractEventsListener;
 import teamunc.uncsurvival.logic.manager.ItemsManager;
-import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.team.Team;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class BlockListener extends AbstractEventsListener {
@@ -173,7 +159,7 @@ public class BlockListener extends AbstractEventsListener {
     public boolean CanDoThisHere(Player player, Location loc) {
         boolean res = true;
 
-        if(this.plugin.getGameManager().getParticipantManager().hasPlayer(player)) {
+        if(this.plugin.getGameManager().getParticipantManager().isPlaying(player)) {
             Team teamPlayer = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(player);
             ArrayList<Team> teams = (ArrayList<Team>) this.plugin.getGameManager().getTeamsManager().getAllTeams().clone();
             teams.remove(teamPlayer);

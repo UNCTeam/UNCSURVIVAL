@@ -57,9 +57,10 @@ public class GrowthBlock extends CustomStorageBlock {
         if(this.inventory.contains(Material.BONE_MEAL)) {
             if (block.getBlockData() instanceof Ageable) {
                 Random ran = new Random();
-                int chance = ran.nextInt(30);
+                int chance = ran.nextInt(10);
                 if(chance == 0) {
                     if(block.getType() == Material.CACTUS) {
+                        Bukkit.broadcastMessage("Cactus pousse");
                         growBockAbove(block, Material.CACTUS, 3);
                         return 1;
                     } else if(block.getType() == Material.SUGAR_CANE) {

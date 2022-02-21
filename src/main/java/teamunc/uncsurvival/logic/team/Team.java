@@ -5,11 +5,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
-import org.bukkit.block.data.type.Piston;
-import org.bukkit.block.data.type.Snow;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import teamunc.uncsurvival.UNCSurvival;
@@ -301,5 +299,81 @@ public class Team implements Serializable {
 
     public void setFamined(boolean famined) {
         isFamined = famined;
+    }
+
+    public String getStats(Player player) {
+        String spacer = "§6-------------------------\n";
+        StringBuilder statsBuild = new StringBuilder();
+        statsBuild.append("§8--------------| §b§lStatistiques §8|---------------\n \n");
+        statsBuild.append("§8----[§6Goal items§8]----\n");
+        for (int i = 0; i < this.itemsProduction.size()-1; i++) {
+            statsBuild
+                    .append(UNCSurvival.getInstance().getGameManager().getItemsManager().getGoalItemName(i))
+                    .append(": §6")
+                    .append(this.itemsProduction.get(i))
+                    .append("\n");
+        }
+        // last ItemPhase show
+        statsBuild
+                .append("Items de phase")
+                .append(": §6")
+                .append(this.itemsProduction.get(this.itemsProduction.size()-1))
+                .append("\n");
+
+        statsBuild.append("§8-----[§2Team§8]-----\n");
+        statsBuild
+                .append("§aTaille de la base : §6" + this.range*2 + "x" + this.range*2 + "\n")
+                .append("§aMorts : §6" + this.getTotalDeaths() + "\n")
+                .append("§aJoueurs tués : §6" + this.getTotalPlayerKilled() + "\n")
+                .append("§aMobs tués : §6" + this.getTotalMobKilled() + "\n")
+                .append("§aScore : §6" + this.getScore() + "\n")
+                .append("§aScore Bonus compris : §6" + this.bonusScore + "\n");
+        statsBuild.append("§8-----[§3Joueur§8]-----\n")
+                .append("§bTemps de connexion : §6" + getTimePlayed(player) + "\n")
+                .append("§bMorts : §6" + UNCSurvival.getInstance().getGameManager().getScoreboardManager().getDeathStats(player) + "\n")
+                .append("§bJoueurs tués : §6" + UNCSurvival.getInstance().getGameManager().getScoreboardManager().getPlayerKill(player) + "\n")
+                .append("§bMobs tués : §6" + UNCSurvival.getInstance().getGameManager().getScoreboardManager().getMobKill(player) + "\n");
+        return statsBuild.toString();
+    }
+
+    public int getTotalDeaths() {
+        int total = 0;
+        for(GamePlayer player : this.getMembers()) {
+            total += UNCSurvival.getInstance().getGameManager().getScoreboardManager().getDeathStats(player.getOfflinePlayer());
+        }
+        return total;
+    }
+
+    public int getTotalPlayerKilled() {
+        int total = 0;
+        for(GamePlayer player : this.getMembers()) {
+            total += UNCSurvival.getInstance().getGameManager().getScoreboardManager().getPlayerKill(player.getOfflinePlayer());
+        }
+        return total;
+    }
+
+    public int getTotalMobKilled() {
+        int total = 0;
+        for(GamePlayer player : this.getMembers()) {
+            total += UNCSurvival.getInstance().getGameManager().getScoreboardManager().getMobKill(player.getOfflinePlayer());
+        }
+        return total;
+    }
+
+    public int getTotalStoneMined() {
+        int total = 0;
+        for(GamePlayer player : this.getMembers()) {
+            total += UNCSurvival.getInstance().getGameManager().getScoreboardManager().getStoneMined(player.getOfflinePlayer());
+        }
+        return total;
+    }
+
+    public String getTimePlayed(Player player) {
+        int total = UNCSurvival.getInstance().getGameManager().getScoreboardManager().getTimePlayed(player)/20;
+        int secondes = total % 60;
+        int minutes = (total / 60) % 60;
+        int heures = (total / 3600) % 24;
+        int jours = (total / 3600) / 24;
+        return jours + " jour(s), " + heures + " heures, " + minutes + " m, " + secondes + " s";
     }
 }

@@ -2,7 +2,6 @@ package teamunc.uncsurvival.eventsListeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
@@ -17,7 +16,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
-import teamunc.uncsurvival.eventsListeners.AbstractEventsListener;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.team.Team;
 
@@ -151,7 +149,7 @@ public class CustomItemListener extends AbstractEventsListener {
     public boolean CanDoThisHere(Player player, Location loc) {
         boolean res = true;
 
-        if(this.plugin.getGameManager().getParticipantManager().hasPlayer(player)) {
+        if(this.plugin.getGameManager().getParticipantManager().isPlaying(player)) {
             Team teamPlayer = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(player);
             ArrayList<Team> teams = (ArrayList<Team>) this.plugin.getGameManager().getTeamsManager().getAllTeams().clone();
             teams.remove(teamPlayer);
