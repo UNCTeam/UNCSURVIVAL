@@ -640,4 +640,113 @@ public class ItemsManager extends AbstractManager {
     public void save() {
         this.brewingControler.stop();
     }
+
+    public Set<Material> getAllFoodOfTheGame() {
+        Set<Material> res = new HashSet<>();
+
+        res.addAll(List.of(
+                Material.GOLDEN_CARROT,
+                Material.COOKED_MUTTON,
+                Material.COOKED_PORKCHOP,
+                Material.COOKED_SALMON,
+                Material.COOKED_BEEF,
+                Material.BAKED_POTATO,
+                Material.BEETROOT,
+                Material.BEETROOT_SOUP,
+                Material.BREAD,
+                Material.CARROT,
+                Material.COOKED_CHICKEN,
+                Material.COOKED_COD,
+                Material.COOKED_RABBIT,
+                Material.MUSHROOM_STEW,
+                Material.RABBIT_STEW,
+                Material.SUSPICIOUS_STEW,
+                Material.APPLE,
+                Material.CHORUS_FRUIT,
+                Material.DRIED_KELP,
+                Material.MELON_SLICE,
+                Material.POISONOUS_POTATO,
+                Material.POTATO,
+                Material.PUMPKIN_PIE,
+                Material.BEEF,
+                Material.CHICKEN,
+                Material.MUTTON,
+                Material.PORKCHOP,
+                Material.RABBIT,
+                Material.SWEET_BERRIES,
+                Material.COOKIE,
+                Material.GLOW_BERRIES,
+                Material.HONEY_BOTTLE,
+                Material.PUFFERFISH,
+                Material.COD,
+                Material.SALMON,
+                Material.ROTTEN_FLESH,
+                Material.SPIDER_EYE,
+                Material.TROPICAL_FISH
+        ));
+
+        return res;
+    }
+
+    public int getFoodLevelOf(Material item) {
+        int res = 0;
+        if (this.getAllFoodOfTheGame().contains(item)){
+            switch (item) {
+                case BEETROOT:
+                case DRIED_KELP:
+                case POTATO:
+                case PUFFERFISH:
+                case TROPICAL_FISH:
+                    res = 1;
+                    break;
+                case COOKIE:
+                case GLOW_BERRIES:
+                case MELON_SLICE:
+                case POISONOUS_POTATO:
+                case CHICKEN:
+                case COD:
+                case MUTTON:
+                case SALMON:
+                case SPIDER_EYE:
+                case SWEET_BERRIES:
+                    res = 2;
+                    break;
+                case CARROT:
+                case BEEF:
+                case PORKCHOP:
+                case RABBIT:
+                    res = 3;
+                    break;
+                case APPLE:
+                case CHORUS_FRUIT:
+                case ROTTEN_FLESH:
+                    res = 4;
+                    break;
+                case BAKED_POTATO:
+                case BREAD:
+                case COOKED_COD:
+                case COOKED_RABBIT:
+                    res = 5;
+                    break;
+                case BEETROOT_SOUP:
+                case COOKED_CHICKEN:
+                case COOKED_MUTTON:
+                case COOKED_SALMON:
+                case HONEY_BOTTLE:
+                case MUSHROOM_STEW:
+                case SUSPICIOUS_STEW:
+                    res = 6;
+                    break;
+                case COOKED_PORKCHOP:
+                case PUMPKIN_PIE:
+                case COOKED_BEEF:
+                    res = 8;
+                    break;
+                case RABBIT_STEW:
+                    res = 10;
+                    break;
+            }
+        }
+        return res;
+    }
 }
