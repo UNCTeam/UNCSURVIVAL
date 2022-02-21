@@ -127,7 +127,7 @@ public class ParticipantManager extends AbstractManager{
         return this.getPlayersByTeam().get(this.getGamePlayer(playerName));
     }
 
-    public boolean hasPlayer(Player player) {
+    public boolean isPlaying(Player player) {
         return this.getPlayersByTeam().containsKey(new GamePlayer(player));
     }
 

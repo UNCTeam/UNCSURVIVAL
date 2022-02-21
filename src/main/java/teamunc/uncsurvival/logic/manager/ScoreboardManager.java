@@ -2,9 +2,11 @@ package teamunc.uncsurvival.logic.manager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.utils.scoreboards.VScoreboard;
 
 import java.util.HashMap;
@@ -54,9 +56,15 @@ public class ScoreboardManager extends AbstractManager{
         this.scoreboardMap = scoreboardMap;
     }
 
+    public void resetStatsScoreboard() {
+        for(GamePlayer gamePlayer : plugin.getGameManager().getParticipantManager().getGamePlayers()) {
+            this.scoreboard.resetScores(gamePlayer.getOfflinePlayer());
+        }
+    }
+
     public void initStatsScoreboard() {
         try {
-            // add here
+            resetStatsScoreboard();
             this.scoreboard.registerNewObjective("STATS.MSTONE","minecraft.mined:minecraft.stone","TOTAL STONE MINED");
             this.scoreboard.registerNewObjective("STATS.PKILL","minecraft.custom:minecraft.player_kills","TOTAL PLAYERS KILLS");
             this.scoreboard.registerNewObjective("STATS.MKILL","minecraft.custom:minecraft.mob_kills","TOTAL MOBS KILLS");
@@ -66,4 +74,25 @@ public class ScoreboardManager extends AbstractManager{
             Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GOLD + e.toString());
         }
     }
+
+    public int getDeathStats(OfflinePlayer player) {
+        return this.scoreboard.getObjective("STATS.DEATH").getScore(player).getScore();
+    }
+
+    public int getPlayerKill(OfflinePlayer player) {
+        return this.scoreboard.getObjective("STATS.PKILL").getScore(player).getScore();
+    }
+
+    public int getMobKill(OfflinePlayer player) {
+        return this.scoreboard.getObjective("STATS.MKILL").getScore(player).getScore();
+    }
+
+    public int getStoneMined(OfflinePlayer player) {
+        return this.scoreboard.getObjective("STATS.MSTONE").getScore(player).getScore();
+    }
+
+    public int getTimePlayed(OfflinePlayer player) {
+        return this.scoreboard.getObjective("STATS.TPLAYED").getScore(player).getScore();
+    }
+
 }
