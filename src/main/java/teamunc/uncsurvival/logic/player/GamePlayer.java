@@ -1,15 +1,18 @@
 package teamunc.uncsurvival.logic.player;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 
 public class GamePlayer implements Serializable {
     private final UUID uuid;
+    private static int MAXFOODBUFFER = 8;
     private int waterLevel;
     /**
      * si timeBeforeCovidExpansion == -1 alors pas de covid, sinon c'est le temps avant le prochain covid (en seconde)
@@ -17,8 +20,11 @@ public class GamePlayer implements Serializable {
      */
     private int timeBeforeCovidExpansion = -1;
 
+    private ArrayList<Material> queueOfEatenFood;
+
     public GamePlayer(Player bukkitPlayer) {
         this.uuid = bukkitPlayer.getUniqueId();
+        this.queueOfEatenFood = new ArrayList<>();
     }
 
     public UUID getUUID() {
@@ -65,6 +71,19 @@ public class GamePlayer implements Serializable {
 
     public void cureCovid() {
         this.timeBeforeCovidExpansion = -1;
+    }
+
+    public int EatHowOften(Material food) {
+        return (int) this.queueOfEatenFood.stream().filter(material -> material == food).count();
+    }
+
+    public void addToEatenFoodQueue(Material food) {
+        this.queueOfEatenFood.add(0,food);
+        if (this.queueOfEatenFood.size() > MAXFOODBUFFER) this.queueOfEatenFood.remove(8);
+    }
+
+    public ArrayList<Material> getQueueOfEatenFood() {
+        return queueOfEatenFood;
     }
 
     @Override

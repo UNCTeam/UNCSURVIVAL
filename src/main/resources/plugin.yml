@@ -87,3 +87,13 @@ commands:
     description: remove a fix number to the score of a team
     usage: /removescore <TeamColor> <score>
     permission: uncsurvival.removescore
+
+  food:
+    description: get stats of your food history
+    usage: /food
+    permission: uncsurvival.food
+
+  f:
+    description: get stats of your food history
+    usage: /f
+    permission: uncsurvival.food
