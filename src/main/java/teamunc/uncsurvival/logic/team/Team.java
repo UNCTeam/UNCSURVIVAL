@@ -325,7 +325,8 @@ public class Team implements Serializable {
                 .append("§aMorts : §6" + this.getTotalDeaths() + "\n")
                 .append("§aJoueurs tués : §6" + this.getTotalPlayerKilled() + "\n")
                 .append("§aMobs tués : §6" + this.getTotalMobKilled() + "\n")
-                .append("§aScore : §6" + this.getScore() + "\n");
+                .append("§aScore : §6" + this.getScore() + "\n")
+                .append("§aScore Bonus compris : §6" + this.bonusScore + "\n");
         statsBuild.append("§8-----[§3Joueur§8]-----\n")
                 .append("§bTemps de connexion : §6" + getTimePlayed(player) + "\n")
                 .append("§bMorts : §6" + UNCSurvival.getInstance().getGameManager().getScoreboardManager().getDeathStats(player) + "\n")
