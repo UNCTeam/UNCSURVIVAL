@@ -50,6 +50,10 @@ public class UNCSurvival extends JavaPlugin {
         this.getCommand("nextphase").setExecutor(new TimerCmdExec(this));
         this.getCommand("removetime").setExecutor(new TimerCmdExec(this));
         this.getCommand("removetime").setTabCompleter(new CustomTabComplete(this));
+        this.getCommand("addscore").setExecutor(new TeamCmdExec(this));
+        this.getCommand("removescore").setExecutor(new TeamCmdExec(this));
+        this.getCommand("addbonusscore").setExecutor(new TeamCmdExec(this));
+        this.getCommand("removebonusscore").setExecutor(new TeamCmdExec(this));
 
         this.getCommand("reloadconfig").setExecutor(new ReloadConfigurationCmdExec(this));
     }

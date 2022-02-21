@@ -91,7 +91,7 @@ public class GameEventsManager extends AbstractManager{
         if ( (phase == PhaseEnum.PHASE2 || phase == PhaseEnum.PHASE3 ) && !team.isFamined() && min1playerOfTeamOnline ) {
             Random r = new Random();
 
-            int res = r.nextInt(100);
+            int res = r.nextInt(180);
 
             result = (res <= TAUX_FAMINE);
         }
