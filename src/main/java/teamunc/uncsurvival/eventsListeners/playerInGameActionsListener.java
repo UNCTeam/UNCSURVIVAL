@@ -153,7 +153,6 @@ public class playerInGameActionsListener extends AbstractEventsListener {
 
                 qualityLevel = Integer.parseInt(numberToConvert.replaceAll("[^0-9]", "").substring(1));
                 qualityLevel += 1;
-                Bukkit.getServer().getConsoleSender().sendMessage("" + qualityLevel);
 
                 meta.setLore(List.of("§r§8Qualité : §r§l"+qualityLevel));
 
