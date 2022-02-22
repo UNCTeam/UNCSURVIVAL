@@ -1,21 +1,17 @@
 package teamunc.uncsurvival.eventsListeners;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryInteractEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -29,8 +25,15 @@ import java.util.Arrays;
 import java.util.List;
 
 public class playerInGameActionsListener extends AbstractEventsListener {
+    private ShapedRecipe recipe;
+
     public playerInGameActionsListener(UNCSurvival plugin) {
         super(plugin);
+
+        recipe = new ShapedRecipe(new NamespacedKey(this.plugin,"craftAlcool"),this.plugin.getGameManager().getItemsManager().createAlcool());
+        recipe.shape("***","*-*","***");
+        recipe.setIngredient('*', Material.ROTTEN_FLESH);
+        recipe.setIngredient('-',Material.POTION);
     }
 
     @EventHandler
@@ -52,7 +55,7 @@ public class playerInGameActionsListener extends AbstractEventsListener {
 
         if (this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE3) {
             // dont apply double damage for customItems
-            if ( !this.plugin.getGameManager().getItemsManager().isCustomItem(itemStack,"Wrench") ) {
+            if ( !this.plugin.getGameManager().getItemsManager().isCustomItem(itemStack,"WRENCH") ) {
                 e.setDamage(e.getDamage() * 3);
             }
         }
@@ -123,5 +126,65 @@ public class playerInGameActionsListener extends AbstractEventsListener {
             plugin.getGameManager().getCustomBlockManager().interfaceInterfact(event);
         }
 
+    }
+
+    @EventHandler
+    public void onCraftPrepare(PrepareItemCraftEvent e) {
+        ItemStack[] items = e.getInventory().getMatrix();
+        if (
+                items[0] != null && items[0].getType() == Material.ROTTEN_FLESH
+                && items[1] != null && items[1].getType() == Material.ROTTEN_FLESH
+                && items[2] != null && items[2].getType() == Material.ROTTEN_FLESH
+                && items[3] != null && items[3].getType() == Material.ROTTEN_FLESH
+                && items[4] != null && items[4].getType() == Material.POTION
+                && items[5] != null && items[5].getType() == Material.ROTTEN_FLESH
+                && items[6] != null && items[6].getType() == Material.ROTTEN_FLESH
+                && items[7] != null && items[7].getType() == Material.ROTTEN_FLESH
+                && items[8] != null && items[8].getType() == Material.ROTTEN_FLESH) {
+            ItemStack item = this.recipe.getResult().clone();
+            ItemStack itemIngredient = items[4];
+
+            if (this.plugin.getGameManager().getItemsManager().isCustomItem(itemIngredient,"ALCOOL")) {
+                ItemMeta meta = item.getItemMeta();
+                int qualityLevel = 0;
+
+                ItemMeta metaIngredient = itemIngredient.getItemMeta();
+                String numberToConvert = metaIngredient.getLore().get(0);
+
+                qualityLevel = Integer.parseInt(numberToConvert.replaceAll("[^0-9]", "").substring(1));
+                qualityLevel += 1;
+
+                meta.setLore(List.of("§r§8Qualité : §r§l"+qualityLevel));
+
+                item.setItemMeta(meta);
+                e.getInventory().setResult(item);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onCraftGet(CraftItemEvent e) {
+        ItemStack[] items = e.getInventory().getMatrix();
+        ItemStack itemIngr = e.getInventory().getMatrix()[4];
+        ItemStack item = this.plugin.getGameManager().getItemsManager().createAlcool();
+
+        if ( e.getRecipe() != null
+                && e.getRecipe().getResult().isSimilar(item)
+                && itemIngr.hasItemMeta()
+                && this.plugin.getGameManager().getItemsManager().isCustomItem(itemIngr,"ALCOOL")) {
+            ItemMeta meta = item.getItemMeta();
+            int qualityLevel = 0;
+
+            ItemMeta metaIngredient = itemIngr.getItemMeta();
+            String numberToConvert = metaIngredient.getLore().get(0);
+
+            qualityLevel = Integer.parseInt(numberToConvert.replaceAll("[^0-9]", "").substring(1));
+            qualityLevel += 1;
+
+            meta.setLore(List.of("§r§8Qualité : §r§l"+qualityLevel));
+
+            item.setItemMeta(meta);
+            e.getInventory().setResult(item);
+        }
     }
 }

@@ -148,6 +148,7 @@ public class ItemsManager extends AbstractManager {
         PotionMeta meta = (PotionMeta) item.getItemMeta();
         meta.setColor(Color.BLACK);
         meta.setDisplayName("§rZombie Alcool");
+        meta.setLore(List.of("§r§8Qualité : §r§l0"));
         PersistentDataContainer data = meta.getPersistentDataContainer();
         data.set(this.customitemKey, PersistentDataType.STRING,"ALCOOL");
         item.setItemMeta(meta);
@@ -443,6 +444,13 @@ public class ItemsManager extends AbstractManager {
         alcool.setIngredient('*',Material.ROTTEN_FLESH);
         alcool.setIngredient('-',Material.GLASS_BOTTLE);
         this.plugin.getServer().addRecipe(alcool);
+
+        // ALCOOL QUALITY
+        ShapedRecipe alcoolQuality = new ShapedRecipe(new NamespacedKey(this.plugin,"craftAlcoolQuality"),this.createAlcool());
+        alcoolQuality.shape("***","*-*","***");
+        alcoolQuality.setIngredient('*',Material.ROTTEN_FLESH);
+        alcoolQuality.setIngredient('-',Material.POTION);
+        this.plugin.getServer().addRecipe(alcoolQuality);
 
         // HEAL PATCH
         ShapedRecipe heal_patch = new ShapedRecipe(new NamespacedKey(this.plugin,"craftHealPatch"),this.createHealPatch());

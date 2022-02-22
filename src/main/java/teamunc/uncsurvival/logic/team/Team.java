@@ -44,6 +44,7 @@ public class Team implements Serializable {
         this.chatColor = chatColor;
         this.members = new ArrayList<>();
 
+
         this.uuid = UUID.randomUUID();
 
         this.spawnPoint = spawnPoint;
