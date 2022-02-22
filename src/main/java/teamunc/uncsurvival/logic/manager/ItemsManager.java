@@ -148,6 +148,7 @@ public class ItemsManager extends AbstractManager {
         PotionMeta meta = (PotionMeta) item.getItemMeta();
         meta.setColor(Color.BLACK);
         meta.setDisplayName("§rZombie Alcool");
+        meta.setLore(List.of("§r§8Qualité : §r§l0"));
         PersistentDataContainer data = meta.getPersistentDataContainer();
         data.set(this.customitemKey, PersistentDataType.STRING,"ALCOOL");
         item.setItemMeta(meta);
