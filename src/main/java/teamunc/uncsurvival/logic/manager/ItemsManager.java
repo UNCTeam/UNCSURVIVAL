@@ -559,6 +559,14 @@ public class ItemsManager extends AbstractManager {
                 new BrewingRecipe(new NamespacedKey(this.plugin,"craftCactusJuice"),this.createCactusJuice(),new ItemStack(Material.GREEN_DYE),potion,1,100)
         );
 
+        // AMETHYST PICKAXE
+        ShapelessRecipe amethystPickaxe = new ShapelessRecipe(new NamespacedKey(this.plugin,"craftAmethystPickaxe"),this.createAmethystPickaxe());
+        amethystPickaxe.addIngredient(new RecipeChoice.ExactChoice(this.createAmethystIngot()));
+        amethystPickaxe.addIngredient(new RecipeChoice.ExactChoice(this.createAmethystIngot()));
+        amethystPickaxe.addIngredient(new RecipeChoice.ExactChoice(this.createAmethystIngot()));
+        amethystPickaxe.addIngredient(Material.DIAMOND_PICKAXE);
+        this.plugin.getServer().addRecipe(amethystPickaxe);
+
         // change recipe
         replaceCraft(
                 new ShapedRecipe(
@@ -595,14 +603,6 @@ public class ItemsManager extends AbstractManager {
         amethystSword.addIngredient(new RecipeChoice.ExactChoice(this.createAmethystIngot()));
         amethystSword.addIngredient(Material.DIAMOND_SWORD);
         this.plugin.getServer().addRecipe(amethystSword);
-
-        // AMETHYST PICKAXE
-        ShapelessRecipe amethystPickaxe = new ShapelessRecipe(new NamespacedKey(this.plugin,"craftAmethystPickaxe"),this.createAmethystPickaxe());
-        amethystPickaxe.addIngredient(new RecipeChoice.ExactChoice(this.createAmethystIngot()));
-        amethystPickaxe.addIngredient(new RecipeChoice.ExactChoice(this.createAmethystIngot()));
-        amethystPickaxe.addIngredient(new RecipeChoice.ExactChoice(this.createAmethystIngot()));
-        amethystPickaxe.addIngredient(Material.DIAMOND_PICKAXE);
-        this.plugin.getServer().addRecipe(amethystPickaxe);
     }
 
     public void replaceCraft(Recipe recipe, NamespacedKey namespacedKey) {
