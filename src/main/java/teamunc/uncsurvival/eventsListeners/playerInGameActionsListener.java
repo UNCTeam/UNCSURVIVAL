@@ -160,6 +160,31 @@ public class playerInGameActionsListener extends AbstractEventsListener {
                 e.getInventory().setResult(item);
             }
         }
+    }
 
+    @EventHandler
+    public void onCraftGet(CraftItemEvent e) {
+        ItemStack[] items = e.getInventory().getMatrix();
+        ItemStack itemIngr = e.getInventory().getMatrix()[4];
+        ItemStack item = this.plugin.getGameManager().getItemsManager().createAlcool();
+
+        if ( e.getRecipe() != null
+                && e.getRecipe().getResult().isSimilar(item)
+                && itemIngr.hasItemMeta()
+                && this.plugin.getGameManager().getItemsManager().isCustomItem(itemIngr,"ALCOOL")) {
+            ItemMeta meta = item.getItemMeta();
+            int qualityLevel = 0;
+
+            ItemMeta metaIngredient = itemIngr.getItemMeta();
+            String numberToConvert = metaIngredient.getLore().get(0);
+
+            qualityLevel = Integer.parseInt(numberToConvert.replaceAll("[^0-9]", "").substring(1));
+            qualityLevel += 1;
+
+            meta.setLore(List.of("§r§8Qualité : §r§l"+qualityLevel));
+
+            item.setItemMeta(meta);
+            e.getInventory().setResult(item);
+        }
     }
 }
