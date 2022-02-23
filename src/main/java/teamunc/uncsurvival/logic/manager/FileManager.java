@@ -72,7 +72,7 @@ public class FileManager extends AbstractManager{
             goalItemsPrices.add(7);
 
 
-            GameConfiguration gameConfiguration = new GameConfiguration(phase, phase, phase, goalItemsPrices);
+            GameConfiguration gameConfiguration = new GameConfiguration(phase, phase, phase, goalItemsPrices,false);
             this.plugin.getFileManager().saveGameConfiguration(gameConfiguration);
             return gameConfiguration;
         } catch (Exception e) {

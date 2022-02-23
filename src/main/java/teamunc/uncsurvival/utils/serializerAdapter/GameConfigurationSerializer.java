@@ -17,6 +17,7 @@ public class GameConfigurationSerializer implements JsonSerializer<GameConfigura
         jsonGameConfiguration.addProperty("datePhase2", gameConfiguration.getDatePhase2().toString());
         jsonGameConfiguration.addProperty("datePhase3", gameConfiguration.getDatePhase3().toString());
         jsonGameConfiguration.addProperty("dateFin", gameConfiguration.getDateFin().toString());
+        jsonGameConfiguration.addProperty("isAlcoolQualityCraftOn", gameConfiguration.isAlcoolQualityCraftOn());
 
         JsonArray priceItems = new JsonArray();
         for(Integer price : gameConfiguration.getGoalItemsPrices()) {
@@ -32,6 +33,7 @@ public class GameConfigurationSerializer implements JsonSerializer<GameConfigura
         LocalDateTime datePhase2 = LocalDateTime.parse(gameConfirurationJson.get("datePhase2").getAsString());
         LocalDateTime datePhase3 = LocalDateTime.parse(gameConfirurationJson.get("datePhase3").getAsString());
         LocalDateTime dateFin = LocalDateTime.parse(gameConfirurationJson.get("dateFin").getAsString());
+        boolean isAlcoolQualityCraftOn = gameConfirurationJson.get("isAlcoolQualityCraftOn").getAsBoolean();
 
         ArrayList<Integer> prices = new ArrayList<>();
 
@@ -39,7 +41,7 @@ public class GameConfigurationSerializer implements JsonSerializer<GameConfigura
         for(int i = 0; i<priceItems.size();i++) {
             prices.add(priceItems.get(i).getAsInt());
         }
-        GameConfiguration gameConfiguration = new GameConfiguration(datePhase2, datePhase3, dateFin, prices);
+        GameConfiguration gameConfiguration = new GameConfiguration(datePhase2, datePhase3, dateFin, prices,isAlcoolQualityCraftOn);
         return gameConfiguration;
     }
 }
