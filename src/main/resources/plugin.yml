@@ -97,3 +97,7 @@ commands:
     description: get stats of your food history
     usage: /f
     permission: uncsurvival.food
+  activealcoolquality:
+    description: active alcool quality craft
+    usage: /activealcoolquality
+    permission: uncsurvival.activealcoolquality

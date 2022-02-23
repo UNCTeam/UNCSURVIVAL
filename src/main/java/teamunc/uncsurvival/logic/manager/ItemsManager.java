@@ -446,11 +446,13 @@ public class ItemsManager extends AbstractManager {
         this.plugin.getServer().addRecipe(alcool);
 
         // ALCOOL QUALITY
-        ShapedRecipe alcoolQuality = new ShapedRecipe(new NamespacedKey(this.plugin,"craftAlcoolQuality"),this.createAlcool());
-        alcoolQuality.shape("***","*-*","***");
-        alcoolQuality.setIngredient('*',Material.ROTTEN_FLESH);
-        alcoolQuality.setIngredient('-',Material.POTION);
-        this.plugin.getServer().addRecipe(alcoolQuality);
+        if (this.plugin.getGameManager().isAlcoolQualityInGame()) {
+            ShapedRecipe alcoolQuality = new ShapedRecipe(new NamespacedKey(this.plugin, "craftAlcoolQuality"), this.createAlcool());
+            alcoolQuality.shape("***", "*-*", "***");
+            alcoolQuality.setIngredient('*', Material.ROTTEN_FLESH);
+            alcoolQuality.setIngredient('-', Material.POTION);
+            this.plugin.getServer().addRecipe(alcoolQuality);
+        }
 
         // HEAL PATCH
         ShapedRecipe heal_patch = new ShapedRecipe(new NamespacedKey(this.plugin,"craftHealPatch"),this.createHealPatch());

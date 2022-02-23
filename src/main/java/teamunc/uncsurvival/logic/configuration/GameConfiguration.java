@@ -19,13 +19,15 @@ public class GameConfiguration implements Serializable {
     private LocalDateTime dateFin;
     private transient ArrayList<ItemStack> goalItems;
     private ArrayList<Integer> goalItemsPrices;
+    private boolean isAlcoolQualityCraftOn;
 
     public GameConfiguration(LocalDateTime datePhase2, LocalDateTime datePhase3, LocalDateTime dateFin,
-                              ArrayList<Integer> goalItemsPrices) {
+                              ArrayList<Integer> goalItemsPrices, boolean isAlcoolQualityCraftOn) {
         this.datePhase2 = datePhase2;
         this.datePhase3 = datePhase3;
         this.dateFin = dateFin;
         this.goalItemsPrices = goalItemsPrices;
+        this.isAlcoolQualityCraftOn = isAlcoolQualityCraftOn;
     }
 
     public LocalDateTime getDateFin() { return dateFin; }
@@ -47,5 +49,13 @@ public class GameConfiguration implements Serializable {
 
     public void setGoalItems(ArrayList<ItemStack> registeredGoalItems) {
         this.goalItems = registeredGoalItems;
+    }
+
+    public boolean isAlcoolQualityCraftOn() {
+        return isAlcoolQualityCraftOn;
+    }
+
+    public void setAlcoolQualityCraftOn(boolean alcoolQualityCraftOn) {
+        isAlcoolQualityCraftOn = alcoolQualityCraftOn;
     }
 }

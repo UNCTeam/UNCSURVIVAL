@@ -57,6 +57,7 @@ public class UNCSurvival extends JavaPlugin {
         this.getCommand("removebonusscore").setExecutor(new TeamCmdExec(this));
         this.getCommand("food").setExecutor(new PlayerCmdExec(this));
         this.getCommand("f").setExecutor(new PlayerCmdExec(this));
+        this.getCommand("activealcoolquality").setExecutor(new PlayerCmdExec(this));
 
         this.getCommand("reloadconfig").setExecutor(new ReloadConfigurationCmdExec(this));
     }

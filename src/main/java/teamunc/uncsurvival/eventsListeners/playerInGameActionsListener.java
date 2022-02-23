@@ -132,7 +132,8 @@ public class playerInGameActionsListener extends AbstractEventsListener {
     public void onCraftPrepare(PrepareItemCraftEvent e) {
         ItemStack[] items = e.getInventory().getMatrix();
         if (
-                items[0] != null && items[0].getType() == Material.ROTTEN_FLESH
+                this.plugin.getGameManager().isAlcoolQualityInGame()
+                && items[0] != null && items[0].getType() == Material.ROTTEN_FLESH
                 && items[1] != null && items[1].getType() == Material.ROTTEN_FLESH
                 && items[2] != null && items[2].getType() == Material.ROTTEN_FLESH
                 && items[3] != null && items[3].getType() == Material.ROTTEN_FLESH
