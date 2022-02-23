@@ -36,6 +36,10 @@ public class GameManager extends AbstractManager {
 
     private CountdownPhaseTask timerTask;
 
+    public void setAlcoolQualityInGame(boolean alcoolQualityInGame) {
+        this.gameConfiguration.setAlcoolQualityCraftOn(alcoolQualityInGame);
+    }
+
     public GameManager(UNCSurvival plugin) {
         super(plugin);
 
@@ -258,5 +262,9 @@ public class GameManager extends AbstractManager {
         this.getTeamsManager().saveTeams();
         this.getCustomBlockManager().saveCustomBlock();
         this.getItemsManager().save();
+    }
+
+    public boolean isAlcoolQualityInGame() {
+        return this.gameConfiguration.isAlcoolQualityCraftOn();
     }
 }
