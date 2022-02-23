@@ -9,6 +9,8 @@ import teamunc.uncsurvival.logic.team.TeamList;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Optional;
 
 public class TeamsManager extends AbstractManager implements Serializable {
@@ -32,6 +34,12 @@ public class TeamsManager extends AbstractManager implements Serializable {
 
     public ArrayList<Team> getAllTeams() {
         return this.teams.getTeams();
+    }
+
+    public ArrayList<Team> getClassement() {
+        ArrayList<Team> classement = getAllTeams();
+        Collections.sort(classement, Comparator.comparing(Team::getScore).reversed());
+        return classement;
     }
 
     public Team addTeam(String name, ChatColor chatColor,Location spawnPoint) {

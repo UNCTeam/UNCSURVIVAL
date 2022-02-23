@@ -23,18 +23,18 @@ public class InGameInfoScoreboard extends VScoreboard{
     @Override
     public List<String> getLines() {
         ArrayList<String> lines = new ArrayList<>();
-
+        UNCSurvival plugin = UNCSurvival.getInstance();
         lines.addAll(
                 Arrays.asList(
                         ChatColor.BOLD + "" + ChatColor.GOLD + "-----------------",
                         " ",
-                        ChatColor.BOLD + "" + ChatColor.GOLD +"- Phase Actuelle : " + ChatColor.AQUA + UNCSurvival.getInstance().getGameManager().getGameStats().getCurrentPhase().getNom(),
+                        ChatColor.BOLD + "" + ChatColor.GOLD +"- Phase Actuelle : " + ChatColor.AQUA + plugin.getGameManager().getGameStats().getCurrentPhase().getNom(),
                         " ",
                         ChatColor.BOLD + "" + ChatColor.GOLD +"- Temps restant :"
                 )
         );
         String tempsRestant = "  §b";
-        GameManager gameManager =  UNCSurvival.getInstance().getGameManager();
+        GameManager gameManager =  plugin.getGameManager();
         if(gameManager != null) {
             if(gameManager.getTimerTask() != null) {
                 if(gameManager.getTimerTask().getJours() == 0) {
@@ -52,16 +52,17 @@ public class InGameInfoScoreboard extends VScoreboard{
         lines.add(tempsRestant);
 
         // each teams
-        for (Team t : UNCSurvival.getInstance().getGameManager().getTeamsManager().getAllTeams()) {
-            lines.add(ChatColor.RED + "- " + t.getChatColor() + t.getName() + ChatColor.GOLD + " : " + ChatColor.AQUA + "" + ChatColor.BOLD + t.getScore());
+        if(gameManager.getParticipantManager().isPlaying(getPlayer())) {
+            Team team = gameManager.getParticipantManager().getTeamForPlayer(getPlayer());
+            lines.add(ChatColor.GREEN + "Score : " + ChatColor.AQUA + "" + ChatColor.BOLD + team.getScore());
+            lines.add(ChatColor.LIGHT_PURPLE + "Classement : " + ChatColor.AQUA + "" + ChatColor.BOLD + team.getClassement());
+            lines.addAll(
+                    Arrays.asList(
+                            " ",
+                            ChatColor.BOLD + "" + ChatColor.GOLD + "-----------------"
+                    )
+            );
         }
-
-        lines.addAll(
-                Arrays.asList(
-                        " ",
-                        ChatColor.BOLD + "" + ChatColor.GOLD + "-----------------"
-                )
-        );
         return lines;
     }
 
