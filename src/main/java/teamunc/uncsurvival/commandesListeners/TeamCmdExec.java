@@ -223,8 +223,8 @@ public class TeamCmdExec extends AbstractCommandExecutor{
 
                 if (commandValid) this.messageTchatManager.sendMessageToPlayer("Removed " + removedScore + " from the score of the team " + teamColorScoreRemoved,sender, ChatColor.GREEN);
 
-            case "teamstats":
-                if (sender instanceof Player ) {
+            case "stats":
+                if (sender instanceof Player) {
                     Player player = (Player) sender;
                     if(this.plugin.getGameManager().getParticipantManager().isPlaying(player)) {
                         Team playerTeam = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(player);
@@ -232,6 +232,28 @@ public class TeamCmdExec extends AbstractCommandExecutor{
                     }
                 }
                 break;
+            case "classement":
+                if(sender instanceof Player) {
+                    Player player = (Player) sender;
+                    StringBuilder classementStr = new StringBuilder();
+                    classementStr.append("§8--------------| §b§lClassement §8|---------------\n \n");
+                    int count = 1;
+                    for(Team team : plugin.getGameManager().getTeamsManager().getClassement()) {
+                        classementStr.append(" " + team.getChatColor()).append(count);
+                        classementStr.append(" - ").append(team.getName()).append("\n");
+                        count++;
+                    }
+                    player.sendMessage(classementStr.toString());
+                }
+                break;
+            case "phaseinfo":
+                if(sender instanceof Player) {
+                    Player player = (Player) sender;
+                    String phaseMsg = "§8--------------| §b§lPhase Info §8|---------------\n百\n\n百\n\n";
+                    phaseMsg += "§f保\n" + "§8百\n百\n百\n百\n百\n百\n百\n百\n百\n百\nt§f包\n百\n百\n百\n百\n百\n百";
+                    player.sendMessage(phaseMsg);
+                    break;
+                }
         }
         return commandValid;
     }

@@ -337,6 +337,10 @@ public class Team implements Serializable {
         return statsBuild.toString();
     }
 
+    public int getClassement() {
+        return UNCSurvival.getInstance().getGameManager().getTeamsManager().getClassement().indexOf(this)+1;
+    }
+
     public int getTotalDeaths() {
         int total = 0;
         for(GamePlayer player : this.getMembers()) {
