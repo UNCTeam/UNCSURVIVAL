@@ -63,6 +63,11 @@ commands:
     usage: /classement
     permission: uncsurvival.classement
 
+  phaseinfo:
+    description: get phases info
+    usage: /phaseinfo
+    permission: uncsurvival.phaseinfo
+
   givecustomitem:
     description: give a custom item
     usage: /givecustomitem

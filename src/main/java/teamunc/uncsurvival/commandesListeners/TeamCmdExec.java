@@ -246,6 +246,14 @@ public class TeamCmdExec extends AbstractCommandExecutor{
                     player.sendMessage(classementStr.toString());
                 }
                 break;
+            case "phaseinfo":
+                if(sender instanceof Player) {
+                    Player player = (Player) sender;
+                    String phaseMsg = "§8--------------| §b§lPhase Info §8|---------------\n百\n\n百\n\n";
+                    phaseMsg += "§f保\n" + "§8百\n百\n百\n百\n百\n百\n百\n百\n百\n百\nt§f包\n百\n百\n百\n百\n百\n百";
+                    player.sendMessage(phaseMsg);
+                    break;
+                }
         }
         return commandValid;
     }
