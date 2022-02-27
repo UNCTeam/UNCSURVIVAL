@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.advancements.Advancement;
 import teamunc.uncsurvival.logic.manager.GameManager;
 import teamunc.uncsurvival.logic.manager.MessageTchatManager;
 import teamunc.uncsurvival.logic.team.Team;
@@ -254,6 +255,24 @@ public class TeamCmdExec extends AbstractCommandExecutor{
                     player.sendMessage(phaseMsg);
                     break;
                 }
+            case "achievements":
+                    StringBuilder advancementStr = new StringBuilder();
+                    advancementStr.append("§8--------------| §b§l Achievements §8|---------------\n \n");
+
+                    for(Advancement adv : plugin.getGameManager().getAdvancementManager().getList()) {
+                        advancementStr.append("§6- " + adv.DisplayedName() + " §b§l+" + adv.givenPoints() + " §r§6: ");
+                        if (adv.alreadyGranted())
+                            advancementStr.append(
+                                this.plugin.getGameManager().getTeamsManager().getTeam(adv.getTeamColor()).getChatColor() +
+                                this.plugin.getGameManager().getTeamsManager().getTeam(adv.getTeamColor()).getName()
+                            );
+                        else
+                            advancementStr.append("§fEncore Possible !");
+
+                        advancementStr.append("\n");
+                    }
+                    sender.sendMessage(advancementStr.toString());
+                break;
         }
         return commandValid;
     }

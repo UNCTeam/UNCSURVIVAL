@@ -76,23 +76,38 @@ public class ScoreboardManager extends AbstractManager{
     }
 
     public int getDeathStats(OfflinePlayer player) {
-        return this.scoreboard.getObjective("STATS.DEATH").getScore(player).getScore();
+        int res = 0;
+        if (this.scoreboard.getObjective("STATS.DEATH") != null)
+            res = this.scoreboard.getObjective("STATS.DEATH").getScore(player.getName()).getScore();
+        return res;
     }
 
     public int getPlayerKill(OfflinePlayer player) {
-        return this.scoreboard.getObjective("STATS.PKILL").getScore(player).getScore();
+        int res = 0;
+        if (this.scoreboard.getObjective("STATS.PKILL") != null)
+            res = this.scoreboard.getObjective("STATS.PKILL").getScore(player.getName()).getScore();
+        return res;
     }
 
     public int getMobKill(OfflinePlayer player) {
-        return this.scoreboard.getObjective("STATS.MKILL").getScore(player).getScore();
+        int res = 0;
+        if (this.scoreboard.getObjective("STATS.MKILL") != null)
+            res = this.scoreboard.getObjective("STATS.MKILL").getScore(player.getName()).getScore();
+        return res;
     }
 
     public int getStoneMined(OfflinePlayer player) {
-        return this.scoreboard.getObjective("STATS.MSTONE").getScore(player).getScore();
+        int res = 0;
+        if (this.scoreboard.getObjective("STATS.MSTONE") != null)
+            res = this.scoreboard.getObjective("STATS.MSTONE").getScore(player.getName()).getScore();
+        return res;
     }
 
     public int getTimePlayed(OfflinePlayer player) {
-        return this.scoreboard.getObjective("STATS.TPLAYED").getScore(player).getScore();
+        int res = 0;
+        if (this.scoreboard.getObjective("STATS.TPLAYED") != null)
+            res = this.scoreboard.getObjective("STATS.TPLAYED").getScore(player.getName()).getScore();
+        return res;
     }
 
 }

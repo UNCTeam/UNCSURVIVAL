@@ -15,7 +15,6 @@ public class ReloadConfigurationCmdExec extends AbstractCommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Reloading config");
         this.plugin.getGameManager().loadGameConfiguration();
-        this.plugin.getGameManager().loadGameRuleConfiguration();
         return false;
     }
 }

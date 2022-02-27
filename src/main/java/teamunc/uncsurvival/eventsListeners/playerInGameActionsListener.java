@@ -16,6 +16,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.advancements.Advancement;
+import teamunc.uncsurvival.logic.manager.AdvancementManager;
 import teamunc.uncsurvival.logic.manager.MessageTchatManager;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.team.Team;
@@ -44,6 +46,14 @@ public class playerInGameActionsListener extends AbstractEventsListener {
             if (this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(p) != t) {
                 t.addABonusScore(100);
             }
+        }
+
+        // advancement
+        AdvancementManager advancementManager = this.plugin.getGameManager().getAdvancementManager();
+        Advancement advancement = advancementManager.getAdvancement("mon_chandail");
+        if(!advancement.alreadyGranted()) {
+            Team t = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(p);
+            advancementManager.grantToATeam(t,advancement);
         }
 
         this.plugin.getMessageTchatManager().sendGeneralMesssage("§6§lMerci pour la mort! §b§l+100 §6§lpoints pour les autres!");
@@ -156,7 +166,7 @@ public class playerInGameActionsListener extends AbstractEventsListener {
                 qualityLevel += 1;
 
                 meta.setLore(List.of("§r§8Qualité : §r§l"+qualityLevel));
-
+                if(qualityLevel >= 64 ) meta.setDisplayName("§6§lGrand Cru");
                 item.setItemMeta(meta);
                 e.getInventory().setResult(item);
             }
@@ -167,13 +177,14 @@ public class playerInGameActionsListener extends AbstractEventsListener {
     public void onCraftGet(CraftItemEvent e) {
         ItemStack[] items = e.getInventory().getMatrix();
         ItemStack itemIngr = e.getInventory().getMatrix()[4];
-        ItemStack item = this.plugin.getGameManager().getItemsManager().createAlcool();
+        ItemStack itemAlcool = this.plugin.getGameManager().getItemsManager().createAlcool();
+        ItemStack itemWrench = this.plugin.getGameManager().getItemsManager().createWrenchItem(1,0);
 
         if ( e.getRecipe() != null
-                && e.getRecipe().getResult().isSimilar(item)
+                && e.getRecipe().getResult().isSimilar(itemAlcool)
                 && itemIngr.hasItemMeta()
                 && this.plugin.getGameManager().getItemsManager().isCustomItem(itemIngr,"ALCOOL")) {
-            ItemMeta meta = item.getItemMeta();
+            ItemMeta meta = itemAlcool.getItemMeta();
             int qualityLevel = 0;
 
             ItemMeta metaIngredient = itemIngr.getItemMeta();
@@ -184,8 +195,28 @@ public class playerInGameActionsListener extends AbstractEventsListener {
 
             meta.setLore(List.of("§r§8Qualité : §r§l"+qualityLevel));
 
-            item.setItemMeta(meta);
-            e.getInventory().setResult(item);
+            // advancement
+            AdvancementManager advancementManager = this.plugin.getGameManager().getAdvancementManager();
+            Advancement advancement = advancementManager.getAdvancement("pete_ma_biere");
+            if(qualityLevel >= 64 ) {
+                meta.setDisplayName("§6§lGrand Cru");
+                if ( !advancement.alreadyGranted() ) {
+                    Team t = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer((Player) e.getWhoClicked());
+                    advancementManager.grantToATeam(t, advancement);
+                }
+            }
+
+            itemAlcool.setItemMeta(meta);
+            e.getInventory().setResult(itemAlcool);
+
+        } else if ( e.getRecipe().getResult().isSimilar(itemWrench)){
+            // advancement
+            AdvancementManager advancementManager = this.plugin.getGameManager().getAdvancementManager();
+            Advancement advancement = advancementManager.getAdvancement("bob_le_bricoleur");
+            if(!advancement.alreadyGranted()) {
+                Team t = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer((Player) e.getWhoClicked());
+                advancementManager.grantToATeam(t,advancement);
+            }
         }
     }
 }

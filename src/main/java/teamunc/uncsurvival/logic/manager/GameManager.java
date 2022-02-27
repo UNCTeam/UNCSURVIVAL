@@ -21,7 +21,6 @@ public class GameManager extends AbstractManager {
 
     /* Configuration */
     private GameConfiguration gameConfiguration;
-    private GameRuleConfiguration gameRuleConfiguration;
     private GameStats gameStats;
 
     /* Mananger */
@@ -35,6 +34,7 @@ public class GameManager extends AbstractManager {
     private GameEventsManager gameEventsManager;
 
     private CountdownPhaseTask timerTask;
+    private AdvancementManager advancementManager;
 
     public void setAlcoolQualityInGame(boolean alcoolQualityInGame) {
         this.gameConfiguration.setAlcoolQualityCraftOn(alcoolQualityInGame);
@@ -43,7 +43,6 @@ public class GameManager extends AbstractManager {
     public GameManager(UNCSurvival plugin) {
         super(plugin);
 
-        this.loadGameRuleConfiguration();
         this.loadGameConfiguration();
         this.loadGameStats();
 
@@ -55,6 +54,7 @@ public class GameManager extends AbstractManager {
         this.interfacesManager = new InterfacesManager(plugin);
         this.customBlockManager = new CustomBlockManager(plugin);
         this.gameEventsManager = new GameEventsManager(plugin);
+        this.advancementManager = new AdvancementManager(plugin);
 
         this.afterReload();
     }
@@ -80,10 +80,6 @@ public class GameManager extends AbstractManager {
         this.timeManager.startTimer();
     }
 
-    public void loadGameRuleConfiguration() {
-        this.gameRuleConfiguration = this.plugin.getFileManager().loadGameRuleConfiguration();
-    }
-
     public void loadGameConfiguration() {
         this.gameConfiguration = this.plugin.getFileManager().loadGameConfiguration();
     }
@@ -99,8 +95,6 @@ public class GameManager extends AbstractManager {
 
     public GameStats getGameStats() { return gameStats; }
 
-    public GameRuleConfiguration getGameRuleConfiguration() { return gameRuleConfiguration; }
-
     public void initStarting() {
         this.timerTask = new CountdownPhaseTask(15, 0, 0, 0);
         timerTask.runTaskTimer(this.plugin,0, 20);
@@ -108,6 +102,9 @@ public class GameManager extends AbstractManager {
     }
 
     public boolean start() {
+
+        // clear advancements
+        this.getAdvancementManager().clearAll();
 
         // start the timer
         this.getTimeManager().startTimer();
@@ -262,9 +259,14 @@ public class GameManager extends AbstractManager {
         this.getTeamsManager().saveTeams();
         this.getCustomBlockManager().saveCustomBlock();
         this.getItemsManager().save();
+        this.getAdvancementManager().save();
     }
 
     public boolean isAlcoolQualityInGame() {
         return this.gameConfiguration.isAlcoolQualityCraftOn();
+    }
+
+    public AdvancementManager getAdvancementManager() {
+        return this.advancementManager;
     }
 }

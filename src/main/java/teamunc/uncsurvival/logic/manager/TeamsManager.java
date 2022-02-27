@@ -23,13 +23,7 @@ public class TeamsManager extends AbstractManager implements Serializable {
 
     public void init() {
         // loading teamList
-        TeamList teamListLoaded = this.plugin.getFileManager().loadTeams();
-        if (teamListLoaded != null)
-            this.teams = teamListLoaded;
-        else {
-            this.teams = new TeamList();
-            this.plugin.getFileManager().saveTeams(this.teams);
-        }
+        this.teams = this.plugin.getFileManager().loadTeams();
     }
 
     public ArrayList<Team> getAllTeams() {
