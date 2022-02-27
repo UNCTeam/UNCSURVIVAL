@@ -11,9 +11,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.advancements.Advancement;
 import teamunc.uncsurvival.logic.customBlock.CustomBlock;
 import teamunc.uncsurvival.logic.interfaces.GoalCustomInterface;
 import teamunc.uncsurvival.logic.interfaces.TeamCustomInterface;
+import teamunc.uncsurvival.logic.manager.AdvancementManager;
 import teamunc.uncsurvival.logic.manager.ItemsManager;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.player.GamePlayer;
@@ -171,6 +173,13 @@ public class Team implements Serializable {
                             this.itemsProduction.set(i,this.itemsProduction.get(i) + itemStack.getAmount());
                             this.addScore(itemsManager.getGoalItemPrice(i,phase) * itemStack.getAmount());
                             block.getBlockInventory().remove(itemStack);
+
+                            // advancement
+                            AdvancementManager advancementManager = UNCSurvival.getInstance().getGameManager().getAdvancementManager();
+                            Advancement advancement = advancementManager.getAdvancement("precoce");
+                            if(!advancement.alreadyGranted()) {
+                                advancementManager.grantToATeam(this,advancement);
+                            }
                         }
                     }
                 }
@@ -288,6 +297,14 @@ public class Team implements Serializable {
     public void addRange(int rangeAdded) {
         this.range += rangeAdded;
         this.region.addRange(rangeAdded);
+
+        // advancement
+        AdvancementManager advancementManager = UNCSurvival.getInstance().getGameManager().getAdvancementManager();
+        Advancement advancement = advancementManager.getAdvancement("extension_de_territoire");
+        if(this.range >= 105
+            && !advancement.alreadyGranted()) {
+            advancementManager.grantToATeam(this,advancement);
+        }
     }
 
     public Location getInterfaceTeam() {

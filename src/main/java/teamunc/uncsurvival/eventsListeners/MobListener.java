@@ -3,10 +3,16 @@ package teamunc.uncsurvival.eventsListeners;
 import net.minecraft.world.entity.EnumCreatureType;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.advancements.Advancement;
+import teamunc.uncsurvival.logic.manager.AdvancementManager;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
+import teamunc.uncsurvival.logic.player.GamePlayer;
+import teamunc.uncsurvival.logic.team.Team;
 
 public class MobListener extends AbstractEventsListener{
     public MobListener(UNCSurvival plugin) {
@@ -49,6 +55,20 @@ public class MobListener extends AbstractEventsListener{
             e.getEntity().setHealth(e.getEntity().getHealth() * healthFact);
             e.getEntity().setCustomName(prefix + e.getEntity().getName());
             e.getEntity().setCustomNameVisible(true);
+        }
+    }
+
+    @EventHandler
+    public void onMobKill(EntityDeathEvent e) {
+        AdvancementManager advancementManager = this.plugin.getGameManager().getAdvancementManager();
+        Advancement advancement = advancementManager.getAdvancement("raciste");
+
+        if( e.getEntity().getType() == EntityType.WITHER
+            && !advancement.alreadyGranted()
+            && e.getEntity().getKiller() != null ){
+            Player p = e.getEntity().getKiller();
+            Team t = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(p);
+            advancementManager.grantToATeam(t,advancement);
         }
     }
 }

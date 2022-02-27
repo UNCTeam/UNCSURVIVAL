@@ -648,7 +648,7 @@ public class ItemsManager extends AbstractManager {
     }
 
     public void save() {
-        this.brewingControler.stop();
+        if (this.brewingControler != null) this.brewingControler.stop();
     }
 
     public Set<Material> getAllFoodOfTheGame() {

@@ -86,10 +86,6 @@ public class CustomBlockManager extends AbstractManager {
 
     public void loadCustomBlock() {
         this.customStorageBlockHashMap = this.plugin.getFileManager().loadBlockManager();
-        if(this.customStorageBlockHashMap == null) {
-            this.customStorageBlockHashMap = new HashMap<>();
-            Bukkit.broadcastMessage("aucun fichier");
-        }
     }
 
     public void saveCustomBlock() {

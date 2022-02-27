@@ -16,6 +16,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.advancements.Advancement;
+import teamunc.uncsurvival.logic.manager.AdvancementManager;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.team.Team;
 
@@ -53,6 +55,14 @@ public class CustomItemListener extends AbstractEventsListener {
                         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(baseValue + 2);
                         if ( (baseValue + 2) == 32 ) {
                             this.plugin.getMessageTchatManager().sendMessageToPlayer(" Vous avez maintenant votre vie au max ! Complétez votre vie avec l'armure en améthyste !", player, ChatColor.GOLD);
+
+                            // advancement
+                            AdvancementManager advancementManager = this.plugin.getGameManager().getAdvancementManager();
+                            Advancement advancement = advancementManager.getAdvancement("ca_fait_beaucoup_la_non");
+                            if(!advancement.alreadyGranted()) {
+                                Team t = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(player);
+                                advancementManager.grantToATeam(t,advancement);
+                            }
                         }
                     }
 

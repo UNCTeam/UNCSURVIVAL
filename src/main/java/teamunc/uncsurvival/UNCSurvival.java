@@ -60,6 +60,7 @@ public class UNCSurvival extends JavaPlugin {
         this.getCommand("food").setExecutor(new PlayerCmdExec(this));
         this.getCommand("f").setExecutor(new PlayerCmdExec(this));
         this.getCommand("activealcoolquality").setExecutor(new PlayerCmdExec(this));
+        this.getCommand("achievements").setExecutor(new TeamCmdExec(this));
 
         this.getCommand("reloadconfig").setExecutor(new ReloadConfigurationCmdExec(this));
     }
@@ -109,5 +110,8 @@ public class UNCSurvival extends JavaPlugin {
         this.gameManager.getTeamsManager().getAllTeams().forEach(team -> {
             team.onDisable();
         });
+
+        // give to every one the root advancement of UNCSURVIVAL
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"advancement grant @a only uncsurvival:root");
     }
 }
