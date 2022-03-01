@@ -45,21 +45,22 @@ public class BrewClock extends BukkitRunnable {
         
             ItemStack ing = bInv.getIngredient();
 
-            if (ing == null) return;
-            int maxIng = 0;
+            if (ing != null) {
+                int maxIng = 0;
 
-            for(int i = 0; i < 3; i++){
-                ItemStack base = bInv.getItem(i);
-                BrewingRecipe recipe = brewingControler.getRecipe(ing, base);
-                if(recipe != null){
-                    maxIng = Math.max(maxIng, recipe.getInputIngredient().getAmount());
-                    recipe.getAction().brew(stand, recipe, i);
+                for (int i = 0; i < 3; i++) {
+                    ItemStack base = bInv.getItem(i);
+                    BrewingRecipe recipe = brewingControler.getRecipe(ing, base);
+                    if ( recipe != null ) {
+                        maxIng = Math.max(maxIng, recipe.getInputIngredient().getAmount());
+                        recipe.getAction().brew(stand, recipe, i);
+                    }
                 }
-            }
 
-            ing.setAmount( ing.getAmount() - maxIng );
-            if(ing.getAmount() == 0) ing = new ItemStack(Material.AIR);
-            bInv.setIngredient(ing);
+                ing.setAmount(ing.getAmount() - maxIng);
+                if ( ing.getAmount() == 0 ) ing = new ItemStack(Material.AIR);
+                bInv.setIngredient(ing);
+            }
             this.cancel();
         }
     }
@@ -83,7 +84,8 @@ public class BrewClock extends BukkitRunnable {
     }
 
     private void updateTime(){
-        this.stand.setBrewingTime( (int)(400 * (1 - (double)brewTime / (double)stopTime)) );
+        Bukkit.getConsoleSender().sendMessage("OH : " + this.brewTime);
+        //this.stand.setBrewingTime( (int)(400 * (1 - (double)brewTime / (double)stopTime)) );
         //this.stand.update();
     }
 
