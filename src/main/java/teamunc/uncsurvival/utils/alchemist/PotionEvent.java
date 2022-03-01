@@ -2,6 +2,7 @@ package teamunc.uncsurvival.utils.alchemist;
 
 import java.util.*;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BrewingStand;
 import org.bukkit.entity.*;
@@ -24,26 +25,28 @@ public class PotionEvent implements Listener {
         this.brewingControler = brewingControler;
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onBrewingInventoryClickEvent(InventoryMoveItemEvent event) {
         Inventory inv = event.getDestination();
 
         if (inv == null || inv.getType() != InventoryType.BREWING) return; // If not brewing stand
-
+        java.util.logging.Logger l = plugin.getLogger();
         BrewerInventory bInv = (BrewerInventory)inv;
-        
+
         ItemStack ing = bInv.getIngredient();
-        
+
         boolean canBrew = false;
         int maxTime = 0;
         int maxFuel = 0;
-        
+
         BrewingStand bStand = bInv.getHolder();
         BrewClock brewClock = activeBrews.get(bStand);
 
         int fuel = BrewingControler.totalFuelInBrewingStand(bStand);
 
         if(brewClock != null && !brewClock.isCancelled()) fuel += brewClock.getFuelUse();
+
+        l.info("totalFuel: " + fuel);
 
         for(int i = 0; i < 3; i++){
             ItemStack base = bInv.getItem(i);
@@ -52,35 +55,102 @@ public class PotionEvent implements Listener {
                 canBrew = true;
                 maxTime = Math.max(maxTime, r.getCookingTime());
                 maxFuel = Math.max(maxFuel, r.getFuelUse());
+                l.info(r.toString());
             }
         }
+
+        l.info("canBrew: " + canBrew);
+
+        l.info(activeBrews.toString());
 
         if(brewClock != null && !brewClock.isCancelled()){
             if(!canBrew){
                 brewClock.cancel();
                 brewClock = null;
+                l.info("Stopped brew");
             }
             else{
                 if(brewClock.getFuelUse() != maxFuel)
                     brewClock.setFuelUse(maxFuel);
                 if(brewClock.getStopTime() != maxTime)
                     brewClock.setStopTime(maxTime);
+                l.info("Changed active brew");
             }
         }
         else{
             if(canBrew){
                 brewClock = new BrewClock(plugin, brewingControler,  bStand, maxTime, maxFuel);
                 activeBrews.put(bStand, brewClock);
+                l.info("Started new brew");
             }
         }
     }
 
-    @EventHandler
-    private void onBrewerInventoryClick(InventoryClickEvent event){
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onBrewingInventoryClickEvent(InventoryClickEvent event) {
         Inventory inv = event.getClickedInventory();
 
-        if (inv == null || inv.getType() != InventoryType.BREWING) return;
+        if (inv == null || inv.getType() != InventoryType.BREWING) return; // If not brewing stand
 
+        this.manageBrewerInventory(event);
+
+        BrewerInventory bInv = (BrewerInventory)inv;
+
+        ItemStack ing = bInv.getIngredient();
+
+        boolean canBrew = false;
+        int maxTime = 0;
+        int maxFuel = 0;
+
+        BrewingStand bStand = bInv.getHolder();
+        BrewClock brewClock = activeBrews.get(bStand);
+
+        java.util.logging.Logger l = plugin.getLogger();
+        int fuel = BrewingControler.totalFuelInBrewingStand(bStand);
+
+        if(brewClock != null && !brewClock.isCancelled()) fuel += brewClock.getFuelUse();
+
+        l.info("totalFuel: " + fuel);
+
+        for(int i = 0; i < 3; i++){
+            ItemStack base = bInv.getItem(i);
+            BrewingRecipe r = brewingControler.getRecipe(ing, base, fuel);
+            if(r != null){
+                canBrew = true;
+                maxTime = Math.max(maxTime, r.getCookingTime());
+                maxFuel = Math.max(maxFuel, r.getFuelUse());
+                l.info(r.toString());
+            }
+        }
+
+        l.info("canBrew: " + canBrew);
+
+        l.info(activeBrews.toString());
+
+        if(brewClock != null && !brewClock.isCancelled()){
+            if(!canBrew){
+                brewClock.cancel();
+                brewClock = null;
+                l.info("Stopped brew");
+            }
+            else{
+                if(brewClock.getFuelUse() != maxFuel)
+                    brewClock.setFuelUse(maxFuel);
+                if(brewClock.getStopTime() != maxTime)
+                    brewClock.setStopTime(maxTime);
+                l.info("Changed active brew");
+            }
+        }
+        else{
+            if(canBrew){
+                brewClock = new BrewClock(plugin, brewingControler,  bStand, maxTime, maxFuel);
+                activeBrews.put(bStand, brewClock);
+                l.info("Started new brew");
+            }
+        }
+    }
+
+    private void manageBrewerInventory(InventoryClickEvent event){
         event.setCancelled(true);
 
         ClickType cl = event.getClick();
@@ -93,7 +163,7 @@ public class PotionEvent implements Listener {
 
         ItemStack empty = new ItemStack(Material.AIR);
         boolean dropAll = true;
-        
+
         switch (cl) {
             case LEFT: {
                 if(slot.isSimilar(held)){ // Combine slot and held stacks (limited to max stack size)
@@ -119,7 +189,7 @@ public class PotionEvent implements Listener {
                 if(heldC > 0 && (slot.isSimilar(held) || slotC == 0) && slotC + 1 <= held.getMaxStackSize()){ // Add one item to slot if empty or similar
                     held.setAmount(slotC + 1);
                     event.setCurrentItem(held);
-                    if(heldC - 1 > 0) 
+                    if(heldC - 1 > 0)
                         held.setAmount(heldC - 1);
                     else
                         held = empty;
@@ -162,7 +232,7 @@ public class PotionEvent implements Listener {
                 p.getInventory().setItemInMainHand(hand);
 
                 int drop = (dropAll) ? slotC : 1;
-                if(slotC - drop > 0) 
+                if(slotC - drop > 0)
                     slot.setAmount(slotC - drop);
                 else
                     slot = empty;
@@ -198,12 +268,12 @@ public class PotionEvent implements Listener {
                         }
                     }
                     p.setItemOnCursor(held);
-                    
+
                     i++;
                 }
                 if(held.getAmount() < held.getMaxStackSize()){ // If still empty search player inventory
                     i = 0;
-                    for(ItemStack stack : p.getInventory().getContents()){ 
+                    for(ItemStack stack : p.getInventory().getContents()){
                         if(stack != null && stack.isSimilar(held)){
                             int stackC = stack.getAmount();
                             if(stackC + held.getAmount() > held.getMaxStackSize()){
@@ -218,7 +288,7 @@ public class PotionEvent implements Listener {
                             }
                         }
                         p.setItemOnCursor(held);
-                        
+
                         i++;
                     }
                 }

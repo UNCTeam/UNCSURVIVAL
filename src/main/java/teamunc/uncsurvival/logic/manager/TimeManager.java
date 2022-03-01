@@ -1,12 +1,18 @@
 package teamunc.uncsurvival.logic.manager;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitScheduler;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.features.thirst.ThirstActualiser;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
+import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.tasks.CountdownPhaseTask;
+
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class TimeManager extends AbstractManager{
 
@@ -119,6 +125,17 @@ public class TimeManager extends AbstractManager{
 
         // dicrease Water Level of 1
         if (this.minutes%2 == 0) ThirstActualiser.getInstance().decreaseWaterForAllRegisteredPlayers(1);
+
+        // gourde ?
+        for(GamePlayer player : this.plugin.getGameManager().getParticipantManager().getGamePlayers()) {
+            if ( player.getBukkitPlayer() != null && player.getWaterLevel() <= 2 && player.getBukkitPlayer().getInventory().contains(this.plugin.getGameManager().getItemsManager().createGourde())) {
+                ItemStack gourde = (ItemStack) Arrays.stream(player.getBukkitPlayer().getInventory().getContents())
+                        .filter(itemStack -> itemStack != null && this.plugin.getGameManager().getItemsManager().isCustomItem(itemStack, "GOURDE")).toArray()[0];
+                if (gourde != null) {
+                    this.plugin.getGameManager().getItemsManager().actionOfGourde(player.getBukkitPlayer(), gourde);
+                }
+            }
+        }
 
     }
 

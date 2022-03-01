@@ -1,10 +1,13 @@
 package teamunc.uncsurvival.features.thirst;
 
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.manager.GameManager;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ThirstActualiser {
     //# SINGLETON
