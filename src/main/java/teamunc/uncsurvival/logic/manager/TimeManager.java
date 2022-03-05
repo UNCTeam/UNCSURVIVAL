@@ -1,6 +1,7 @@
 package teamunc.uncsurvival.logic.manager;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -10,6 +11,8 @@ import teamunc.uncsurvival.features.thirst.ThirstActualiser;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.tasks.CountdownPhaseTask;
+import teamunc.uncsurvival.utils.LoggerFile;
+import teamunc.uncsurvival.utils.Region;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -113,6 +116,25 @@ public class TimeManager extends AbstractManager{
                 }
             }
         }
+
+        // check for players locations
+        Bukkit.getServer().getOnlinePlayers().forEach(player -> {
+            plugin.getGameManager().getTeamsManager().getAllTeams().forEach(team -> {
+                Region region = team.getRegion();
+                // dans la liste des joueurs present dans la region mais les locations ne correspondent plus
+                if (region.inRegion(player.getUniqueId().toString()) && !region.contains(player.getLocation())) {
+                    plugin.getMessageTchatManager().sendMessageToPlayer("§6Vous sortez de la zone de la team " + team.getChatColor() + team.getName() + "§6.",player);
+                    region.leaveTheRegion(player.getUniqueId().toString());
+                } else // pas dans la liste mais present en locations
+                    if (!region.inRegion(player.getUniqueId().toString()) && region.contains(player.getLocation())) {
+                    plugin.getMessageTchatManager().sendMessageToPlayer("§6Vous entrez dans la zone de la team " + team.getChatColor() + team.getName() + "§6.", player);
+                    region.enterInRegion(player.getUniqueId().toString());
+                }
+            });
+        });
+
+        // writes logs
+        LoggerFile.WriteNextLine();
     }
 
     public void actionsEachMinutes() {

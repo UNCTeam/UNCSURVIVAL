@@ -103,6 +103,10 @@ public class playerInGameActionsListener extends AbstractEventsListener {
                     if ( itemStack.hasItemMeta() && itemStack.getItemMeta().getPersistentDataContainer().has(key, PersistentDataType.STRING) && itemStack.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING).equals("MODULE") ) {
 
                         Team team = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(inventoryView.getPlayer().getName());
+                        if (team == null) {
+                            event.setCancelled(true);
+                            return;
+                        }
                         if (team.getRange() < 105) team.addRange(10);
                         else {
                             UNCSurvival.getInstance().getMessageTchatManager().sendMessageToPlayer("Votre équipe possède déjà la protection maximale !",event.getWhoClicked(), ChatColor.RED);
