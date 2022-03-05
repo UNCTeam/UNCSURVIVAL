@@ -19,6 +19,7 @@ public class TeamList implements Serializable {
     }
 
     public void removeTeam(Team team) {
+        team.getRegion().unforceChunksWithinChunkLocation(team.getSpawnPoint().getWorld());
         this.teams.remove(team);
     }
 

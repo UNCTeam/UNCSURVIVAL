@@ -25,7 +25,6 @@ public class Region implements Serializable{
 
         Location cornerMIN = new Location(loc.getWorld(),this.minX,0,this.minZ);
         Location cornerMAX = new Location(loc.getWorld(),this.maxX,0,this.maxZ);
-
         this.forceChunksWithinChunkLocation(cornerMIN.getChunk(),cornerMAX.getChunk());
     }
 
@@ -35,6 +34,23 @@ public class Region implements Serializable{
                 if (!chunkMax.getWorld().getChunkAt(i,j).isForceLoaded()) {
                     Bukkit.getConsoleSender().sendMessage("force the chunk at : " + i + " " + j);
                     chunkMax.getWorld().getChunkAt(i, j).setForceLoaded(true);
+                }
+            }
+        }
+    }
+
+    public void unforceChunksWithinChunkLocation(World world) {
+        Location cornerMIN = new Location(world,this.minX,0,this.minZ);
+        Location cornerMAX = new Location(world,this.maxX,0,this.maxZ);
+
+        Chunk chunkMin = cornerMIN.getChunk();
+        Chunk chunkMax = cornerMAX.getChunk();
+
+        for (int i = chunkMin.getX() ; i <= chunkMax.getX(); i++) {
+            for (int j = chunkMin.getZ() ; j <= chunkMax.getZ(); j++) {
+                if (chunkMax.getWorld().getChunkAt(i,j).isForceLoaded()) {
+                    Bukkit.getConsoleSender().sendMessage("unforce the chunk at : " + i + " " + j);
+                    chunkMax.getWorld().getChunkAt(i, j).setForceLoaded(false);
                 }
             }
         }
