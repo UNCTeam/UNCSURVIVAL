@@ -546,6 +546,24 @@ public class ItemsManager extends AbstractManager {
         growth.setIngredient('-',Material.REDSTONE_BLOCK);
         this.plugin.getServer().addRecipe(growth);
 
+        // GOURDE
+        ShapedRecipe gourde = new ShapedRecipe(new NamespacedKey(this.plugin,"craftGourde"),this.createGourde());
+        gourde.shape("*/*","^-^","_^_");
+        gourde.setIngredient('*',Material.STICK);
+        gourde.setIngredient('/',new RecipeChoice.MaterialChoice(Material.JUNGLE_PLANKS,
+                Material.ACACIA_PLANKS,
+                Material.BIRCH_PLANKS,
+                Material.CRIMSON_PLANKS,
+                Material.OAK_PLANKS,
+                Material.SPRUCE_PLANKS,
+                Material.DARK_OAK_PLANKS,
+                Material.WARPED_PLANKS
+        ));
+        gourde.setIngredient('^',Material.GLASS_PANE);
+        gourde.setIngredient('_',Material.STRING);
+        gourde.setIngredient('-',Material.BUCKET);
+        this.plugin.getServer().addRecipe(gourde);
+
         // Module
         ShapedRecipe module = new ShapedRecipe(new NamespacedKey(this.plugin,"craftModule"),this.createModule());
         module.shape("*^*","^-^","*/*");
