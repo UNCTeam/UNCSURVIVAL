@@ -36,8 +36,6 @@ public class MincerBlock extends CustomStorageBlock {
             }
             fillFromInput();
             exportOutput();
-        } else {
-            Bukkit.broadcastMessage("Le block est trop loin");
         }
     }
 

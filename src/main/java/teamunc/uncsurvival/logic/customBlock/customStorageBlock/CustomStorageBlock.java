@@ -66,8 +66,7 @@ public abstract class CustomStorageBlock implements Serializable {
     }
 
     public boolean isBlockLoaded() {
-        Bukkit.broadcastMessage(this.location.getChunk().isLoaded() + "");
-        return this.location.getChunk().isLoaded();
+        return this.location.getChunk().isEntitiesLoaded();
     }
 
     public int getProcessingDuration() {
