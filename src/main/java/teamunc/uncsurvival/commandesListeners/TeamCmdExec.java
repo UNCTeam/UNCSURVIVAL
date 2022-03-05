@@ -251,10 +251,10 @@ public class TeamCmdExec extends AbstractCommandExecutor{
                 if(sender instanceof Player) {
                     Player player = (Player) sender;
                     String phaseMsg = "§8--------------| §b§lPhase Info §8|---------------\n百\n\n百\n\n";
-                    phaseMsg += "§f保\n" + "§8百\n百\n百\n百\n百\n百\n百\n百\n百\n百\nt§f包\n百\n百\n百\n百\n百\n百";
+                    phaseMsg += "§f保\n" + "§8百\n百\n百\n百\n百\n百\n百\n百\n百\n百\n§f包\n百\n百\n百\n百\n百\n百";
                     player.sendMessage(phaseMsg);
-                    break;
                 }
+                break;
             case "achievements":
                     StringBuilder advancementStr = new StringBuilder();
                     advancementStr.append("§8--------------| §b§l Achievements §8|---------------\n \n");
