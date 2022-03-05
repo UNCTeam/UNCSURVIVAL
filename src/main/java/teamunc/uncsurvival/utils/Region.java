@@ -1,5 +1,7 @@
 package teamunc.uncsurvival.utils;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import teamunc.uncsurvival.UNCSurvival;
@@ -17,20 +19,34 @@ public class Region implements Serializable{
         this.maxX = loc.getBlockX()+range;
         this.minZ = loc.getBlockZ()-range;
         this.maxZ = loc.getBlockZ()+range;
+
+        Location cornerMIN = new Location(loc.getWorld(),this.minX,0,this.minZ);
+        Location cornerMAX = new Location(loc.getWorld(),this.maxX,0,this.maxZ);
+
+        this.forceChunksWithinChunkLocation(cornerMIN.getChunk(),cornerMAX.getChunk());
     }
 
-    public Region( int x1, int z1, int x2, int z2) {
-        minX = Math.min(x1, x2);
-        minZ = Math.min(z1, z2);
-        maxX = Math.max(x1, x2);
-        maxZ = Math.max(z1, z2);
+    public void forceChunksWithinChunkLocation(Chunk chunkMin, Chunk chunkMax) {
+        for (int i = chunkMin.getX() ; i <= chunkMax.getX(); i++) {
+            for (int j = chunkMin.getZ() ; j <= chunkMax.getZ(); j++) {
+                if (!chunkMax.getWorld().getChunkAt(i,j).isForceLoaded()) {
+                    Bukkit.getConsoleSender().sendMessage("force the chunk at : " + i + " " + j);
+                    chunkMax.getWorld().getChunkAt(i, j).setForceLoaded(true);
+                }
+            }
+        }
     }
 
-    public void addRange(int addedRange) {
+    public void addRange(World world, int addedRange) {
         this.minX -= addedRange;
         this.maxX += addedRange;
         this.minZ -= addedRange;
         this.maxZ += addedRange;
+
+        Location cornerMIN = new Location(world,this.minX,0,this.minZ);
+        Location cornerMAX = new Location(world,this.maxX,0,this.maxZ);
+
+        this.forceChunksWithinChunkLocation(cornerMIN.getChunk(),cornerMAX.getChunk());
     }
 
     public World getWorld() {

@@ -52,8 +52,12 @@ public class BrewingControler {
     public void checkHopperForBrewingStand() {
         for (Location loc :
                 this.brewingStandLocations) {
-            BrewingStand stand = (BrewingStand) loc.getBlock().getState();
-            checkHopper(stand);
+            try {
+                BrewingStand stand = (BrewingStand) loc.getBlock().getState();
+                checkHopper(stand);
+            } catch (Exception e) {
+                this.removeStand(loc);
+            }
         }
     }
 
