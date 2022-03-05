@@ -316,4 +316,15 @@ public class FileManager extends AbstractManager{
 
         }
     }
+
+    public void writeInLogFile(String line) {
+        String path = pluginDataFile.getPath() + "/logs.txt";
+        try {
+            FileWriter writer = new FileWriter(path,true);
+            writer.append(line);
+            writer.append(System.lineSeparator());
+            writer.close();
+        } catch (Exception e){}
+
+    }
 }

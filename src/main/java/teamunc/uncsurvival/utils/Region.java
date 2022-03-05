@@ -7,12 +7,15 @@ import org.bukkit.World;
 import teamunc.uncsurvival.UNCSurvival;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Region implements Serializable{
     private int minX;
     private int maxX;
     private int minZ;
     private int maxZ;
+    private ArrayList<String> uuidsInRegion = new ArrayList<>();
 
     public Region(Location loc, int range) {
         this.minX = loc.getBlockX()-range;
@@ -88,6 +91,20 @@ public class Region implements Serializable{
         return region.getWorld().equals(getWorld()) &&
                 !(region.getMinX() > maxX || region.getMinZ() > maxZ ||
                         minZ > region.getMaxX() || minZ > region.getMaxZ());
+    }
+
+    public void enterInRegion(String uuid) {
+        this.uuidsInRegion.add(uuid);
+        LoggerFile.AppendLineToWrite("[REGION] L'UUID "+uuid+ " ENTRE DANS LA REGION " + this + " LE " + LocalDateTime.now());
+    }
+
+    public void leaveTheRegion(String uuid) {
+        this.uuidsInRegion.remove(uuid);
+        LoggerFile.AppendLineToWrite("[REGION] L'UUID "+uuid+ " QUITTE LA REGION " + this + " LE " + LocalDateTime.now());
+    }
+
+    public boolean inRegion(String uuid) {
+        return this.uuidsInRegion.contains(uuid);
     }
 
     @Override

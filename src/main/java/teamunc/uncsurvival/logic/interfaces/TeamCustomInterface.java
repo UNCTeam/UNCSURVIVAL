@@ -24,7 +24,7 @@ public class TeamCustomInterface extends GameCustomInterface{
             nameFormated += "\u258B";
         }
 
-        String teamNameTrad = this.reduceAt(25) + "       " + nameFormated;
+        String teamNameTrad = this.reduceAt(24) + "       " + nameFormated;
         teamNameTrad += this.translateInInterfaceDisplay("" + team.getRange(),5);
         this.inv = Bukkit.createInventory(null,27,name + teamNameTrad);
         return this.inv;
