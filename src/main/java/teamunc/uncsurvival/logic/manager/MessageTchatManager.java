@@ -11,7 +11,7 @@ public class MessageTchatManager extends AbstractManager{
         super(plugin);
     }
 
-    private String prefix = "[UNC-SURVIVAL] : ";
+    private String prefix = "§l[UNC] : §6";
 
     public void sendGeneralMesssage(String message, ChatColor color) {
         Bukkit.broadcastMessage(this.prefix + color + message);

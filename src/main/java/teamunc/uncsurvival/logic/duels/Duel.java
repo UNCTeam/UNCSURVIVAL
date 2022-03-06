@@ -1,8 +1,10 @@
 package teamunc.uncsurvival.logic.duels;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -14,27 +16,21 @@ import java.util.*;
 public class Duel {
 
     // Static
-    private static ArrayList<Location> spawns = new ArrayList<>(
+    private static final ArrayList<Location> spawns = new ArrayList<>(
         List.of(
             new Location(UNCSurvival.getInstance().getMainWorld(),0,45,15,180,0),
             new Location(UNCSurvival.getInstance().getMainWorld(),0,45,-15,0,0)
         )
     );
 
-    // saved data of players
-    private HashMap<UUID, ItemStack[]> inventories = new HashMap<>();
-    private HashMap<UUID, Double> lifes = new HashMap<>();
-    private HashMap<UUID, Location> locations = new HashMap<>();
-    private HashMap<UUID, Collection<PotionEffect>> effects = new HashMap<>();
-
-
-    private ArrayList<GamePlayer> gamePlayersInGame;
+    private final ArrayList<PlayerRestorationInfo> playerRestorationInfos = new ArrayList<>();
     private ItemStack loot;
 
     public Duel(ArrayList<GamePlayer> gamePlayersInGame) {
-        this.gamePlayersInGame = gamePlayersInGame;
+
+        gamePlayersInGame.forEach(gamePlayer -> playerRestorationInfos.add(new PlayerRestorationInfo(gamePlayer)));
+
         randomLootGiven();
-        saveDataOfPlayers();
     }
 
     private void randomLootGiven() {
@@ -53,23 +49,15 @@ public class Duel {
         }
     }
 
-    private void saveDataOfPlayers() {
-        for (GamePlayer p : this.gamePlayersInGame) {
-            Player pl = p.getBukkitPlayer();
-            UUID playerUUID = pl.getUniqueId();
-            this.inventories.put(playerUUID,pl.getInventory().getContents());
-            this.lifes.put(playerUUID,pl.getHealth());
-            this.locations.put(playerUUID,pl.getLocation());
-            this.effects.put(playerUUID,pl.getActivePotionEffects());
-        }
-    }
-
     public void startDuel() {
-        ArrayList<GamePlayer> playersInGame = this.gamePlayersInGame;
-        for (int i = 0; i < playersInGame.size(); i++) {
-            GamePlayer gp = playersInGame.get(i);
+        ArrayList<PlayerRestorationInfo> playersResto = this.playerRestorationInfos;
+        for (int i = 0; i < playersResto.size(); i++) {
+            GamePlayer gp = playersResto.get(i).getGamePlayer();
+            Player p = playersResto.get(i).getPlayer();
             gp.setInDuel(true);
-            Player p = gp.getBukkitPlayer();
+
+            // heal
+            p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 
             // tp
             p.teleport(spawns.get(i));
@@ -77,7 +65,7 @@ public class Duel {
             // remove effects
             p.getActivePotionEffects().stream().map(PotionEffect::getType).forEach(p::removePotionEffect);
 
-            UNCSurvival.getInstance().getMessageTchatManager().sendMessageToPlayer("Info : vous récupérerez tous votre stuff !",p, ChatColor.GOLD);
+            UNCSurvival.getInstance().getMessageTchatManager().sendMessageToPlayer("Info : vous récupérerez tout votre stuff !",p, ChatColor.GOLD);
             UNCSurvival.getInstance().getMessageTchatManager().sendMessageToPlayer("Loot possible en cas de victoire :\n" +
                     "40% -> 48 irons ingots.\n" +
                     "35% -> 32 golds ingots.\n" +
@@ -91,19 +79,13 @@ public class Duel {
 
     public void endDuel(GamePlayer winner) {
         // regiving data for each Players
-        for (GamePlayer gamePlayer : this.gamePlayersInGame) {
-            Player pl = gamePlayer.getBukkitPlayer();
-            UUID playerUUID = pl.getUniqueId();
-            pl.getInventory().setContents(this.inventories.get(playerUUID));
-            pl.setHealth(this.lifes.get(playerUUID));
-
+        for (PlayerRestorationInfo playerRestorationInfo : this.playerRestorationInfos) {
+            Player pl = playerRestorationInfo.getPlayer();
+            GamePlayer gamePlayer = playerRestorationInfo.getGamePlayer();
             pl.getActivePotionEffects().stream().map(PotionEffect::getType).forEach(pl::removePotionEffect);
-            for (PotionEffect pE : this.effects.get(playerUUID)) {
-                pl.addPotionEffect(pE);
-            }
-
             gamePlayer.setInDuel(false);
-            pl.teleport(this.locations.get(playerUUID));
+
+            playerRestorationInfo.apply();
         }
 
         // giving loot
@@ -124,6 +106,10 @@ public class Duel {
     }
 
     public ArrayList<GamePlayer> getGamePlayersInGame() {
-        return gamePlayersInGame;
+        ArrayList<GamePlayer> res = new ArrayList<>();
+        for (PlayerRestorationInfo pri : playerRestorationInfos) {
+            res.add(pri.getGamePlayer());
+        }
+        return res;
     }
 }

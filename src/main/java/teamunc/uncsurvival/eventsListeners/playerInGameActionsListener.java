@@ -71,19 +71,27 @@ public class playerInGameActionsListener extends AbstractEventsListener {
             Player victim = (Player) e.getEntity();
             if (e.getDamage() >= victim.getHealth() && this.plugin.getGameManager().getParticipantManager().getGamePlayer(victim.getName()).isInDuel()) { // DUEL
                 e.setCancelled(true);
-                Duel duel = this.plugin.getGameManager().getGameEventsManager().getDuels().remove(0);
-                GamePlayer winner = duel.getGamePlayersInGame().stream().filter(gamePlayer -> gamePlayer.getUUID() != victim.getUniqueId()).findFirst().get();
-                duel.endDuel(winner);
+
+                Duel duel = this.plugin.getGameManager().getGameEventsManager().getDuel();
+                for (GamePlayer gp : duel.getGamePlayersInGame()) {
+                    if (gp.getBukkitPlayer().getUniqueId() != victim.getUniqueId()) duel.endDuel(gp);
+                }
+
+                this.plugin.getGameManager().getGameEventsManager().endDuel();
             }
         }
     }
 
     @EventHandler
     public void onPlayerDeconnect(PlayerQuitEvent e) {
-        if (this.plugin.getGameManager().getParticipantManager().getGamePlayer(e.getPlayer().getName()).isInDuel()) {
-            Duel duel = this.plugin.getGameManager().getGameEventsManager().getDuels().remove(0);
-            GamePlayer winner = duel.getGamePlayersInGame().stream().filter(gamePlayer -> gamePlayer.getUUID() != e.getPlayer().getUniqueId()).findFirst().get();
-            duel.endDuel(winner);
+        Player player = e.getPlayer();
+        if (this.plugin.getGameManager().getParticipantManager().getGamePlayer(player.getName()).isInDuel()) {
+            Duel duel = this.plugin.getGameManager().getGameEventsManager().getDuel();
+            for (GamePlayer gp : duel.getGamePlayersInGame()) {
+                if (gp.getBukkitPlayer().getUniqueId() != player.getUniqueId()) duel.endDuel(gp);
+            }
+
+            this.plugin.getGameManager().getGameEventsManager().endDuel();
         }
     }
 

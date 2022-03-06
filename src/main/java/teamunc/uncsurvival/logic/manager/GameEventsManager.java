@@ -20,7 +20,7 @@ import java.util.*;
 public class GameEventsManager extends AbstractManager{
     private final int TAUX_COVID = 2;
     private final int TAUX_FAMINE = 1;
-    private ArrayList<Duel> duels = new ArrayList<>();
+    private Duel actualDuel;
 
     public GameEventsManager(UNCSurvival plugin) {
         super(plugin);
@@ -140,27 +140,31 @@ public class GameEventsManager extends AbstractManager{
         if (playersSelected != null) {
             plugin.getMessageTchatManager().sendGeneralMesssage(
                     "§6Les joueurs "
-                    + playersSelected.get(1).getTeamColor()
+                    + playersSelected.get(0).getTeamColor()
                     + playersSelected.get(0).getBukkitPlayer().getName()
                     + "§6 et "
                     + playersSelected.get(1).getTeamColor()
                     + playersSelected.get(1).getBukkitPlayer().getName()
                     + "§6 vont se battre !"
             );
-            Duel duel = new Duel(playersSelected);
-            this.duels.add(duel);
-            duel.startDuel();
+            this.actualDuel = new Duel(playersSelected);
+
+            this.actualDuel.startDuel();
 
         } else {
             Bukkit.getConsoleSender().sendMessage("Une erreur avec le duel est survenu, aleatoire de joueur po bon");
         }
     }
 
-    public ArrayList<Duel> getDuels() {
-        return duels;
+    public Duel getDuel() {
+        return this.actualDuel;
     }
 
     public void forceStopDuels() {
-        this.duels.forEach(duel -> duel.endDuel(null));
+        if (this.actualDuel != null) this.actualDuel.endDuel(null);
+    }
+
+    public void endDuel() {
+        this.actualDuel = null;
     }
 }
