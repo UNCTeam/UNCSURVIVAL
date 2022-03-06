@@ -1,36 +1,71 @@
 package teamunc.uncsurvival.utils;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import teamunc.uncsurvival.UNCSurvival;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Region implements Serializable{
     private int minX;
     private int maxX;
     private int minZ;
     private int maxZ;
+    private ArrayList<String> uuidsInRegion = new ArrayList<>();
 
     public Region(Location loc, int range) {
         this.minX = loc.getBlockX()-range;
         this.maxX = loc.getBlockX()+range;
         this.minZ = loc.getBlockZ()-range;
         this.maxZ = loc.getBlockZ()+range;
+
+        Location cornerMIN = new Location(loc.getWorld(),this.minX,0,this.minZ);
+        Location cornerMAX = new Location(loc.getWorld(),this.maxX,0,this.maxZ);
+        this.forceChunksWithinChunkLocation(cornerMIN.getChunk(),cornerMAX.getChunk());
     }
 
-    public Region( int x1, int z1, int x2, int z2) {
-        minX = Math.min(x1, x2);
-        minZ = Math.min(z1, z2);
-        maxX = Math.max(x1, x2);
-        maxZ = Math.max(z1, z2);
+    public void forceChunksWithinChunkLocation(Chunk chunkMin, Chunk chunkMax) {
+        for (int i = chunkMin.getX() ; i <= chunkMax.getX(); i++) {
+            for (int j = chunkMin.getZ() ; j <= chunkMax.getZ(); j++) {
+                if (!chunkMax.getWorld().getChunkAt(i,j).isForceLoaded()) {
+                    Bukkit.getConsoleSender().sendMessage("force the chunk at : " + i + " " + j);
+                    chunkMax.getWorld().getChunkAt(i, j).setForceLoaded(true);
+                }
+            }
+        }
     }
 
-    public void addRange(int addedRange) {
+    public void unforceChunksWithinChunkLocation(World world) {
+        Location cornerMIN = new Location(world,this.minX,0,this.minZ);
+        Location cornerMAX = new Location(world,this.maxX,0,this.maxZ);
+
+        Chunk chunkMin = cornerMIN.getChunk();
+        Chunk chunkMax = cornerMAX.getChunk();
+
+        for (int i = chunkMin.getX() ; i <= chunkMax.getX(); i++) {
+            for (int j = chunkMin.getZ() ; j <= chunkMax.getZ(); j++) {
+                if (chunkMax.getWorld().getChunkAt(i,j).isForceLoaded()) {
+                    Bukkit.getConsoleSender().sendMessage("unforce the chunk at : " + i + " " + j);
+                    chunkMax.getWorld().getChunkAt(i, j).setForceLoaded(false);
+                }
+            }
+        }
+    }
+
+    public void addRange(World world, int addedRange) {
         this.minX -= addedRange;
         this.maxX += addedRange;
         this.minZ -= addedRange;
         this.maxZ += addedRange;
+
+        Location cornerMIN = new Location(world,this.minX,0,this.minZ);
+        Location cornerMAX = new Location(world,this.maxX,0,this.maxZ);
+
+        this.forceChunksWithinChunkLocation(cornerMIN.getChunk(),cornerMAX.getChunk());
     }
 
     public World getWorld() {
@@ -72,6 +107,20 @@ public class Region implements Serializable{
         return region.getWorld().equals(getWorld()) &&
                 !(region.getMinX() > maxX || region.getMinZ() > maxZ ||
                         minZ > region.getMaxX() || minZ > region.getMaxZ());
+    }
+
+    public void enterInRegion(String uuid) {
+        this.uuidsInRegion.add(uuid);
+        LoggerFile.AppendLineToWrite("[REGION] L'UUID "+uuid+ " ENTRE DANS LA REGION " + this + " LE " + LocalDateTime.now());
+    }
+
+    public void leaveTheRegion(String uuid) {
+        this.uuidsInRegion.remove(uuid);
+        LoggerFile.AppendLineToWrite("[REGION] L'UUID "+uuid+ " QUITTE LA REGION " + this + " LE " + LocalDateTime.now());
+    }
+
+    public boolean inRegion(String uuid) {
+        return this.uuidsInRegion.contains(uuid);
     }
 
     @Override

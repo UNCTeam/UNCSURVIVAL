@@ -1,5 +1,6 @@
 package teamunc.uncsurvival.logic.manager;
 
+import com.google.common.base.MoreObjects;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
@@ -8,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.logic.duels.Duel;
 import teamunc.uncsurvival.logic.gameStats.GameStats;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.player.GamePlayer;
@@ -18,6 +20,7 @@ import java.util.*;
 public class GameEventsManager extends AbstractManager{
     private final int TAUX_COVID = 2;
     private final int TAUX_FAMINE = 1;
+    private Duel actualDuel;
 
     public GameEventsManager(UNCSurvival plugin) {
         super(plugin);
@@ -73,7 +76,7 @@ public class GameEventsManager extends AbstractManager{
                         GamePlayer gamePlayerToCovid = this.plugin.getGameManager().getParticipantManager().getGamePlayer(e.getName());
                         if (!gamePlayerToCovid.isCovided()) {
                             gamePlayerToCovid.ActiveCovided();
-                            this.plugin.getMessageTchatManager().sendGeneralMesssage("§b§l" + gp.getBukkitPlayer().getName() + "§6§l vient de covider : §b§l" + gamePlayerToCovid.getBukkitPlayer().getName());
+                            this.plugin.getMessageTchatManager().sendGeneralMesssage("§b§l" + gp.getTeamColor() + gp.getBukkitPlayer().getName() + "§6§l vient de covider : §b§l" + gamePlayerToCovid.getTeamColor() + gamePlayerToCovid.getBukkitPlayer().getName());
                         }
                     }
                 }
@@ -126,4 +129,42 @@ public class GameEventsManager extends AbstractManager{
         }
     }
 
+    public void startDuel() {
+
+        // choix des joueurs
+        ArrayList<GamePlayer> playersSelected = this.plugin.getGameManager().getParticipantManager().getRandomOnlineGamePlayer(2);
+        this.startDuel(playersSelected);
+    }
+
+    public void startDuel(ArrayList<GamePlayer> playersSelected) {
+        if (playersSelected != null) {
+            plugin.getMessageTchatManager().sendGeneralMesssage(
+                    "§6Les joueurs "
+                    + playersSelected.get(0).getTeamColor()
+                    + playersSelected.get(0).getBukkitPlayer().getName()
+                    + "§6 et "
+                    + playersSelected.get(1).getTeamColor()
+                    + playersSelected.get(1).getBukkitPlayer().getName()
+                    + "§6 vont se battre !"
+            );
+            this.actualDuel = new Duel(playersSelected);
+
+            this.actualDuel.startDuel();
+
+        } else {
+            Bukkit.getConsoleSender().sendMessage("Une erreur avec le duel est survenu, aleatoire de joueur po bon");
+        }
+    }
+
+    public Duel getDuel() {
+        return this.actualDuel;
+    }
+
+    public void forceStopDuels() {
+        if (this.actualDuel != null) this.actualDuel.endDuel(null);
+    }
+
+    public void endDuel() {
+        this.actualDuel = null;
+    }
 }

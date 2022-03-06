@@ -130,7 +130,7 @@ public class Team implements Serializable {
         ArmorStand oldArmorStand = cBlock.getArmorStand();
         if (oldArmorStand != null) oldArmorStand.remove();
         oldLoc.getBlock().setType(Material.AIR);
-        oldLoc.getWorld().setChunkForceLoaded(oldLoc.getChunk().getX(), oldLoc.getChunk().getZ(), false);
+        if (!this.region.contains(oldLoc)) oldLoc.getWorld().setChunkForceLoaded(oldLoc.getChunk().getX(), oldLoc.getChunk().getZ(), false);
 
         // nouvelle pos
         newLocation.getBlock().setType(Material.BARRIER);
@@ -296,7 +296,7 @@ public class Team implements Serializable {
 
     public void addRange(int rangeAdded) {
         this.range += rangeAdded;
-        this.region.addRange(rangeAdded);
+        this.region.addRange(spawnPoint.getWorld(),rangeAdded);
 
         // advancement
         AdvancementManager advancementManager = UNCSurvival.getInstance().getGameManager().getAdvancementManager();
@@ -350,6 +350,7 @@ public class Team implements Serializable {
                 .append("§bTemps de connexion : §6" + getTimePlayed(player) + "\n")
                 .append("§bMorts : §6" + UNCSurvival.getInstance().getGameManager().getScoreboardManager().getDeathStats(player) + "\n")
                 .append("§bJoueurs tués : §6" + UNCSurvival.getInstance().getGameManager().getScoreboardManager().getPlayerKill(player) + "\n")
+                .append("§bDuels gagnés : §6" + UNCSurvival.getInstance().getGameManager().getParticipantManager().getGamePlayer(player.getName()).getDuelsWon() + "\n")
                 .append("§bMobs tués : §6" + UNCSurvival.getInstance().getGameManager().getScoreboardManager().getMobKill(player) + "\n");
         return statsBuild.toString();
     }

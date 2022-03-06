@@ -65,6 +65,10 @@ public abstract class CustomStorageBlock implements Serializable {
         return this.location.clone().add(0,-1,0).clone().getBlock().getType() == Material.HOPPER;
     }
 
+    public boolean isBlockLoaded() {
+        return this.location.getChunk().isEntitiesLoaded();
+    }
+
     public int getProcessingDuration() {
         return processingDuration;
     }

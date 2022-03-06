@@ -11,6 +11,7 @@ import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftShapelessRecipe;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -21,11 +22,13 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 import teamunc.uncsurvival.UNCSurvival;
+import teamunc.uncsurvival.features.thirst.ThirstActualiser;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 import teamunc.uncsurvival.logic.customBlock.CustomBlockType;
 import teamunc.uncsurvival.logic.customBlock.customStorageBlock.MincerBlock;
 import teamunc.uncsurvival.logic.gameStats.GameStats;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
+import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.utils.alchemist.BrewingControler;
 import teamunc.uncsurvival.utils.alchemist.BrewingRecipe;
 
@@ -56,7 +59,7 @@ public class ItemsManager extends AbstractManager {
         registerGoalItems(gameStats.getCurrentPhase());
         this.goalItemsPrices = gameConfiguration.getGoalItemsPrices();
         this.customItems = List.of("diamondApple", "wrench", "mincer", "healPatch", "alcool",
-                "vaccin","module","mincedMeat","burger","wheatFlour", "growthBlock", "cactusJuice","amethystIngot","amethystSword","amethystPickaxe","famineSoup");
+                "vaccin","module","mincedMeat","burger","wheatFlour", "growthBlock", "cactusJuice","amethystIngot","amethystSword","amethystPickaxe","famineSoup","gourde");
     }
 
     public void registerGoalItems(PhaseEnum phase) {
@@ -173,6 +176,17 @@ public class ItemsManager extends AbstractManager {
         meta.setDisplayName("§b§lUpgrade Region Module");
         PersistentDataContainer data = meta.getPersistentDataContainer();
         data.set(this.customitemKey, PersistentDataType.STRING,"MODULE");
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public ItemStack createGourde() {
+        ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK,1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setCustomModelData(10);
+        meta.setDisplayName("§rGourde");
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(this.customitemKey, PersistentDataType.STRING,"GOURDE");
         item.setItemMeta(meta);
         return item;
     }
@@ -532,6 +546,24 @@ public class ItemsManager extends AbstractManager {
         growth.setIngredient('-',Material.REDSTONE_BLOCK);
         this.plugin.getServer().addRecipe(growth);
 
+        // GOURDE
+        ShapedRecipe gourde = new ShapedRecipe(new NamespacedKey(this.plugin,"craftGourde"),this.createGourde());
+        gourde.shape("*/*","^-^","_^_");
+        gourde.setIngredient('*',Material.STICK);
+        gourde.setIngredient('/',new RecipeChoice.MaterialChoice(Material.JUNGLE_PLANKS,
+                Material.ACACIA_PLANKS,
+                Material.BIRCH_PLANKS,
+                Material.CRIMSON_PLANKS,
+                Material.OAK_PLANKS,
+                Material.SPRUCE_PLANKS,
+                Material.DARK_OAK_PLANKS,
+                Material.WARPED_PLANKS
+        ));
+        gourde.setIngredient('^',Material.GLASS_PANE);
+        gourde.setIngredient('_',Material.STRING);
+        gourde.setIngredient('-',Material.BUCKET);
+        this.plugin.getServer().addRecipe(gourde);
+
         // Module
         ShapedRecipe module = new ShapedRecipe(new NamespacedKey(this.plugin,"craftModule"),this.createModule());
         module.shape("*^*","^-^","*/*");
@@ -643,7 +675,9 @@ public class ItemsManager extends AbstractManager {
     }
 
     public boolean isCustomItem(ItemStack itemStack, String customNameCaseSensitive) {
-        return (itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING) != null &&
+        return (itemStack != null &&
+                itemStack.hasItemMeta() &&
+                itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING) != null &&
                 itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING).equals(customNameCaseSensitive));
     }
 
@@ -758,5 +792,25 @@ public class ItemsManager extends AbstractManager {
             }
         }
         return res;
+    }
+
+
+    public void actionOfGourde(Player p, ItemStack gourde) {
+        if (p.getInventory().contains(Material.POTION)) {
+            ArrayList<ItemStack> potions = new ArrayList<>();
+            for (ItemStack itemStack : p.getInventory().all(Material.POTION).values()) {
+                PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
+                if (meta == null || meta.getBasePotionData().getType() == PotionType.WATER ) potions.add(itemStack);
+            }
+
+            if (potions.size() > 0) {
+                potions.get(0).setType(Material.GLASS_BOTTLE);
+                Damageable meta = (Damageable) gourde.getItemMeta();
+                meta.setDamage(meta.getDamage() + 1);
+                gourde.setItemMeta(meta);
+                GamePlayer gp = this.plugin.getGameManager().getParticipantManager().getGamePlayer(p.getName());
+                ThirstActualiser.getInstance().increaseWater(5,gp);
+            }
+        }
     }
 }

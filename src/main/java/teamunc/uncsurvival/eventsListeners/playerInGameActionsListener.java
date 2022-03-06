@@ -6,9 +6,12 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -17,9 +20,11 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.advancements.Advancement;
+import teamunc.uncsurvival.logic.duels.Duel;
 import teamunc.uncsurvival.logic.manager.AdvancementManager;
 import teamunc.uncsurvival.logic.manager.MessageTchatManager;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
+import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.team.Team;
 
 import java.util.ArrayList;
@@ -57,6 +62,37 @@ public class playerInGameActionsListener extends AbstractEventsListener {
         }
 
         this.plugin.getMessageTchatManager().sendGeneralMesssage("§6§lMerci pour la mort! §b§l+100 §6§lpoints pour les autres!");
+    }
+
+    @EventHandler
+    public void onDamageTaken(EntityDamageEvent e) {
+
+        if (e.getEntity() instanceof Player) {
+            Player victim = (Player) e.getEntity();
+            if (e.getDamage() >= victim.getHealth() && this.plugin.getGameManager().getParticipantManager().getGamePlayer(victim.getName()).isInDuel()) { // DUEL
+                e.setCancelled(true);
+
+                Duel duel = this.plugin.getGameManager().getGameEventsManager().getDuel();
+                for (GamePlayer gp : duel.getGamePlayersInGame()) {
+                    if (gp.getBukkitPlayer().getUniqueId() != victim.getUniqueId()) duel.endDuel(gp);
+                }
+
+                this.plugin.getGameManager().getGameEventsManager().endDuel();
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDeconnect(PlayerQuitEvent e) {
+        Player player = e.getPlayer();
+        if (this.plugin.getGameManager().getParticipantManager().getGamePlayer(player.getName()).isInDuel()) {
+            Duel duel = this.plugin.getGameManager().getGameEventsManager().getDuel();
+            for (GamePlayer gp : duel.getGamePlayersInGame()) {
+                if (gp.getBukkitPlayer().getUniqueId() != player.getUniqueId()) duel.endDuel(gp);
+            }
+
+            this.plugin.getGameManager().getGameEventsManager().endDuel();
+        }
     }
 
     @EventHandler
@@ -103,6 +139,10 @@ public class playerInGameActionsListener extends AbstractEventsListener {
                     if ( itemStack.hasItemMeta() && itemStack.getItemMeta().getPersistentDataContainer().has(key, PersistentDataType.STRING) && itemStack.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING).equals("MODULE") ) {
 
                         Team team = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(inventoryView.getPlayer().getName());
+                        if (team == null) {
+                            event.setCancelled(true);
+                            return;
+                        }
                         if (team.getRange() < 105) team.addRange(10);
                         else {
                             UNCSurvival.getInstance().getMessageTchatManager().sendMessageToPlayer("Votre équipe possède déjà la protection maximale !",event.getWhoClicked(), ChatColor.RED);

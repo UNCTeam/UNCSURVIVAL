@@ -10,109 +10,120 @@ commands:
   startuncsurvival:
     description: Start the game
     usage: /startuncsurvival
-    permission: uncsurvival.startuncsurvival
+    permission: uncsurvival.admins
 
   addplayertoteam:
     description: Add players to a team
     usage: /addplayertoteam <TeamColor> <ParticipantplayerName> <ParticipantplayerName?> ...
-    permission: uncsurvival.addplayertoteam
+    permission: uncsurvival.admins
   removeplayertoteam:
     description: Remove players from a team
     usage: /removeplayertoteam <TeamColor> <ParticipantplayerName> <ParticipantplayerName?> ...
-    permission: uncsurvival.removeplayertoteam
+    permission: uncsurvival.admins
 
   addteam:
     description: Add a Team
     usage: must be a player to execute this command.
       Actual location = spawnpoint and center of the team
       /addteam <TeamName> <TeamColor>
-    permission: uncsurvival.addteam
+    permission: uncsurvival.admins
 
   nextphase:
     description: Go to next phase
     usage: /nextphase
-    permission: uncsurival.nextphase
+    permission: uncsurvival.admins
 
   addtime:
     description: Add time to timer
     usage: Use /addtime [secondes] [minutes] [hours] [day]
-    permission: uncsurvival.addtime
+    permission: uncsurvival.admins
 
   removetime:
     description: Remove time to timer
     usage: Use /removetime [secondes] [minutes] [hours] [day]
-    permission: uncsurvival.addtime
+    permission: uncsurvival.admins
 
   removeteam:
     description: Remove a team
     usage: /removeteam <TeamName>
-    permission: uncsurvival.removeteam
+    permission: uncsurvival.admins
 
   getplayersingame:
     description: get players in the game
     usage: /getplayersingame
-    permission: uncsurvival.getplayersingame
+    permission: uncsurvival.admins
 
   stats:
     description: get stats for your team
     usage: /stats
-    permission: uncsurvival.teamstats
+    permission: uncsurvival.player
 
   classement:
     description: get leaderboard
     usage: /classement
-    permission: uncsurvival.classement
+    permission: uncsurvival.player
 
   phaseinfo:
     description: get phases info
     usage: /phaseinfo
-    permission: uncsurvival.phaseinfo
+    permission: uncsurvival.player
 
   givecustomitem:
     description: give a custom item
     usage: /givecustomitem
-    permission: uncsurvival.giveCustomItem
+    permission: uncsurvival.admins
 
   reloadconfig:
     description: reload configuration
     usage: /reloadconfig
-    permission: uncsurvival.reloadconfig
+    permission: uncsurvival.admins
 
   addBonusscore:
     description: add a bonus score to a team
     usage: /addbonusscore <TeamColor> <score>
-    permission: uncsurvival.addbonusscore
+    permission: uncsurvival.admins
 
   removebonusscore:
     description: remove a bonus score to a team
     usage: /removebonusscore <TeamColor> <score>
-    permission: uncsurvival.removebonusscore
+    permission: uncsurvival.admins
 
   addscore:
     description: add a fix number to the score of a team
     usage: /addscore <TeamColor> <score>
-    permission: uncsurvival.addscore
+    permission: uncsurvival.admins
 
   removescore:
     description: remove a fix number to the score of a team
     usage: /removescore <TeamColor> <score>
-    permission: uncsurvival.removescore
+    permission: uncsurvival.admins
 
   food:
     description: get stats of your food history
     usage: /food
-    permission: uncsurvival.food
+    permission: uncsurvival.player
   f:
     description: get stats of your food history
     usage: /f
-    permission: uncsurvival.food
+    permission: uncsurvival.player
 
   achievements:
     description: get all achievements of the uncSurvival
     usage: /achievements
-    permission: uncsurvival.achievements
+    permission: uncsurvival.player
+
+  startduel:
+    description: start a duel with two players
+    usage: /duel player1 player2
+    permission: uncsurvival.admin
 
   activealcoolquality:
     description: active alcool quality craft
     usage: /activealcoolquality
-    permission: uncsurvival.activealcoolquality
+    permission: uncsurvival.admins
+
+permissions:
+  uncsurvival.admins:
+      default: op
+  uncsurvival.player:
+      default: true

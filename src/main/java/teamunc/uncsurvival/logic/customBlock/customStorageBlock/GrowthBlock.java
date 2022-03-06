@@ -31,7 +31,9 @@ public class GrowthBlock extends CustomStorageBlock {
         for(int i = 0; i<9;i++) {
             for(int j = 0;j<9;j++) {
                 Block block = baseBlock.getBlock().getWorld().getBlockAt(baseBlock.getBlockX()+i, baseBlock.getBlockY(), baseBlock.getBlockZ()+j);
-                isGrowing += checkIfGrowthable(block);
+                if(block != null && block.getLocation().getChunk().isEntitiesLoaded()) {
+                    isGrowing += checkIfGrowthable(block);
+                }
             }
         }
         if((isGrowing > 0) && (seconds % 2 == 0)) {

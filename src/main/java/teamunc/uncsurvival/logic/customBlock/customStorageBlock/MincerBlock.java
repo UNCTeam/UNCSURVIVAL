@@ -25,17 +25,18 @@ public class MincerBlock extends CustomStorageBlock {
 
     @Override
     public void tickAction(int seconds) {
-        // Vérifi si le duration == 0
-        if(duration == 0) {
-            produceMincedMeat();
-        } else if(duration > 0) {
-            updateProgressBar();
-            duration--;
-        } else if(duration == -1) {
-            checkIfCanProduce();
+        if(this.isBlockLoaded()) {
+            if(duration == 0) {
+                produceMincedMeat();
+            } else if(duration > 0) {
+                updateProgressBar();
+                duration--;
+            } else if(duration == -1) {
+                checkIfCanProduce();
+            }
+            fillFromInput();
+            exportOutput();
         }
-        fillFromInput();
-        exportOutput();
     }
 
     public void checkIfCanProduce() {

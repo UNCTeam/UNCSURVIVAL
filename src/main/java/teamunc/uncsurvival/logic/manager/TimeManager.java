@@ -1,12 +1,22 @@
 package teamunc.uncsurvival.logic.manager;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitScheduler;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.features.thirst.ThirstActualiser;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
+import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.tasks.CountdownPhaseTask;
+import teamunc.uncsurvival.utils.LoggerFile;
+import teamunc.uncsurvival.utils.Region;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class TimeManager extends AbstractManager{
 
@@ -107,6 +117,25 @@ public class TimeManager extends AbstractManager{
                 }
             }
         }
+
+        // check for players locations
+        Bukkit.getServer().getOnlinePlayers().forEach(player -> {
+            plugin.getGameManager().getTeamsManager().getAllTeams().forEach(team -> {
+                Region region = team.getRegion();
+                // dans la liste des joueurs present dans la region mais les locations ne correspondent plus
+                if (region.inRegion(player.getUniqueId().toString()) && !region.contains(player.getLocation())) {
+                    plugin.getMessageTchatManager().sendMessageToPlayer("§6Vous sortez de la zone de la team " + team.getChatColor() + team.getName() + "§6.",player);
+                    region.leaveTheRegion(player.getUniqueId().toString());
+                } else // pas dans la liste mais present en locations
+                    if (!region.inRegion(player.getUniqueId().toString()) && region.contains(player.getLocation())) {
+                    plugin.getMessageTchatManager().sendMessageToPlayer("§6Vous entrez dans la zone de la team " + team.getChatColor() + team.getName() + "§6.", player);
+                    region.enterInRegion(player.getUniqueId().toString());
+                }
+            });
+        });
+
+        // writes logs
+        LoggerFile.WriteNextLine();
     }
 
     public void actionsEachMinutes() {
@@ -120,6 +149,34 @@ public class TimeManager extends AbstractManager{
         // dicrease Water Level of 1
         if (this.minutes%2 == 0) ThirstActualiser.getInstance().decreaseWaterForAllRegisteredPlayers(1);
 
+        // gourde ?
+        for(GamePlayer player : this.plugin.getGameManager().getParticipantManager().getGamePlayers()) {
+            if ( player.getBukkitPlayer() != null && player.getWaterLevel() <= 2 && player.getBukkitPlayer().getInventory().contains(this.plugin.getGameManager().getItemsManager().createGourde())) {
+                ItemStack gourde = (ItemStack) Arrays.stream(player.getBukkitPlayer().getInventory().getContents())
+                        .filter(itemStack -> itemStack != null && this.plugin.getGameManager().getItemsManager().isCustomItem(itemStack, "GOURDE")).toArray()[0];
+                if (gourde != null) {
+                    this.plugin.getGameManager().getItemsManager().actionOfGourde(player.getBukkitPlayer(), gourde);
+                }
+            }
+        }
+
+        //duels
+        LocalDateTime now = LocalDateTime.now();
+        PhaseEnum phase = this.plugin.getGameManager().getGameStats().getCurrentPhase();
+
+        if ((phase == PhaseEnum.PHASE1 || phase == PhaseEnum.PHASE2 || phase == PhaseEnum.PHASE3) &&
+            now.getSecond() == 0 && now.getMinute() == 0 && now.getHour() > 9 && now.getHour()%2 == 0) {
+            if (this.plugin.getGameManager().getParticipantManager().getOnlinePlayers().size() >=2 ) {
+                this.plugin.getMessageTchatManager().sendGeneralMesssage("Un duel se prépare... Tenez-vous pret !");
+                Bukkit.getScheduler().runTaskLater(
+                        this.plugin,
+                        () -> this.plugin.getGameManager().getGameEventsManager().startDuel(),
+                        100
+                );
+            } else {
+                this.plugin.getMessageTchatManager().sendGeneralMesssage("Un duel a été annulé car il n'y a pas assez de joueurs connectés!",ChatColor.GOLD);
+            }
+        }
     }
 
     public void actionsEachHours() {
