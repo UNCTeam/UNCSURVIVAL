@@ -9,6 +9,7 @@ import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.advancements.Advancement;
 import teamunc.uncsurvival.logic.manager.GameManager;
 import teamunc.uncsurvival.logic.manager.MessageTchatManager;
+import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.team.Team;
 
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ public class TeamCmdExec extends AbstractCommandExecutor{
         GameManager gameManager = this.plugin.getGameManager();
         boolean commandValid = true;
         switch ( label ) {
-            case "addteam":
-                if (args.length == 2 && sender instanceof Player ) {
+            case "addteam": {
+                if ( args.length == 2 && sender instanceof Player ) {
                     Player player = (Player) sender;
 
                     // Name
@@ -38,53 +39,55 @@ public class TeamCmdExec extends AbstractCommandExecutor{
                     Location location = player.getLocation();
 
                     // Team creation
-                    Team t = UNCSurvival.getInstance().getGameManager().getTeamsManager().addTeam(name,color,location);
+                    Team t = UNCSurvival.getInstance().getGameManager().getTeamsManager().addTeam(name, color, location);
 
-                    if (t == null)
+                    if ( t == null )
                         plugin.getMessageTchatManager().sendMessageToPlayer("You can't add the team " + name + ".",
-                                sender,ChatColor.RED);
+                                sender, ChatColor.RED);
                     else
                         plugin.getMessageTchatManager().sendMessageToPlayer("Your Team " + t.getChatColor() + t.getName() + ChatColor.GREEN + " has been successfully created !",
-                                sender,ChatColor.GREEN);
+                                sender, ChatColor.GREEN);
 
                 } else {
                     commandValid = false;
                 }
-            break;
-            case "removeteam":
-                if (args.length == 1) {
+                break;
+            }
+            case "removeteam": {
+                if ( args.length == 1 ) {
 
                     // Name
                     String name = args[0];
 
                     // Team remove
                     Team t = UNCSurvival.getInstance().getGameManager().getTeamsManager().removeTeam(name);
-                    if (t == null)
+                    if ( t == null )
                         plugin.getMessageTchatManager().sendMessageToPlayer("You can't delete the team " + name + ".",
-                                sender,ChatColor.RED);
+                                sender, ChatColor.RED);
                     else
                         plugin.getMessageTchatManager().sendMessageToPlayer("Your team " + t.getChatColor() + t.getName() + ChatColor.GREEN + " has been successfully removed !",
-                                sender,ChatColor.GREEN);
+                                sender, ChatColor.GREEN);
                 } else {
                     commandValid = false;
                 }
                 break;
-            case "addplayertoteam":
+            }
+            case "addplayertoteam": {
                 ArrayList<String> playersNameAdded = new ArrayList<>();
                 String teamColorAdded = "";
 
-                if(args.length >= 2) {
+                if ( args.length >= 2 ) {
                     teamColorAdded = args[0];
                     for (int i = 1; i < args.length; i++) {
                         playersNameAdded.add(args[i]);
                     }
                     if ( ChatColor.valueOf(teamColorAdded) == null ) {
-                        this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like \"AQUA\"",sender, ChatColor.RED);
+                        this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like \"AQUA\"", sender, ChatColor.RED);
                         return false;
                     }
                     Team team = this.plugin.getGameManager().getTeamsManager().getTeam(ChatColor.valueOf(teamColorAdded));
-                    if(team == null) {
-                        this.messageTchatManager.sendMessageToPlayer("La team n'existe pas",sender, ChatColor.RED);
+                    if ( team == null ) {
+                        this.messageTchatManager.sendMessageToPlayer("La team n'existe pas", sender, ChatColor.RED);
                         return false;
                     }
                     for (String playerName : playersNameAdded) {
@@ -92,22 +95,24 @@ public class TeamCmdExec extends AbstractCommandExecutor{
                             this.plugin.getGameManager().getParticipantManager().addPlayer(team, playerName);
                         } catch (Exception e) {
                             commandValid = false;
-                            this.messageTchatManager.sendMessageToPlayer(e.toString(),sender, ChatColor.RED);
+                            this.messageTchatManager.sendMessageToPlayer(e.toString(), sender, ChatColor.RED);
                         }
                     }
                 } else {
                     commandValid = false;
-                    this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like \"AQUA\" and names of players to add",sender, ChatColor.RED);
+                    this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like \"AQUA\" and names of players to add", sender, ChatColor.RED);
                 }
 
-                if (commandValid) this.messageTchatManager.sendMessageToPlayer("Player(s) " + playersNameAdded + " have been successfully added from the team " + teamColorAdded,sender, ChatColor.GREEN);
+                if ( commandValid )
+                    this.messageTchatManager.sendMessageToPlayer("Player(s) " + playersNameAdded + " have been successfully added from the team " + teamColorAdded, sender, ChatColor.GREEN);
 
                 break;
-            case "removeplayertoteam":
+            }
+            case "removeplayertoteam": {
                 ArrayList<String> playersNameRemoved = new ArrayList<>();
                 String teamColorRemoved = "";
 
-                if(args.length >= 2) {
+                if ( args.length >= 2 ) {
                     teamColorRemoved = args[0];
                     for (int i = 1; i < args.length; i++) {
                         playersNameRemoved.add(args[i]);
@@ -120,126 +125,133 @@ public class TeamCmdExec extends AbstractCommandExecutor{
                         }
                     } else {
                         commandValid = false;
-                        this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like \"AQUA\"",sender, ChatColor.RED);
+                        this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like \"AQUA\"", sender, ChatColor.RED);
                     }
                 } else {
                     commandValid = false;
-                    this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like \"AQUA\" and names of players to add",sender, ChatColor.RED);
+                    this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like \"AQUA\" and names of players to add", sender, ChatColor.RED);
                 }
 
-                if (commandValid) this.messageTchatManager.sendMessageToPlayer("Player(s) " + playersNameRemoved + "has been successfully removed from the team " + teamColorRemoved,sender, ChatColor.GREEN);
+                if ( commandValid )
+                    this.messageTchatManager.sendMessageToPlayer("Player(s) " + playersNameRemoved + "has been successfully removed from the team " + teamColorRemoved, sender, ChatColor.GREEN);
 
                 break;
-
-            case "addbonusscore":
+            }
+            case "addbonusscore": {
                 final String teamColorBonusAdded = args[0];
                 final int addedBonusScore = Integer.parseInt(args[1]);
 
-                if(args.length == 2) {
+                if ( args.length == 2 ) {
 
-                    if ( gameManager.getTeamsManager().getTeam(ChatColor.valueOf(teamColorBonusAdded)) != null) {
+                    if ( gameManager.getTeamsManager().getTeam(ChatColor.valueOf(teamColorBonusAdded)) != null ) {
                         Team team = this.plugin.getGameManager().getTeamsManager().getTeam(ChatColor.valueOf(teamColorBonusAdded));
                         team.addABonusScore(addedBonusScore);
 
                     } else {
                         commandValid = false;
-                        this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA",sender, ChatColor.RED);
+                        this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA", sender, ChatColor.RED);
                     }
                 } else {
                     commandValid = false;
-                    this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA and a number to add",sender, ChatColor.RED);
+                    this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA and a number to add", sender, ChatColor.RED);
                 }
 
-                if (commandValid) this.messageTchatManager.sendMessageToPlayer("Added " + addedBonusScore + " as a bonus to the team " + teamColorBonusAdded,sender, ChatColor.GREEN);
+                if ( commandValid )
+                    this.messageTchatManager.sendMessageToPlayer("Added " + addedBonusScore + " as a bonus to the team " + teamColorBonusAdded, sender, ChatColor.GREEN);
 
                 break;
-
-            case "removebonusscore":
+        }
+            case "removebonusscore": {
                 final String teamColorBonusRemove = args[0];
                 final int removedBonusScore = Integer.parseInt(args[1]);
 
-                if(args.length == 2) {
+                if ( args.length == 2 ) {
 
-                    if ( gameManager.getTeamsManager().getTeam(ChatColor.valueOf(teamColorBonusRemove)) != null) {
+                    if ( gameManager.getTeamsManager().getTeam(ChatColor.valueOf(teamColorBonusRemove)) != null ) {
                         Team team = this.plugin.getGameManager().getTeamsManager().getTeam(ChatColor.valueOf(teamColorBonusRemove));
 
                         team.addABonusScore(-removedBonusScore);
 
                     } else {
                         commandValid = false;
-                        this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA",sender, ChatColor.RED);
+                        this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA", sender, ChatColor.RED);
                     }
                 } else {
                     commandValid = false;
-                    this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA and a number to add",sender, ChatColor.RED);
+                    this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA and a number to add", sender, ChatColor.RED);
                 }
 
-                if (commandValid) this.messageTchatManager.sendMessageToPlayer("Removed " + removedBonusScore + " as a bonus to the team " + teamColorBonusRemove,sender, ChatColor.GREEN);
+                if ( commandValid )
+                    this.messageTchatManager.sendMessageToPlayer("Removed " + removedBonusScore + " as a bonus to the team " + teamColorBonusRemove, sender, ChatColor.GREEN);
 
                 break;
-
-            case "addscore":
+            }
+            case "addscore": {
                 final String teamColorScoreAdded = args[0];
                 final int addedScore = Integer.parseInt(args[1]);
 
-                if(args.length == 2) {
+                if ( args.length == 2 ) {
 
-                    if ( gameManager.getTeamsManager().getTeam(ChatColor.valueOf(teamColorScoreAdded)) != null) {
+                    if ( gameManager.getTeamsManager().getTeam(ChatColor.valueOf(teamColorScoreAdded)) != null ) {
                         Team team = this.plugin.getGameManager().getTeamsManager().getTeam(ChatColor.valueOf(teamColorScoreAdded));
 
                         team.addScore(addedScore);
 
                     } else {
                         commandValid = false;
-                        this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA",sender, ChatColor.RED);
+                        this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA", sender, ChatColor.RED);
                     }
                 } else {
                     commandValid = false;
-                    this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA and a number to add",sender, ChatColor.RED);
+                    this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA and a number to add", sender, ChatColor.RED);
                 }
 
-                if (commandValid) this.messageTchatManager.sendMessageToPlayer("Added " + addedScore + " from the score of the team " + teamColorScoreAdded,sender, ChatColor.GREEN);
+                if ( commandValid )
+                    this.messageTchatManager.sendMessageToPlayer("Added " + addedScore + " from the score of the team " + teamColorScoreAdded, sender, ChatColor.GREEN);
 
                 break;
-
-            case "removescore":
+            }
+            case "removescore": {
                 final String teamColorScoreRemoved = args[0];
                 final int removedScore = Integer.parseInt(args[1]);
 
-                if(args.length == 2) {
+                if ( args.length == 2 ) {
 
-                    if ( gameManager.getTeamsManager().getTeam(ChatColor.valueOf(teamColorScoreRemoved)) != null) {
+                    if ( gameManager.getTeamsManager().getTeam(ChatColor.valueOf(teamColorScoreRemoved)) != null ) {
                         Team team = this.plugin.getGameManager().getTeamsManager().getTeam(ChatColor.valueOf(teamColorScoreRemoved));
 
                         team.addScore(-removedScore);
 
                     } else {
                         commandValid = false;
-                        this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA",sender, ChatColor.RED);
+                        this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA", sender, ChatColor.RED);
                     }
                 } else {
                     commandValid = false;
-                    this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA and a number to remove",sender, ChatColor.RED);
+                    this.messageTchatManager.sendMessageToPlayer("The command is incorrect ! Use Color like AQUA and a number to remove", sender, ChatColor.RED);
                 }
 
-                if (commandValid) this.messageTchatManager.sendMessageToPlayer("Removed " + removedScore + " from the score of the team " + teamColorScoreRemoved,sender, ChatColor.GREEN);
-
-            case "stats":
-                if (sender instanceof Player) {
+                if ( commandValid )
+                    this.messageTchatManager.sendMessageToPlayer("Removed " + removedScore + " from the score of the team " + teamColorScoreRemoved, sender, ChatColor.GREEN);
+                break;
+            }
+            case "stats": {
+                if ( sender instanceof Player ) {
                     Player player = (Player) sender;
-                    if(this.plugin.getGameManager().getParticipantManager().isPlaying(player)) {
+                    if ( this.plugin.getGameManager().getParticipantManager().isPlaying(player) ) {
                         Team playerTeam = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(player);
                         player.sendMessage(playerTeam.getStats(player));
                     }
                 }
                 break;
-            case "classement":
-                if(sender instanceof Player) {
+            }
+            case "classement": {
+                if ( sender instanceof Player ) {
                     Player player = (Player) sender;
                     StringBuilder classementStr = new StringBuilder();
                     classementStr.append("§8--------------| §b§lClassement §8|---------------\n \n");
                     int count = 1;
-                    for(Team team : plugin.getGameManager().getTeamsManager().getClassement()) {
+                    for (Team team : plugin.getGameManager().getTeamsManager().getClassement()) {
                         classementStr.append(" " + team.getChatColor()).append(count);
                         classementStr.append(" - ").append(team.getName()).append("\n");
                         count++;
@@ -247,15 +259,17 @@ public class TeamCmdExec extends AbstractCommandExecutor{
                     player.sendMessage(classementStr.toString());
                 }
                 break;
-            case "phaseinfo":
-                if(sender instanceof Player) {
+            }
+            case "phaseinfo": {
+                if ( sender instanceof Player ) {
                     Player player = (Player) sender;
                     String phaseMsg = "§8--------------| §b§lPhase Info §8|---------------\n百\n\n百\n\n";
                     phaseMsg += "§f保\n" + "§8百\n百\n百\n百\n百\n百\n百\n百\n百\n百\n§f包\n百\n百\n百\n百\n百\n百";
                     player.sendMessage(phaseMsg);
                 }
                 break;
-            case "achievements":
+            }
+            case "achievements": {
                     StringBuilder advancementStr = new StringBuilder();
                     advancementStr.append("§8--------------| §b§l Achievements §8|---------------\n \n");
 
@@ -273,6 +287,19 @@ public class TeamCmdExec extends AbstractCommandExecutor{
                     }
                     sender.sendMessage(advancementStr.toString());
                 break;
+            }
+            case "startduel": {
+                if ( args.length == 2 ) {
+                    ArrayList<GamePlayer> playersSelected = new ArrayList<>();
+                    playersSelected.add(this.plugin.getGameManager().getParticipantManager().getGamePlayer(args[0]));
+                    playersSelected.add(this.plugin.getGameManager().getParticipantManager().getGamePlayer(args[1]));
+
+                    gameManager.getGameEventsManager().startDuel(playersSelected);
+                } else {
+                    this.plugin.getMessageTchatManager().sendMessageToPlayer("Il faut 2 joueurs !", sender, ChatColor.RED);
+                }
+                break;
+            }
         }
         return commandValid;
     }

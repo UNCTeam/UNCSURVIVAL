@@ -112,6 +112,11 @@ commands:
     usage: /achievements
     permission: uncsurvival.player
 
+  startduel:
+    description: start a duel with two players
+    usage: /duel player1 player2
+    permission: uncsurvival.admin
+
   activealcoolquality:
     description: active alcool quality craft
     usage: /activealcoolquality

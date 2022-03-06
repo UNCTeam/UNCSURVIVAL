@@ -1,6 +1,7 @@
 package teamunc.uncsurvival;
 
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 import teamunc.uncsurvival.commandesListeners.*;
 import teamunc.uncsurvival.eventsListeners.EventsManager;
@@ -61,6 +62,7 @@ public class UNCSurvival extends JavaPlugin {
         this.getCommand("f").setExecutor(new PlayerCmdExec(this));
         this.getCommand("activealcoolquality").setExecutor(new PlayerCmdExec(this));
         this.getCommand("achievements").setExecutor(new TeamCmdExec(this));
+        this.getCommand("startduel").setExecutor(new TeamCmdExec(this));
 
         this.getCommand("reloadconfig").setExecutor(new ReloadConfigurationCmdExec(this));
     }
@@ -113,5 +115,12 @@ public class UNCSurvival extends JavaPlugin {
 
         // give to every one the root advancement of UNCSURVIVAL
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"advancement grant @a only uncsurvival:root");
+
+        // cancel Duels
+        this.gameManager.getGameEventsManager().forceStopDuels();
+    }
+
+    public World getMainWorld() {
+        return Bukkit.getWorld(this.fileManager.getServerProperties("level-name"));
     }
 }
