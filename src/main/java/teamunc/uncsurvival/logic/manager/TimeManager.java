@@ -14,6 +14,7 @@ import teamunc.uncsurvival.logic.tasks.CountdownPhaseTask;
 import teamunc.uncsurvival.utils.LoggerFile;
 import teamunc.uncsurvival.utils.Region;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -159,6 +160,15 @@ public class TimeManager extends AbstractManager{
             }
         }
 
+        //duels
+        LocalDateTime now = LocalDateTime.now();
+        if ( now.getMinute() == 0 && now.getHour() > 9 && now.getHour()%2 == 0) {
+            if (this.plugin.getGameManager().getParticipantManager().getOnlinePlayers().size() >=2 ) {
+
+            } else {
+                this.plugin.getMessageTchatManager().sendGeneralMesssage("Un duel a été annulé car il n'y a pas assez de joueurs connectés!",ChatColor.GOLD);
+            }
+        }
     }
 
     public void actionsEachHours() {
