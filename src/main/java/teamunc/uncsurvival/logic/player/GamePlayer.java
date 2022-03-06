@@ -1,9 +1,11 @@
 package teamunc.uncsurvival.logic.player;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import teamunc.uncsurvival.UNCSurvival;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ public class GamePlayer implements Serializable {
     private int timeBeforeCovidExpansion = -1;
 
     private ArrayList<Material> queueOfEatenFood;
+    private boolean inDuel;
+    private int duelsWon;
 
     public GamePlayer(Player bukkitPlayer) {
         this.uuid = bukkitPlayer.getUniqueId();
@@ -57,6 +61,10 @@ public class GamePlayer implements Serializable {
 
     public void ActiveCovided() {
         this.timeBeforeCovidExpansion = 4;
+    }
+
+    public ChatColor getTeamColor() {
+        return UNCSurvival.getInstance().getGameManager().getParticipantManager().getTeamForPlayer(this.getBukkitPlayer()).getChatColor();
     }
 
     /**
@@ -97,5 +105,21 @@ public class GamePlayer implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(uuid);
+    }
+
+    public void setInDuel(boolean b) {
+        this.inDuel = b;
+    }
+
+    public boolean isInDuel() {
+        return inDuel;
+    }
+
+    public int getDuelsWon() {
+        return this.duelsWon;
+    }
+
+    public void justWinADuel() {
+        this.duelsWon += 1;
     }
 }

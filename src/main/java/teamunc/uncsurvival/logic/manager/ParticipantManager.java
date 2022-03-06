@@ -6,10 +6,7 @@ import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.team.Team;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ParticipantManager extends AbstractManager{
@@ -152,5 +149,25 @@ public class ParticipantManager extends AbstractManager{
                 .filter(gamePlayer -> gamePlayer.isOnline())
                 .map(gamePlayer -> gamePlayer.getBukkitPlayer())
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Renvoi des gamePlayer en ligne aleatoirement
+     * @return
+     */
+    public ArrayList<GamePlayer> getRandomOnlineGamePlayer(int numberRequired) {
+        ArrayList<GamePlayer> res = null;
+        ArrayList<GamePlayer> randomized = new ArrayList<>(this.getGamePlayers());
+
+        Collections.shuffle(randomized);
+
+        if (numberRequired <= randomized.size()) {
+            res = new ArrayList<>();
+            for (int i = 0; i < numberRequired; i++) {
+                res.add(randomized.get(i));
+            }
+        }
+
+        return res;
     }
 }

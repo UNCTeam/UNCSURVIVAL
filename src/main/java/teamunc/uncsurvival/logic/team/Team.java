@@ -350,6 +350,7 @@ public class Team implements Serializable {
                 .append("§bTemps de connexion : §6" + getTimePlayed(player) + "\n")
                 .append("§bMorts : §6" + UNCSurvival.getInstance().getGameManager().getScoreboardManager().getDeathStats(player) + "\n")
                 .append("§bJoueurs tués : §6" + UNCSurvival.getInstance().getGameManager().getScoreboardManager().getPlayerKill(player) + "\n")
+                .append("§bDuels gagnés : §6" + UNCSurvival.getInstance().getGameManager().getParticipantManager().getGamePlayer(player.getName()).getDuelsWon() + "\n")
                 .append("§bMobs tués : §6" + UNCSurvival.getInstance().getGameManager().getScoreboardManager().getMobKill(player) + "\n");
         return statsBuild.toString();
     }

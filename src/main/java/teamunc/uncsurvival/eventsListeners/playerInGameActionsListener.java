@@ -11,6 +11,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -19,9 +20,11 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.advancements.Advancement;
+import teamunc.uncsurvival.logic.duels.Duel;
 import teamunc.uncsurvival.logic.manager.AdvancementManager;
 import teamunc.uncsurvival.logic.manager.MessageTchatManager;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
+import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.team.Team;
 
 import java.util.ArrayList;
@@ -64,6 +67,24 @@ public class playerInGameActionsListener extends AbstractEventsListener {
     @EventHandler
     public void onDamageTaken(EntityDamageEvent e) {
 
+        if (e.getEntity() instanceof Player) {
+            Player victim = (Player) e.getEntity();
+            if (e.getDamage() >= victim.getHealth() && this.plugin.getGameManager().getParticipantManager().getGamePlayer(victim.getName()).isInDuel()) { // DUEL
+                e.setCancelled(true);
+                Duel duel = this.plugin.getGameManager().getGameEventsManager().getDuels().remove(0);
+                GamePlayer winner = duel.getGamePlayersInGame().stream().filter(gamePlayer -> gamePlayer.getUUID() != victim.getUniqueId()).findFirst().get();
+                duel.endDuel(winner);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDeconnect(PlayerQuitEvent e) {
+        if (this.plugin.getGameManager().getParticipantManager().getGamePlayer(e.getPlayer().getName()).isInDuel()) {
+            Duel duel = this.plugin.getGameManager().getGameEventsManager().getDuels().remove(0);
+            GamePlayer winner = duel.getGamePlayersInGame().stream().filter(gamePlayer -> gamePlayer.getUUID() != e.getPlayer().getUniqueId()).findFirst().get();
+            duel.endDuel(winner);
+        }
     }
 
     @EventHandler
