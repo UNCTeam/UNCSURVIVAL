@@ -152,22 +152,35 @@ public class ParticipantManager extends AbstractManager{
     }
 
     /**
-     * Renvoi des gamePlayer en ligne aleatoirement
+     * Renvoi des gamePlayer en ligne aleatoirement de differentes team
      * @return
      */
-    public ArrayList<GamePlayer> getRandomOnlineGamePlayer(int numberRequired) {
+    public ArrayList<GamePlayer> getRandomOnlineGamePlayerFromDiffTeams(int numberRequired) {
         ArrayList<GamePlayer> res = null;
-        ArrayList<GamePlayer> randomized = new ArrayList<>(this.getGamePlayers());
+        ArrayList<Team> teams = new ArrayList<>(this.plugin.getGameManager().getTeamsManager().getAllTeams());
 
-        Collections.shuffle(randomized);
-
-        if (numberRequired <= randomized.size()) {
+        if (numberRequired <= teams.size()) {
             res = new ArrayList<>();
-            for (int i = 0; i < numberRequired; i++) {
-                res.add(randomized.get(i));
+            Collections.shuffle(teams);
+            for (Team t : teams) {
+                ArrayList<GamePlayer> members = getOnlineGamePlayerForGivenList(new ArrayList<>(t.getMembers()));
+                if (members.size() > 0 && res.size() < numberRequired) {
+                    Collections.shuffle(members);
+                    res.add(members.get(0));
+                }
             }
+            if (res.size() != numberRequired) return null;
         }
 
+        return res;
+    }
+
+
+    public ArrayList<GamePlayer> getOnlineGamePlayerForGivenList(ArrayList<GamePlayer> gps) {
+        ArrayList<GamePlayer> res = new ArrayList<>();
+        for (GamePlayer gp : gps) {
+            if (gp.isOnline()) res.add(gp);
+        }
         return res;
     }
 }

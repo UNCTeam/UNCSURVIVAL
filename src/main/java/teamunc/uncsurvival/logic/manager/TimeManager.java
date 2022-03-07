@@ -15,8 +15,8 @@ import teamunc.uncsurvival.utils.LoggerFile;
 import teamunc.uncsurvival.utils.Region;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Stream;
 
 public class TimeManager extends AbstractManager{
 
@@ -166,11 +166,14 @@ public class TimeManager extends AbstractManager{
 
         if ((phase == PhaseEnum.PHASE1 || phase == PhaseEnum.PHASE2 || phase == PhaseEnum.PHASE3) &&
             now.getSecond() == 0 && now.getMinute() == 0 && now.getHour() > 9 && now.getHour()%2 == 0) {
-            if (this.plugin.getGameManager().getParticipantManager().getOnlinePlayers().size() >=2 ) {
+            // choix des joueurs
+            ArrayList<GamePlayer> playersSelected = this.plugin.getGameManager().getParticipantManager().getRandomOnlineGamePlayerFromDiffTeams(2);
+
+            if (playersSelected != null) {
                 this.plugin.getMessageTchatManager().sendGeneralMesssage("Un duel se prépare... Tenez-vous pret !");
                 Bukkit.getScheduler().runTaskLater(
                         this.plugin,
-                        () -> this.plugin.getGameManager().getGameEventsManager().startDuel(),
+                        () -> this.plugin.getGameManager().getGameEventsManager().startDuel(playersSelected),
                         100
                 );
             } else {

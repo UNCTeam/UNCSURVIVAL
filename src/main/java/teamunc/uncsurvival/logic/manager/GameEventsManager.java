@@ -129,13 +129,6 @@ public class GameEventsManager extends AbstractManager{
         }
     }
 
-    public void startDuel() {
-
-        // choix des joueurs
-        ArrayList<GamePlayer> playersSelected = this.plugin.getGameManager().getParticipantManager().getRandomOnlineGamePlayer(2);
-        this.startDuel(playersSelected);
-    }
-
     public void startDuel(ArrayList<GamePlayer> playersSelected) {
         if (playersSelected != null) {
             plugin.getMessageTchatManager().sendGeneralMesssage(

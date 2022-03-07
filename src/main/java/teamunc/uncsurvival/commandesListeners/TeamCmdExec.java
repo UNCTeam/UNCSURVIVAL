@@ -295,6 +295,10 @@ public class TeamCmdExec extends AbstractCommandExecutor{
                     playersSelected.add(this.plugin.getGameManager().getParticipantManager().getGamePlayer(args[1]));
 
                     gameManager.getGameEventsManager().startDuel(playersSelected);
+                } else if (args.length == 0) {
+                    // choix des joueurs
+                    ArrayList<GamePlayer> playersSelected = this.plugin.getGameManager().getParticipantManager().getRandomOnlineGamePlayerFromDiffTeams(2);
+                    gameManager.getGameEventsManager().startDuel(playersSelected);
                 } else {
                     this.plugin.getMessageTchatManager().sendMessageToPlayer("Il faut 2 joueurs !", sender, ChatColor.RED);
                 }
