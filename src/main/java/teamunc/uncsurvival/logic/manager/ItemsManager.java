@@ -611,9 +611,10 @@ public class ItemsManager extends AbstractManager {
                 NamespacedKey.minecraft("amethyst_block")
         );
 
-        if (this.plugin.getGameManager().getGameStats().getCurrentPhase() != PhaseEnum.PHASE1) {
+        PhaseEnum phaseActual = this.plugin.getGameManager().getGameStats().getCurrentPhase();
+        if (phaseActual == PhaseEnum.PHASE2 || phaseActual == PhaseEnum.PHASE3) {
             this.replaceCraftPhase2();
-            if (this.plugin.getGameManager().getGameStats().getCurrentPhase() != PhaseEnum.PHASE2) {
+            if (phaseActual == PhaseEnum.PHASE3) {
                 this.replaceCraftPhase3();
             }
         }

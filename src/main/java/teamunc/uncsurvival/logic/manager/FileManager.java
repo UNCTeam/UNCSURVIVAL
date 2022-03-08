@@ -42,6 +42,7 @@ import java.util.zip.GZIPOutputStream;
 public class FileManager extends AbstractManager{
 
     private String gameConfiguration_path;
+    private String logFileNamePath;
     private File pluginDataFile;
     private File propertiesFile;
 
@@ -54,7 +55,7 @@ public class FileManager extends AbstractManager{
 
         // init paths
         this.gameConfiguration_path = this.pluginDataFile.getPath() + "/game-config.json";
-
+        this.logFileNamePath = pluginDataFile.getPath() + "/logs-" + LocalDateTime.now() + ".txt";
 
         // get server properties
         this.propertiesFile = new File("server.properties");
@@ -318,9 +319,8 @@ public class FileManager extends AbstractManager{
     }
 
     public void writeInLogFile(String line) {
-        String path = pluginDataFile.getPath() + "/logs.txt";
         try {
-            FileWriter writer = new FileWriter(path,true);
+            FileWriter writer = new FileWriter(this.logFileNamePath,true);
             writer.append(line);
             writer.append(System.lineSeparator());
             writer.close();
