@@ -208,6 +208,9 @@ public class GameManager extends AbstractManager {
         });
 
         // Gamerules
+        Bukkit.getWorlds().get(0).setDifficulty(Difficulty.HARD);
+        Bukkit.getWorlds().get(0).setGameRule(GameRule.MOB_GRIEFING,false);
+        Bukkit.getWorlds().get(0).setGameRule(GameRule.DO_DAYLIGHT_CYCLE,true);
         Bukkit.getWorlds().get(0).setGameRule(GameRule.NATURAL_REGENERATION,false);
     }
 

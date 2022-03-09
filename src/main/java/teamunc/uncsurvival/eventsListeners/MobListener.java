@@ -44,13 +44,17 @@ public class MobListener extends AbstractEventsListener{
         }
 
         if (modifyNeeded && e.getEntity().getType() != EntityType.ARMOR_STAND ) {
-            e.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(
-                    e.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * healthFact
-            );
+            if (e.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH) != null) {
+                e.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(
+                        e.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * healthFact
+                );
+            }
 
-            e.getEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(
-                    e.getEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue() * damageFact
-            );
+            if (e.getEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null) {
+                e.getEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(
+                        e.getEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue() * damageFact
+                );
+            }
 
             e.getEntity().setHealth(e.getEntity().getHealth() * healthFact);
             e.getEntity().setCustomName(prefix + e.getEntity().getName());

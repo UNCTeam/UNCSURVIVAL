@@ -30,7 +30,7 @@ public class ThirstActualiser {
 
     public void registerPlayers(ArrayList<GamePlayer> players) {
         for (GamePlayer p : players) {
-            p.setWaterLevel(10);
+            p.setWaterLevel(18);
         }
     }
 

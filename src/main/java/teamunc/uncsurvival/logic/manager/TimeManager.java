@@ -134,21 +134,6 @@ public class TimeManager extends AbstractManager{
             });
         });
 
-        // writes logs
-        LoggerFile.WriteNextLine();
-    }
-
-    public void actionsEachMinutes() {
-        // place all events that can occur each minutes
-        this.plugin.getGameManager().getTeamsManager().getAllTeams().forEach(team -> {
-            // Famine test
-            if (this.plugin.getGameManager().getGameEventsManager().isItTimeForFamine(team))
-                this.plugin.getGameManager().getGameEventsManager().actionFamine(team);
-        });
-
-        // dicrease Water Level of 1
-        if (this.minutes%2 == 0) ThirstActualiser.getInstance().decreaseWaterForAllRegisteredPlayers(1);
-
         // gourde ?
         for(GamePlayer player : this.plugin.getGameManager().getParticipantManager().getGamePlayers()) {
             if ( player.getBukkitPlayer() != null && player.getWaterLevel() <= 2 && player.getBukkitPlayer().getInventory().contains(this.plugin.getGameManager().getItemsManager().createGourde())) {
@@ -160,9 +145,25 @@ public class TimeManager extends AbstractManager{
             }
         }
 
+        // writes logs
+        LoggerFile.WriteNextLine();
+    }
+
+    public void actionsEachMinutes() {
+        PhaseEnum phase = plugin.getGameManager().getGameStats().getCurrentPhase();
+
+        // place all events that can occur each minutes
+        this.plugin.getGameManager().getTeamsManager().getAllTeams().forEach(team -> {
+            // Famine test
+            if (this.plugin.getGameManager().getGameEventsManager().isItTimeForFamine(team))
+                this.plugin.getGameManager().getGameEventsManager().actionFamine(team);
+        });
+
+        // dicrease Water Level of 1
+        if (this.minutes%3 == 0 && phase != PhaseEnum.INIT && phase != PhaseEnum.FIN) ThirstActualiser.getInstance().decreaseWaterForAllRegisteredPlayers(1);
+
         //duels
         LocalDateTime now = LocalDateTime.now();
-        PhaseEnum phase = this.plugin.getGameManager().getGameStats().getCurrentPhase();
 
         if ((phase == PhaseEnum.PHASE1 || phase == PhaseEnum.PHASE2 || phase == PhaseEnum.PHASE3) &&
             now.getSecond() == 0 && now.getMinute() == 0 && now.getHour() > 9 && now.getHour()%2 == 0) {
