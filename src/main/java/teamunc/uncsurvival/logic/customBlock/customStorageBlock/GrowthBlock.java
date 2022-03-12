@@ -50,7 +50,7 @@ public class GrowthBlock extends CustomStorageBlock {
                 age++;
             }
         }
-        if(age<4) {
+        if(age<3 && block.getLocation().clone().add(0, age, 0).getBlock().getType() == Material.AIR) {
             age=age+block.getY();
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "setblock " + block.getX() + " " + age + " " + block.getZ() + " minecraft:" + mat.name().toLowerCase());
         }
