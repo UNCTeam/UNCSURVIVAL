@@ -3,6 +3,7 @@ package teamunc.uncsurvival.logic.manager;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.resources.MinecraftKey;
 import net.minecraft.world.item.crafting.IRecipe;
+import net.minecraft.world.item.crafting.RecipeCampfire;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -250,7 +251,7 @@ public class ItemsManager extends AbstractManager {
         ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK,1);
         ItemMeta meta = item.getItemMeta();
         meta.setCustomModelData(9);
-        meta.setDisplayName("§rFamine Soup");
+        meta.setDisplayName("§rHunger Soup");
         meta.setLore(List.of("§r§cUn remède puissant et très curatif de grand-mère..."));
         PersistentDataContainer data = meta.getPersistentDataContainer();
         data.set(this.customitemKey, PersistentDataType.STRING, "FAMINESOUP");
@@ -451,6 +452,10 @@ public class ItemsManager extends AbstractManager {
         wrench.setIngredient('/',Material.AIR);
         wrench.setIngredient('.',Material.IRON_BLOCK);
         this.plugin.getServer().addRecipe(wrench);
+
+        // BLAZE POWDER
+        CampfireRecipe blazepowder = new CampfireRecipe(new NamespacedKey(this.plugin,"craftBlazePowder"),new ItemStack(Material.BLAZE_POWDER),Material.GUNPOWDER,5,200);
+        this.plugin.getServer().addRecipe(blazepowder);
 
         // ALCOOL
         ShapedRecipe alcool = new ShapedRecipe(new NamespacedKey(this.plugin,"craftAlcool"),this.createAlcool());

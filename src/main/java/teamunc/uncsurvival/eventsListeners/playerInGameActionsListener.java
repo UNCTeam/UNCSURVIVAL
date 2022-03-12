@@ -69,14 +69,16 @@ public class playerInGameActionsListener extends AbstractEventsListener {
 
         if (e.getEntity() instanceof Player) {
             Player victim = (Player) e.getEntity();
-            if (e.getDamage() >= victim.getHealth() && this.plugin.getGameManager().getParticipantManager().getGamePlayer(victim.getName()).isInDuel()) { // DUEL
-                e.setCancelled(true);
+            GamePlayer gamePlayer = this.plugin.getGameManager().getParticipantManager().getGamePlayer(victim.getName());
+            if (e.getDamage() >= victim.getHealth() && gamePlayer != null && gamePlayer.isInDuel()) { // DUEL
 
                 Duel duel = this.plugin.getGameManager().getGameEventsManager().getDuel();
-                for (GamePlayer gp : duel.getGamePlayersInGame()) {
-                    if (gp.getBukkitPlayer().getUniqueId() != victim.getUniqueId()) duel.endDuel(gp);
-                }
-
+                if (duel != null) {
+                    e.setCancelled(true);
+                    for (GamePlayer gp : duel.getGamePlayersInGame()) {
+                        if ( gp.getBukkitPlayer().getUniqueId() != victim.getUniqueId() ) duel.endDuel(gp);
+                    }
+                } else gamePlayer.setInDuel(false);
                 this.plugin.getGameManager().getGameEventsManager().endDuel();
             }
         }
@@ -85,11 +87,14 @@ public class playerInGameActionsListener extends AbstractEventsListener {
     @EventHandler
     public void onPlayerDeconnect(PlayerQuitEvent e) {
         Player player = e.getPlayer();
-        if (this.plugin.getGameManager().getParticipantManager().getGamePlayer(player.getName()).isInDuel()) {
+        GamePlayer gp = this.plugin.getGameManager().getParticipantManager().getGamePlayer(player.getName());
+        if (gp != null && gp.isInDuel()) {
             Duel duel = this.plugin.getGameManager().getGameEventsManager().getDuel();
-            for (GamePlayer gp : duel.getGamePlayersInGame()) {
-                if (gp.getBukkitPlayer().getUniqueId() != player.getUniqueId()) duel.endDuel(gp);
-            }
+            if (duel != null) {
+                for (GamePlayer gpI : duel.getGamePlayersInGame()) {
+                    if ( gpI.getBukkitPlayer().getUniqueId() != player.getUniqueId() ) duel.endDuel(gpI);
+                }
+            } else gp.setInDuel(false);
 
             this.plugin.getGameManager().getGameEventsManager().endDuel();
         }

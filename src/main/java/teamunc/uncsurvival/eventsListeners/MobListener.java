@@ -7,12 +7,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.advancements.Advancement;
 import teamunc.uncsurvival.logic.manager.AdvancementManager;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.team.Team;
+
+import java.util.List;
+import java.util.Random;
 
 public class MobListener extends AbstractEventsListener{
     public MobListener(UNCSurvival plugin) {
@@ -26,6 +32,8 @@ public class MobListener extends AbstractEventsListener{
         String prefix = "";
         double healthFact = 1;
         double damageFact = 1;
+        Random r = new Random();
+        String baseName = e.getEntity().getName();
 
         // modifications par phases
         switch (phase) {
@@ -36,14 +44,37 @@ public class MobListener extends AbstractEventsListener{
                 modifyNeeded = true;
                 break;
             case PHASE3: case FIN:
-                prefix = "§c§lMega-";
-                healthFact = 2;
-                damageFact = 1.75;
-                modifyNeeded = true;
+                if (r.nextInt(150) <= 1) {
+                    String temp = "§1§lU§2§ll§3§lt§4§lr§5§la§6§l-";
+                    int i = 7;
+                    List<String> colors = List.of("§1§l","§2§l","§3§l","§4§l","§5§l","§6§l","§7§l","§8§l","§9§l","§a§l","§b§l","§c§l","§d§l","§e§l","§f§l");
+                    for (char c : baseName.toCharArray()) {
+                        temp += colors.get(i) + c;
+                        i = (i+1)%15;
+                    }
+                    baseName = temp;
+                    prefix = "";
+                    healthFact = 2.25;
+                    damageFact = 1.75;
+                    e.getEntity().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,9999999,1,false,true,true));
+                    e.getEntity().getEquipment().setItemInOffHand(this.plugin.getGameManager().getItemsManager().createAmethystIngot());
+                    e.getEntity().getEquipment().setItemInOffHandDropChance(1.0f);
+                    modifyNeeded = true;
+                } else {
+                    prefix = "§c§lMega-";
+                    healthFact = 2;
+                    damageFact = 1.75;
+                    modifyNeeded = true;
+                }
                 break;
         }
 
-        if (modifyNeeded && e.getEntity().getType() != EntityType.ARMOR_STAND ) {
+        if (modifyNeeded
+                && e.getEntity().getType() != EntityType.ARMOR_STAND
+                && e.getEntity().getType() != EntityType.ENDER_DRAGON
+                && e.getEntity().getType() != EntityType.BOAT
+                && e.getEntity().getType() != EntityType.BAT
+                && e.getEntity().getType() != EntityType.BEE) {
             if (e.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH) != null) {
                 e.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(
                         e.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * healthFact
@@ -56,8 +87,8 @@ public class MobListener extends AbstractEventsListener{
                 );
             }
 
-            e.getEntity().setHealth(e.getEntity().getHealth() * healthFact);
-            e.getEntity().setCustomName(prefix + e.getEntity().getName());
+            e.getEntity().setHealth(e.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+            e.getEntity().setCustomName(prefix + baseName);
             e.getEntity().setCustomNameVisible(true);
         }
     }
