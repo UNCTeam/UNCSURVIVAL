@@ -226,6 +226,10 @@ public class CustomBlockManager extends AbstractManager {
             if(slot < 27 && !((slot > 2 && slot < 6) || (slot > 11 && slot < 15) || (slot > 20 && slot < 24))) {
                 event.setCancelled(true);
                 return;
+            } else if((event.getRawSlot() > 27 && event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) ||
+                    event.getRawSlot() == 15 && event.getAction() == InventoryAction.PLACE_ALL) {
+                event.setCancelled(true);
+                return;
             }
         }
     }

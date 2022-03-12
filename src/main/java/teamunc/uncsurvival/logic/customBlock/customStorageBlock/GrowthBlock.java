@@ -50,8 +50,9 @@ public class GrowthBlock extends CustomStorageBlock {
                 age++;
             }
         }
-        if(age < 3) {
-            block.getLocation().clone().add(0, age, 0).getBlock().setType(mat);
+        if(age<4) {
+            age=age+block.getY();
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "setblock " + block.getX() + " " + age + " " + block.getZ() + " minecraft:" + mat.name().toLowerCase());
         }
     }
 
@@ -62,7 +63,6 @@ public class GrowthBlock extends CustomStorageBlock {
                 int chance = ran.nextInt(10);
                 if(chance == 0) {
                     if(block.getType() == Material.CACTUS) {
-                        Bukkit.broadcastMessage("Cactus pousse");
                         growBockAbove(block, Material.CACTUS, 3);
                         return 1;
                     } else if(block.getType() == Material.SUGAR_CANE) {
@@ -82,7 +82,6 @@ public class GrowthBlock extends CustomStorageBlock {
                                 {
                                     ag.setAge(ag.getAge()+1);
                                     block.setBlockData(ag);
-                                    Bukkit.broadcastMessage("wheat age +1");
                                 }
                             }.runTaskLater(UNCSurvival.getInstance(), 1);
                             return 1;
