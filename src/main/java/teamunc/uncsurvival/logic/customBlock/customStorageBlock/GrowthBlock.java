@@ -42,7 +42,7 @@ public class GrowthBlock extends CustomStorageBlock {
         fillFromInput();
     }
 
-    public void growBockAbove(Block block, Material mat, int size) {
+    public int growBockAbove(Block block, Material mat, int size) {
         int age = 0;
         for(int i = 0; i<size; i++) {
             Block currentBlock = block.getLocation().clone().add(0, i, 0).getBlock();
@@ -53,7 +53,9 @@ public class GrowthBlock extends CustomStorageBlock {
         if(age<3 && block.getLocation().clone().add(0, age, 0).getBlock().getType() == Material.AIR) {
             age=age+block.getY();
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "setblock " + block.getX() + " " + age + " " + block.getZ() + " minecraft:" + mat.name().toLowerCase());
+            return 1;
         }
+        return 0;
     }
 
     public int checkIfGrowthable(Block block) {
@@ -63,14 +65,12 @@ public class GrowthBlock extends CustomStorageBlock {
                 int chance = ran.nextInt(10);
                 if(chance == 0) {
                     if(block.getType() == Material.CACTUS) {
-                        growBockAbove(block, Material.CACTUS, 3);
-                        return 1;
+                        return growBockAbove(block, Material.CACTUS, 3);
                     } else if(block.getType() == Material.SUGAR_CANE) {
-                        growBockAbove(block, Material.SUGAR_CANE, 3);
-                        return 1;
+
+                        return growBockAbove(block, Material.SUGAR_CANE, 3);
                     } else if(block.getType() == Material.BAMBOO) {
-                        growBockAbove(block, Material.BAMBOO, 12);
-                            return 1;
+                            return growBockAbove(block, Material.BAMBOO, 12);
                     } else {
                         Ageable ag = (Ageable) block.getBlockData();
                         int newAge = ag.getAge()+1;

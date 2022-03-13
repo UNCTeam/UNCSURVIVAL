@@ -6,6 +6,7 @@ import teamunc.uncsurvival.utils.alchemist.BrewingControler;
 import teamunc.uncsurvival.utils.alchemist.PotionEvent;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EventsManager extends AbstractManager {
 
@@ -13,7 +14,7 @@ public class EventsManager extends AbstractManager {
 
     public EventsManager(UNCSurvival plugin) {
         super(plugin);
-
+        List<String> blockedArmors = new ArrayList<>();
         this.eventsListeners.add(new ConsumeListenerVanilla(this.plugin));
         this.eventsListeners.add(new CustomItemListener(this.plugin));
         this.eventsListeners.add(new BlockListener(this.plugin));
@@ -21,6 +22,7 @@ public class EventsManager extends AbstractManager {
         this.eventsListeners.add(new PlayerConnectionListener(this.plugin));
         this.eventsListeners.add(new playerInGameActionsListener(this.plugin));
         this.eventsListeners.add(new MobListener(this.plugin));
+        this.eventsListeners.add(new ArmorListener(blockedArmors, this.plugin));
 
         // register
         for (AbstractEventsListener evLi : this.eventsListeners)

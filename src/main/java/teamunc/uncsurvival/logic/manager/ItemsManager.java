@@ -680,6 +680,17 @@ public class ItemsManager extends AbstractManager {
         return getGoalItemPrice(itemNumber,phase);
     }
 
+    public boolean isCustomItemOfArray(ItemStack itemStack, List<String> items) {
+        Boolean result = false;
+        for(String item : items) {
+            if(isCustomItem(itemStack, item)) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+
     public boolean isCustomItem(ItemStack itemStack, String customNameCaseSensitive) {
         return (itemStack != null &&
                 itemStack.hasItemMeta() &&
