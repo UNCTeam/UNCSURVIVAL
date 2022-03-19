@@ -7,7 +7,7 @@ public class Raciste extends Advancement{
 
     @Override
     public int givenPoints() {
-        return 1500;
+        return 50000;
     }
 
     @Override

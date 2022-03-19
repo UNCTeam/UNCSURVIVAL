@@ -86,7 +86,7 @@ public class BrewClock extends BukkitRunnable {
     private void updateTime(){
         Bukkit.getConsoleSender().sendMessage("OH : " + this.brewTime);
         //this.stand.setBrewingTime( (int)(400 * (1 - (double)brewTime / (double)stopTime)) );
-        //this.stand.update();
+        this.stand.update();
     }
 
     public int getStopTime() {

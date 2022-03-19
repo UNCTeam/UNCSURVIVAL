@@ -3,6 +3,7 @@ package teamunc.uncsurvival.logic.manager;
 import org.bukkit.Bukkit;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.advancements.*;
+import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.team.Team;
 
 import java.io.Serializable;
@@ -28,6 +29,8 @@ public class AdvancementManager extends AbstractManager implements Serializable 
 
     public void grantToATeam(Team team,Advancement advancement) {
         if (team == null) return;
+        PhaseEnum phase = this.plugin.getGameManager().getGameStats().getCurrentPhase();
+        if (phase == PhaseEnum.INIT || phase == PhaseEnum.FIN) return;
         this.plugin.getMessageTchatManager().sendGeneralMesssage("§6La team " + team.getChatColor() + team.getName() + "§6 remporte l'achievement §b" + advancement.DisplayedName() + " !");
         team.getMembers().forEach(gamePlayer -> {
             this.plugin.getFileManager().unlockAdvancement(gamePlayer.getUUID(),advancement);

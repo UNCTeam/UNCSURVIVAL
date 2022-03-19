@@ -83,6 +83,11 @@ public class CustomItemListener extends AbstractEventsListener {
 
         if (itemMeta == null) return;
 
+        if (!e.getPlayer().isSneaking() && this.plugin.getGameManager().getCustomBlockManager().getCustomBlock(block.getLocation()) != null) {
+            e.setCancelled(true);
+            return;
+        }
+
         if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             PersistentDataContainer data = itemMeta.getPersistentDataContainer();
 

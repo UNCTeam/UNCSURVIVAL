@@ -7,7 +7,7 @@ public class PeteMaBiere extends Advancement{
 
     @Override
     public int givenPoints() {
-        return 500;
+        return 30000;
     }
 
     @Override

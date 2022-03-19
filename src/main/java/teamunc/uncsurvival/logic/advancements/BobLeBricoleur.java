@@ -7,7 +7,7 @@ public class BobLeBricoleur extends Advancement{
 
     @Override
     public int givenPoints() {
-        return 200;
+        return 5000;
     }
 
     @Override

@@ -56,9 +56,8 @@ public class GameEventsManager extends AbstractManager{
 
             if (gp.isCovided()) {
                 // Application des effets du covid
-                gp.getBukkitPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,100,2,false,false));
-                gp.getBukkitPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW,40,1,false,false));
-                gp.getBukkitPlayer().addPotionEffect(new PotionEffect(PotionEffectType.HARM,40,1,false,false));
+                gp.getBukkitPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW,40,0,false,false));
+                gp.getBukkitPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,40,1,false,false));
 
                 // Effect propagation et temps
                 boolean propagationAFaire = gp.passerUneSecondeCovid();
@@ -94,7 +93,7 @@ public class GameEventsManager extends AbstractManager{
         if ( (phase == PhaseEnum.PHASE2 || phase == PhaseEnum.PHASE3 ) && !team.isFamined() && min1playerOfTeamOnline ) {
             Random r = new Random();
 
-            int res = r.nextInt(180);
+            int res = r.nextInt(500);
 
             result = (res <= TAUX_FAMINE);
         }

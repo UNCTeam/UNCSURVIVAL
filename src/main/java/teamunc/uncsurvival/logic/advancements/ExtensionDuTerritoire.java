@@ -8,11 +8,11 @@ public class ExtensionDuTerritoire extends Advancement{
 
     @Override
     public int givenPoints() {
-        return 400;
+        return 10000;
     }
 
     @Override
     public String DisplayedName() {
-        return "Extension de territoire";
+        return "Extension du territoire";
     }
 }

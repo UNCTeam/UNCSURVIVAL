@@ -7,7 +7,7 @@ public class CaFaitBeaucoupLaNon extends Advancement{
 
     @Override
     public int givenPoints() {
-        return 400;
+        return 15000;
     }
 
     @Override

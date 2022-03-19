@@ -1,5 +1,6 @@
 package teamunc.uncsurvival.eventsListeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -15,10 +16,6 @@ public class PlayerConnectionListener extends AbstractEventsListener
     @EventHandler
     public void onPlayerConnection(PlayerJoinEvent playerJoinEvent) {
         plugin.getGameManager().getScoreboardManager().addScoreboard(new InGameInfoScoreboard(playerJoinEvent.getPlayer()));
-    }
-
-    @EventHandler
-    public void onPlyaerDisconnect(PlayerQuitEvent playerQuitEvent) {
-        plugin.getGameManager().getScoreboardManager().removeScoreboard(playerQuitEvent.getPlayer());
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"advancement grant @a only uncsurvival:root");
     }
 }

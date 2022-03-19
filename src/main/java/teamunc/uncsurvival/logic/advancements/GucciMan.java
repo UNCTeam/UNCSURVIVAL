@@ -7,7 +7,7 @@ public class GucciMan extends Advancement{
 
     @Override
     public int givenPoints() {
-        return 1000;
+        return 20000;
     }
 
     @Override

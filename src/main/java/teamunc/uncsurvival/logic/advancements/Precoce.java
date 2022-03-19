@@ -7,7 +7,7 @@ public class Precoce extends Advancement{
 
     @Override
     public int givenPoints() {
-        return 300;
+        return 3000;
     }
 
     @Override

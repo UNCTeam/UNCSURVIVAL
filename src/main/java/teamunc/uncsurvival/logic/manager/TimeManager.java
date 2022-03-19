@@ -136,7 +136,7 @@ public class TimeManager extends AbstractManager{
 
         // gourde ?
         for(GamePlayer player : this.plugin.getGameManager().getParticipantManager().getGamePlayers()) {
-            if ( player.getBukkitPlayer() != null && player.getWaterLevel() <= 2 && player.getBukkitPlayer().getInventory().contains(this.plugin.getGameManager().getItemsManager().createGourde())) {
+            if ( player.getBukkitPlayer() != null && player.getWaterLevel() <= 2 && this.plugin.getGameManager().getItemsManager().aUneGourde(player.getBukkitPlayer().getInventory())) {
                 ItemStack gourde = (ItemStack) Arrays.stream(player.getBukkitPlayer().getInventory().getContents())
                         .filter(itemStack -> itemStack != null && this.plugin.getGameManager().getItemsManager().isCustomItem(itemStack, "GOURDE")).toArray()[0];
                 if (gourde != null) {

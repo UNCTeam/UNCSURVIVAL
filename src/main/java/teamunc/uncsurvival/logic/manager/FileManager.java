@@ -71,13 +71,13 @@ public class FileManager extends AbstractManager{
             LocalDateTime phase = LocalDateTime.now();
 
             ArrayList<Integer> goalItemsPrices = new ArrayList<>();
-            goalItemsPrices.add(1);
+            goalItemsPrices.add(12);
+            goalItemsPrices.add(60);
+            goalItemsPrices.add(55);
+            goalItemsPrices.add(400);
             goalItemsPrices.add(2);
-            goalItemsPrices.add(3);
-            goalItemsPrices.add(4);
-            goalItemsPrices.add(5);
-            goalItemsPrices.add(6);
-            goalItemsPrices.add(7);
+            goalItemsPrices.add(30);
+            goalItemsPrices.add(50);
 
 
             GameConfiguration gameConfiguration = new GameConfiguration(phase, phase, phase, goalItemsPrices,false);

@@ -830,4 +830,14 @@ public class ItemsManager extends AbstractManager {
             }
         }
     }
+
+    public boolean aUneGourde(Inventory inv) {
+        boolean res = false;
+        for (ItemStack itemStack : inv.all(Material.CARROT_ON_A_STICK).values()) {
+            if (isCustomItem(itemStack,"GOURDE")) {
+                res = true;
+            }
+        }
+        return res;
+    }
 }

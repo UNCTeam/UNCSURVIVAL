@@ -7,7 +7,7 @@ public class MonChandail extends Advancement{
 
     @Override
     public int givenPoints() {
-        return 100;
+        return 300;
     }
 
     @Override
