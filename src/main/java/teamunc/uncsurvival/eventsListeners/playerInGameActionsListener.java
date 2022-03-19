@@ -49,9 +49,10 @@ public class playerInGameActionsListener extends AbstractEventsListener {
 
         for (Team t : this.plugin.getGameManager().getTeamsManager().getAllTeams()) {
             if (this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(p) != t) {
-                t.addABonusScore(100);
+                t.addABonusScore(300);
             }
         }
+        this.plugin.getMessageTchatManager().sendGeneralMesssage("§6§lMerci pour la mort! §b§l+300 §6§lpoints pour les autres!");
 
         // advancement
         AdvancementManager advancementManager = this.plugin.getGameManager().getAdvancementManager();
@@ -61,7 +62,6 @@ public class playerInGameActionsListener extends AbstractEventsListener {
             advancementManager.grantToATeam(t,advancement);
         }
 
-        this.plugin.getMessageTchatManager().sendGeneralMesssage("§6§lMerci pour la mort! §b§l+100 §6§lpoints pour les autres!");
     }
 
     @EventHandler
@@ -87,6 +87,7 @@ public class playerInGameActionsListener extends AbstractEventsListener {
     @EventHandler
     public void onPlayerDeconnect(PlayerQuitEvent e) {
         Player player = e.getPlayer();
+        plugin.getGameManager().getScoreboardManager().removeScoreboard(player);
         GamePlayer gp = this.plugin.getGameManager().getParticipantManager().getGamePlayer(player.getName());
         if (gp != null && gp.isInDuel()) {
             Duel duel = this.plugin.getGameManager().getGameEventsManager().getDuel();
