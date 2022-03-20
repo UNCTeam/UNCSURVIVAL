@@ -226,6 +226,14 @@ public class CustomBlockManager extends AbstractManager {
                 event.setCancelled(true);
                 return;
             }
+        } else if(title.contains(this.getTitle(CustomBlockType.BOTTLER_BLOCK))) {
+            if(slot < 27 && slot != 10 && slot != 12 && slot != 7 && slot != 17 && slot != 25) {
+                event.setCancelled(true);
+                return;
+            } else if(event.getRawSlot() > 27 && event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+                event.setCancelled(true);
+                return;
+            }
         }
     }
 }

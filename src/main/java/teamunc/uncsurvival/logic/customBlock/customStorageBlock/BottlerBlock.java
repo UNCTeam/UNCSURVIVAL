@@ -13,7 +13,7 @@ public class BottlerBlock extends CustomStorageBlock {
 
     public BottlerBlock(Location location, CustomBlockType customBlockType) {
         super(location, customBlockType);
-        this.processingDuration = 100;
+        this.processingDuration = 20;
         this.inventory = Bukkit.createInventory(null, 27, UNCSurvival.getInstance().getGameManager().getCustomBlockManager().getTitle(this.customBlockType));
     }
 
@@ -22,6 +22,7 @@ public class BottlerBlock extends CustomStorageBlock {
         if(this.isBlockLoaded()) {
             if(duration == 0) {
                 produceCactusJuce();
+                resetProgressAnimation();
             } else if(duration > 0) {
                 if(checkIfCanProduce()) {
                     updateProgressAnimation();
@@ -43,7 +44,12 @@ public class BottlerBlock extends CustomStorageBlock {
 
     private void updateProgressAnimation() {
         double pourcentage = (1 - (double) duration / processingDuration) * 100;
-        ItemStack progress = UNCSurvival.getInstance().getGameManager().getItemsManager().createProgresBar((int) pourcentage);
+        ItemStack progress = UNCSurvival.getInstance().getGameManager().getItemsManager().createProgresBarBottler((int) pourcentage);
+        inventory.setItem(14, progress);
+    }
+
+    private void resetProgressAnimation() {
+        ItemStack progress = UNCSurvival.getInstance().getGameManager().getItemsManager().createProgresBarBottler(0);
         inventory.setItem(14, progress);
     }
 
