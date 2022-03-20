@@ -35,7 +35,7 @@ public class MincerBlock extends CustomStorageBlock {
                 checkIfCanProduce();
             }
             fillFromInput();
-            exportOutput(15, null);
+            exportOutput(15, null, UNCSurvival.getInstance().getGameManager().getItemsManager().createMincedMeat());
         }
     }
 

@@ -120,8 +120,6 @@ public class CustomBlockManager extends AbstractManager {
         if(armorStand != null) {
             this.removeCustomBlock(loc);
             armorStand.remove();
-        } else if(bl.getType() == Material.BREWING_STAND) {
-            this.removeCustomBlock(loc);
         }
 
         // pas de drop d'item vanilla
@@ -175,7 +173,7 @@ public class CustomBlockManager extends AbstractManager {
         if(customBlock == null) return;
 
         event.getPlayer().openInventory(customBlock.getInventory());
-
+        event.setCancelled(true);
     }
 
     public void placeCustomBlock(BlockPlaceEvent event) {

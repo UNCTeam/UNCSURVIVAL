@@ -2,6 +2,7 @@ package teamunc.uncsurvival.utils.serializerAdapter;
 
 import com.google.gson.*;
 import teamunc.uncsurvival.logic.customBlock.CustomBlockType;
+import teamunc.uncsurvival.logic.customBlock.customStorageBlock.BottlerBlock;
 import teamunc.uncsurvival.logic.customBlock.customStorageBlock.CustomStorageBlock;
 import teamunc.uncsurvival.logic.customBlock.customStorageBlock.GrowthBlock;
 import teamunc.uncsurvival.logic.customBlock.customStorageBlock.MincerBlock;
@@ -17,7 +18,8 @@ public class CustomStorageBlockInterfaceCreator implements JsonDeserializer<Cust
         switch (types) {
             case MINCER_BLOCK:
                 return jsonDeserializationContext.deserialize(jsonElement, MincerBlock.class);
-                // TODO: ADAPTER pour le brewing stand
+            case BOTTLER_BLOCK:
+                return jsonDeserializationContext.deserialize(jsonElement, BottlerBlock.class);
             case GROWTH_BLOCK:
                 return jsonDeserializationContext.deserialize(jsonElement, GrowthBlock.class);
         }

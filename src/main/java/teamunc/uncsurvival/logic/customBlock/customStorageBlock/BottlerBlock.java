@@ -1,5 +1,6 @@
 package teamunc.uncsurvival.logic.customBlock.customStorageBlock;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Hopper;
@@ -8,10 +9,12 @@ import org.bukkit.inventory.ItemStack;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.customBlock.CustomBlockType;
 
-public class BrewingStand extends CustomStorageBlock {
+public class BottlerBlock extends CustomStorageBlock {
 
-    public BrewingStand(Location location, CustomBlockType customBlockType) {
+    public BottlerBlock(Location location, CustomBlockType customBlockType) {
         super(location, customBlockType);
+        this.processingDuration = 100;
+        this.inventory = Bukkit.createInventory(null, 27, UNCSurvival.getInstance().getGameManager().getCustomBlockManager().getTitle(this.customBlockType));
     }
 
     @Override
@@ -32,7 +35,9 @@ public class BrewingStand extends CustomStorageBlock {
                 }
             }
             fillFromInput();
-            exportOutput(15, Material.GLASS_BOTTLE);
+            exportOutput(7, Material.GLASS_BOTTLE, UNCSurvival.getInstance().getGameManager().getItemsManager().createCactusJuice());
+            exportOutput(17, Material.GLASS_BOTTLE, UNCSurvival.getInstance().getGameManager().getItemsManager().createCactusJuice());
+            exportOutput(25, Material.GLASS_BOTTLE, UNCSurvival.getInstance().getGameManager().getItemsManager().createCactusJuice());
         }
     }
 
