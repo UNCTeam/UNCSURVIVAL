@@ -8,9 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
+import org.bukkit.entity.*;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockGrowEvent;
@@ -75,6 +73,9 @@ public class CustomBlockManager extends AbstractManager {
     public boolean removeCustomBlock(Location location) {
         if(this.customStorageBlockHashMap.containsKey(location)) {
             CustomStorageBlock customBlock = this.customStorageBlockHashMap.get(location);
+            for(HumanEntity player : customBlock.getInventory().getViewers()) {
+                player.closeInventory();
+            }
             if(customBlock.getCustomBlockType() == CustomBlockType.GROWTH_BLOCK) {
                 this.growthBlockArrayList.remove((GrowthBlock) customBlock);
             }

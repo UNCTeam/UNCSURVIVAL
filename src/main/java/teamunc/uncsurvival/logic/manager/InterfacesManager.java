@@ -22,7 +22,7 @@ public class InterfacesManager extends AbstractManager{
         return new ArrayList<>(Arrays.asList(
                 "本", "北", "被", "背", "备",
                 "鼻",
-                "杯", "抱"
+                "杯", "抱", "帮"
         ));
     }
 

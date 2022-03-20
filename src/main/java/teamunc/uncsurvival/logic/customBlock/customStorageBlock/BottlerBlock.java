@@ -15,6 +15,7 @@ public class BottlerBlock extends CustomStorageBlock {
         super(location, customBlockType);
         this.processingDuration = 20;
         this.inventory = Bukkit.createInventory(null, 27, UNCSurvival.getInstance().getGameManager().getCustomBlockManager().getTitle(this.customBlockType));
+        this.resetProgressAnimation();
     }
 
     @Override
