@@ -93,7 +93,7 @@ public class CustomBlockManager extends AbstractManager {
     }
 
     public void breakCustomBlock(Block bl) {
-        if(bl.getType() != Material.SMOOTH_STONE) return;
+        if((bl.getType() != Material.SMOOTH_STONE) && (bl.getType() != Material.BREWING_STAND)) return;
 
         CustomStorageBlock customBlock = this.getCustomBlock(bl.getLocation());
 
@@ -120,6 +120,8 @@ public class CustomBlockManager extends AbstractManager {
         if(armorStand != null) {
             this.removeCustomBlock(loc);
             armorStand.remove();
+        } else if(bl.getType() == Material.BREWING_STAND) {
+            this.removeCustomBlock(loc);
         }
 
         // pas de drop d'item vanilla
@@ -132,7 +134,8 @@ public class CustomBlockManager extends AbstractManager {
             case GROWTH_BLOCK:
                 itemStack = plugin.getGameManager().getItemsManager().createGrowthItemBlock();
                 break;
-            case COOK_BLOCk:
+            case BOTTLER_BLOCK:
+                itemStack = new ItemStack(Material.BREWING_STAND);
                 break;
             case MINCER_BLOCK:
                 itemStack = plugin.getGameManager().getItemsManager().createMincerItemBlock();
@@ -155,19 +158,17 @@ public class CustomBlockManager extends AbstractManager {
             case GROWTH_BLOCK:
                 name = ChatColor.WHITE +"\uF80B抱";
                 break;
-            case COOK_BLOCk:
-                break;
             case MINCER_BLOCK:
                 name = ChatColor.WHITE +"\uF80B杯";
                 break;
-            case PROECTION_BLOCK:
-                break;
+            case BOTTLER_BLOCK:
+                name = ChatColor.WHITE +"\uF80B帮";
         }
         return name;
     }
 
     public void interactBlockEvent(PlayerInteractEvent event) {
-        if(event.getClickedBlock().getType() != Material.SMOOTH_STONE) return;
+        if(!(event.getClickedBlock().getType() == Material.SMOOTH_STONE || event.getClickedBlock().getType() == Material.BREWING_STAND)) return;
 
         CustomStorageBlock customBlock = this.getCustomBlock(event.getClickedBlock().getLocation());
 
@@ -198,10 +199,6 @@ public class CustomBlockManager extends AbstractManager {
             switch (blockType) {
                 case MINCER_BLOCK:
                     this.addCustomBlock(new MincerBlock(loc, blockType));
-                    break;
-                case COOK_BLOCk:
-                    break;
-                case PROECTION_BLOCK:
                     break;
                 case GROWTH_BLOCK:
                     this.addCustomBlock(new GrowthBlock(loc, blockType));

@@ -37,6 +37,7 @@ public class BlockListener extends AbstractEventsListener {
                         event.setCancelled(true);
                         break;
                     case SMOOTH_STONE:
+                    case BREWING_STAND:
                         plugin.getGameManager().getCustomBlockManager().interactBlockEvent(event);
                         event.setCancelled(true);
                         break;
@@ -63,8 +64,6 @@ public class BlockListener extends AbstractEventsListener {
 
             switch (block.getType()) {
                 case BREWING_STAND:
-
-                    break;
                 case SMOOTH_STONE:
                     this.plugin.getGameManager().getCustomBlockManager().breakCustomBlock(block);
                     break;

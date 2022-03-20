@@ -17,12 +17,9 @@ public class CustomStorageBlockInterfaceCreator implements JsonDeserializer<Cust
         switch (types) {
             case MINCER_BLOCK:
                 return jsonDeserializationContext.deserialize(jsonElement, MincerBlock.class);
-            case COOK_BLOCk:
-                return null;
+                // TODO: ADAPTER pour le brewing stand
             case GROWTH_BLOCK:
                 return jsonDeserializationContext.deserialize(jsonElement, GrowthBlock.class);
-            case PROECTION_BLOCK:
-                return null;
         }
         return null;
     }
