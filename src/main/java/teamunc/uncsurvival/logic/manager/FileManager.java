@@ -74,13 +74,13 @@ public class FileManager extends AbstractManager{
             goalItemsPrices.add(12);
             goalItemsPrices.add(60);
             goalItemsPrices.add(55);
-            goalItemsPrices.add(400);
+            goalItemsPrices.add(200);
             goalItemsPrices.add(2);
             goalItemsPrices.add(30);
             goalItemsPrices.add(50);
 
 
-            GameConfiguration gameConfiguration = new GameConfiguration(phase, phase, phase, goalItemsPrices,false);
+            GameConfiguration gameConfiguration = new GameConfiguration(phase, phase, phase, goalItemsPrices);
             this.plugin.getFileManager().saveGameConfiguration(gameConfiguration);
             return gameConfiguration;
         } catch (Exception e) {
@@ -204,27 +204,6 @@ public class FileManager extends AbstractManager{
             TeamList teamList = new TeamList();
             this.plugin.getFileManager().saveTeams(teamList);
             return teamList;
-        }
-    }
-
-    public ArrayList<Location> loadBrewingStands() {
-        try {
-            ArrayList<Location> res = (ArrayList<Location>) this.load(this.pluginDataFile.getPath() + "/brewingstands_locations.unc_save");
-            return res;
-        } catch (Exception e) {
-            // Le fichier n'existe pas alors on l'init et le créer
-            Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "Creation du fichier brewingstands_locations");
-            return new ArrayList<Location>();
-        }
-    }
-
-    public boolean saveBrewingStands(ArrayList<Location> locations) {
-        try {
-            this.save(locations,this.pluginDataFile.getPath() + "/brewingstands_locations.unc_save");
-            return true;
-        } catch (Exception e) {
-            Bukkit.getServer().getConsoleSender().sendMessage(e.toString());
-            return false;
         }
     }
 

@@ -1,17 +1,8 @@
 package teamunc.uncsurvival.logic.manager;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
-import net.minecraft.resources.MinecraftKey;
-import net.minecraft.world.item.crafting.IRecipe;
-import net.minecraft.world.item.crafting.RecipeCampfire;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.block.BrewingStand;
-import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftShapelessRecipe;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.Damageable;
@@ -20,18 +11,14 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.features.thirst.ThirstActualiser;
 import teamunc.uncsurvival.logic.configuration.GameConfiguration;
 import teamunc.uncsurvival.logic.customBlock.CustomBlockType;
-import teamunc.uncsurvival.logic.customBlock.customStorageBlock.MincerBlock;
 import teamunc.uncsurvival.logic.gameStats.GameStats;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.player.GamePlayer;
-import teamunc.uncsurvival.utils.alchemist.BrewingControler;
-import teamunc.uncsurvival.utils.alchemist.BrewingRecipe;
 
 import java.util.*;
 
@@ -41,7 +28,6 @@ public class ItemsManager extends AbstractManager {
     private NamespacedKey wrenchKey = new NamespacedKey(plugin, "wrenchID");
     private ArrayList<Integer> goalItemsPrices;
     private List<String> customItems;
-    private BrewingControler brewingControler;
     private GameConfiguration gameConfiguration;
 
     public List<String> getCustomItems() {
@@ -61,6 +47,10 @@ public class ItemsManager extends AbstractManager {
         this.goalItemsPrices = gameConfiguration.getGoalItemsPrices();
         this.customItems = List.of("diamondApple", "wrench", "mincer", "healPatch", "alcool",
                 "vaccin","module","mincedMeat","burger","wheatFlour", "growthBlock", "cactusJuice","amethystIngot","amethystSword","amethystPickaxe","famineSoup","gourde");
+    }
+
+    public void setGoalItemPrice(int strictIndex, int newValue) {
+        this.goalItemsPrices.set(strictIndex,newValue);
     }
 
     public void registerGoalItems(PhaseEnum phase) {
@@ -434,8 +424,6 @@ public class ItemsManager extends AbstractManager {
     }
 
     public void initCraftingRecipe() {
-        // potion craft manager
-        this.brewingControler = new BrewingControler(this.plugin);
 
         // DIAMOND APPLE
         ShapedRecipe diamondApple = new ShapedRecipe(new NamespacedKey(this.plugin,"craftDiamondApple"),this.createDiamondApple());
@@ -464,14 +452,11 @@ public class ItemsManager extends AbstractManager {
         alcool.setIngredient('-',Material.GLASS_BOTTLE);
         this.plugin.getServer().addRecipe(alcool);
 
-        // ALCOOL QUALITY
-        if (this.plugin.getGameManager().isAlcoolQualityInGame()) {
-            ShapedRecipe alcoolQuality = new ShapedRecipe(new NamespacedKey(this.plugin, "craftAlcoolQuality"), this.createAlcool());
-            alcoolQuality.shape("***", "*-*", "***");
-            alcoolQuality.setIngredient('*', Material.ROTTEN_FLESH);
-            alcoolQuality.setIngredient('-', Material.POTION);
-            this.plugin.getServer().addRecipe(alcoolQuality);
-        }
+        ShapedRecipe alcoolQuality = new ShapedRecipe(new NamespacedKey(this.plugin, "craftAlcoolQuality"), this.createAlcool());
+        alcoolQuality.shape("***", "*-*", "***");
+        alcoolQuality.setIngredient('*', Material.ROTTEN_FLESH);
+        alcoolQuality.setIngredient('-', Material.POTION);
+        this.plugin.getServer().addRecipe(alcoolQuality);
 
         // HEAL PATCH
         ShapedRecipe heal_patch = new ShapedRecipe(new NamespacedKey(this.plugin,"craftHealPatch"),this.createHealPatch());
@@ -588,16 +573,6 @@ public class ItemsManager extends AbstractManager {
         famineSoup.setIngredient('_',Material.FERMENTED_SPIDER_EYE);
         this.plugin.getServer().addRecipe(famineSoup);
 
-        // CACTUS JUICE
-        // creating water potion
-        ItemStack potion = new ItemStack(Material.POTION);
-        PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
-        potionMeta.setBasePotionData(new PotionData(PotionType.WATER));
-        potion.setItemMeta(potionMeta);
-        brewingControler.addRecipe(
-                new BrewingRecipe(new NamespacedKey(this.plugin,"craftCactusJuice"),this.createCactusJuice(),new ItemStack(Material.GREEN_DYE),potion,1,100)
-        );
-
         // AMETHYST PICKAXE
         ShapelessRecipe amethystPickaxe = new ShapelessRecipe(new NamespacedKey(this.plugin,"craftAmethystPickaxe"),this.createAmethystPickaxe());
         amethystPickaxe.addIngredient(new RecipeChoice.ExactChoice(this.createAmethystIngot()));
@@ -650,10 +625,6 @@ public class ItemsManager extends AbstractManager {
         Bukkit.getServer().addRecipe(recipe);
     }
 
-    public BrewingControler getBrewingControler() {
-        return brewingControler;
-    }
-
     public ItemStack getGoalItem(int itemNumber) {return this.gameConfiguration.getGoalItems().get(itemNumber);}
 
     public int getGoalItemPrice(Integer itemNumber,PhaseEnum phase) {
@@ -696,10 +667,6 @@ public class ItemsManager extends AbstractManager {
                 itemStack.hasItemMeta() &&
                 itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING) != null &&
                 itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING).equals(customNameCaseSensitive));
-    }
-
-    public void save() {
-        if (this.brewingControler != null) this.brewingControler.stop();
     }
 
     public Set<Material> getAllFoodOfTheGame() {
@@ -810,7 +777,6 @@ public class ItemsManager extends AbstractManager {
         }
         return res;
     }
-
 
     public void actionOfGourde(Player p, ItemStack gourde) {
         if (p.getInventory().contains(Material.POTION)) {

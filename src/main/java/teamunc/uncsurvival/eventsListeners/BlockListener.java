@@ -1,6 +1,7 @@
 package teamunc.uncsurvival.eventsListeners;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BrewingStand;
 import org.bukkit.entity.Player;
@@ -53,11 +54,16 @@ public class BlockListener extends AbstractEventsListener {
 
         Player player = event.getPlayer();
         Block block = event.getBlock();
+
+        if (block.getType() == Material.AMETHYST_BLOCK) {
+            event.setDropItems(false);
+        }
+
         if (CanDoThisHere(player,block.getLocation())) {
 
             switch (block.getType()) {
                 case BREWING_STAND:
-                    itemsManager.getBrewingControler().removeStand(block.getLocation());
+
                     break;
                 case SMOOTH_STONE:
                     this.plugin.getGameManager().getCustomBlockManager().breakCustomBlock(block);
@@ -112,13 +118,15 @@ public class BlockListener extends AbstractEventsListener {
                                     if (bl.getType() == event.getBlock().getType() && CanDoThisHere(player,bl.getLocation())) {
                                         switch (bl.getType()) {
                                             case BREWING_STAND:
-                                                itemsManager.getBrewingControler().removeStand(bl.getLocation());
+
                                                 break;
                                             case SMOOTH_STONE:
                                                 this.plugin.getGameManager().getCustomBlockManager().breakCustomBlock(bl);
                                                 break;
                                             default:
-                                                bl.breakNaturally(item);
+                                                if (block.getType() == Material.AMETHYST_BLOCK) {
+                                                    bl.setType(Material.AIR);
+                                                } else bl.breakNaturally(item);
                                                 break;
                                         }
                                     }
@@ -145,7 +153,7 @@ public class BlockListener extends AbstractEventsListener {
 
             switch (block.getType()) {
                 case BREWING_STAND:
-                    itemsManager.getBrewingControler().addStand((BrewingStand) block.getState());
+
                     break;
                 case DROPPER:
                     this.plugin.getGameManager().getCustomBlockManager().placeCustomBlock(event);

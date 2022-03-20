@@ -1,5 +1,6 @@
 package teamunc.uncsurvival.commandesListeners;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
@@ -46,15 +47,24 @@ public class PlayerCmdExec extends AbstractCommandExecutor{
                     sender.sendMessage(sendedMsg);
                     break;
 
-                case "activealcoolquality":
-                    // ALCOOL QUALITY
-                    this.plugin.getGameManager().setAlcoolQualityInGame(true);
-                    ShapedRecipe alcoolQuality = new ShapedRecipe(new NamespacedKey(this.plugin, "craftAlcoolQuality"), this.plugin.getGameManager().getItemsManager().createAlcool());
-                    alcoolQuality.shape("***", "*-*", "***");
-                    alcoolQuality.setIngredient('*', Material.ROTTEN_FLESH);
-                    alcoolQuality.setIngredient('-', Material.POTION);
-                    this.plugin.getServer().addRecipe(alcoolQuality);
-                    sender.sendMessage("§8---------| §b§lAlcool Quality Activated §8|---------\n");
+                case "modifyitemvalue":
+                    // ITEM VALUE MODIFICATION
+                    if (args.length == 2) {
+                        try {
+                            int num1 = Integer.parseInt(args[0]);
+                            int num2 = Integer.parseInt(args[1]);
+
+                            this.plugin.getGameManager().getItemsManager().setGoalItemPrice(num1,num2);
+
+                            this.plugin.getMessageTchatManager().sendMessageToPlayer(
+                                    "Nouvelle valeur de l'item "
+                                    + this.plugin.getGameManager().getItemsManager().getGoalItemName(num1)
+                                    + ChatColor.GOLD
+                                    + " est maintenant "
+                                    + ChatColor.LIGHT_PURPLE
+                                    + this.plugin.getGameManager().getItemsManager().getGoalItemPrice(num1),sender, ChatColor.GOLD);
+                        } catch (Exception ignored) {}
+                    }
                     break;
             }
         return commandValid;

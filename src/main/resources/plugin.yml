@@ -115,11 +115,11 @@ commands:
   startduel:
     description: start a duel with two players
     usage: /duel player1 player2
-    permission: uncsurvival.admin
+    permission: uncsurvival.admins
 
-  activealcoolquality:
-    description: active alcool quality craft
-    usage: /activealcoolquality
+  modifyitemvalue:
+    description: modify value of an item goal
+    usage: /modifyitemvalue <item number> <value>
     permission: uncsurvival.admins
 
 permissions:
