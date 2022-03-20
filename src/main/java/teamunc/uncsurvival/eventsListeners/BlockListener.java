@@ -1,5 +1,6 @@
 package teamunc.uncsurvival.eventsListeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -37,8 +38,8 @@ public class BlockListener extends AbstractEventsListener {
                         event.setCancelled(true);
                         break;
                     case SMOOTH_STONE:
+                    case BREWING_STAND:
                         plugin.getGameManager().getCustomBlockManager().interactBlockEvent(event);
-                        event.setCancelled(true);
                         break;
                 }
             } else {
@@ -61,13 +62,9 @@ public class BlockListener extends AbstractEventsListener {
 
         if (CanDoThisHere(player,block.getLocation())) {
 
-            switch (block.getType()) {
-                case BREWING_STAND:
-
-                    break;
-                case SMOOTH_STONE:
-                    this.plugin.getGameManager().getCustomBlockManager().breakCustomBlock(block);
-                    break;
+            if(block.getType() == Material.BREWING_STAND || block.getType() == Material.SMOOTH_STONE) {
+                this.plugin.getGameManager().getCustomBlockManager().breakCustomBlock(block);
+                return;
             }
 
             // test outil custom
@@ -145,16 +142,11 @@ public class BlockListener extends AbstractEventsListener {
 
     @EventHandler
     public void onPlaceBlockEvent(BlockPlaceEvent event) {
-        ItemsManager itemsManager = this.plugin.getGameManager().getItemsManager();
-
         Player player = event.getPlayer();
         Block block = event.getBlock();
         if (CanDoThisHere(player,block.getLocation())) {
 
             switch (block.getType()) {
-                case BREWING_STAND:
-
-                    break;
                 case DROPPER:
                     this.plugin.getGameManager().getCustomBlockManager().placeCustomBlock(event);
                     break;

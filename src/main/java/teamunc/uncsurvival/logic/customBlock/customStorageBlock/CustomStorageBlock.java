@@ -3,6 +3,7 @@ package teamunc.uncsurvival.logic.customBlock.customStorageBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
@@ -25,7 +26,9 @@ public abstract class CustomStorageBlock implements Serializable {
     public CustomStorageBlock(Location location, CustomBlockType customBlockType) {
         this.customBlockType = customBlockType;
         this.location = location;
-        location.getBlock().setType(Material.SMOOTH_STONE);
+        if(customBlockType != CustomBlockType.BOTTLER_BLOCK) {
+            location.getBlock().setType(Material.SMOOTH_STONE);
+        }
 
         // Spawn Armorstand
         Location loc = location.clone().add(0.5,0,0.5);
@@ -57,12 +60,45 @@ public abstract class CustomStorageBlock implements Serializable {
         return null;
     }
 
+    protected void exportOutput(int indexItemToExport, Material exlude, ItemStack item) {
+        ItemStack output = this.inventory.getItem(indexItemToExport);
+        if(output != null && this.hasOutput() && output.getType() != exlude) {
+            Hopper input = this.getOutput();
+            Inventory outputInventory = input.getInventory();
+            // Check si y a de la place
+            if (outputInventory.firstEmpty() != -1) {
+                outputInventory.addItem(item);
+                output.setAmount(output.getAmount()-1);
+            }
+        }
+    }
+
+    protected boolean hasSpaceInOutput(Material mat, int index) {
+        ItemStack item = inventory.getItem(index);
+        if(item != null  && (item.getAmount() == 64 || !item.getType().equals(mat))) {
+            return false;
+        }
+        return true;
+    }
+
+    public void moveItem(Integer itemIndex, ItemStack item) {
+        if(inventory.getItem(itemIndex) != null && inventory.getItem(itemIndex).getAmount() != 64) {
+            inventory.getItem(itemIndex).setAmount(inventory.getItem(itemIndex).getAmount()+1);
+            item.setAmount(item.getAmount()-1);
+        } else if(inventory.getItem(itemIndex) == null) {
+            inventory.setItem(itemIndex, new ItemStack(item.getType()));
+            item.setAmount(item.getAmount()-1);
+        }
+    }
+
     public boolean hasInput() {
-        return this.location.clone().add(0,1,0).clone().getBlock().getType() == Material.HOPPER;
+        Block block = this.location.clone().add(0,1,0).clone().getBlock();
+        return block.getType() == Material.HOPPER;
     }
 
     public boolean hasOutput() {
-        return this.location.clone().add(0,-1,0).clone().getBlock().getType() == Material.HOPPER;
+        Block block = this.location.clone().add(0,-1,0).clone().getBlock();
+        return block.getType() == Material.HOPPER && !block.isBlockPowered();
     }
 
     public boolean isBlockLoaded() {

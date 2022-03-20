@@ -258,6 +258,23 @@ public class ItemsManager extends AbstractManager {
         return item;
     }
 
+    public ItemStack createProgresBarBottler(Integer pourcentage) {
+        ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK);
+        ItemMeta meta = item.getItemMeta();
+        if(pourcentage < 25) {
+            meta.setCustomModelData(11);
+        } else if(pourcentage < 50) {
+            meta.setCustomModelData(12);
+        }  else if(pourcentage < 75) {
+            meta.setCustomModelData(13);
+        } else {
+            meta.setCustomModelData(14);
+        }
+        meta.setDisplayName("§a" + pourcentage + "%");
+        item.setItemMeta(meta);
+        return item;
+    }
+
     public ItemStack createAnimatedMincer() {
         ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK);
         ItemMeta meta = item.getItemMeta();

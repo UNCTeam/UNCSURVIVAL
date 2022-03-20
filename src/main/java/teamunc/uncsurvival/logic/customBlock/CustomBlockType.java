@@ -2,9 +2,8 @@ package teamunc.uncsurvival.logic.customBlock;
 
 public enum CustomBlockType {
     GROWTH_BLOCK(101),
-    PROECTION_BLOCK(102),
-    MINCER_BLOCK(103),
-    COOK_BLOCk(104);
+    BOTTLER_BLOCK(102),
+    MINCER_BLOCK(103);
 
     private Integer model;
 

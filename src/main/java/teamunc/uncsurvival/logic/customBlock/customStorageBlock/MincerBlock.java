@@ -35,7 +35,7 @@ public class MincerBlock extends CustomStorageBlock {
                 checkIfCanProduce();
             }
             fillFromInput();
-            exportOutput();
+            exportOutput(15, null, UNCSurvival.getInstance().getGameManager().getItemsManager().createMincedMeat());
         }
     }
 
@@ -64,7 +64,7 @@ public class MincerBlock extends CustomStorageBlock {
     }
 
     public void produceMincedMeat() {
-        if(this.hasSpaceInOutput(Material.COOKED_BEEF)) {
+        if(this.hasSpaceInOutput(Material.COOKED_BEEF, 15)) {
             duration = -1;
             ItemStack item = this.inventory.getItem(15);
             if(item != null) {
@@ -79,27 +79,6 @@ public class MincerBlock extends CustomStorageBlock {
         }
     }
 
-    public void exportOutput() {
-        ItemStack output = this.inventory.getItem(15);
-        if(output != null && this.hasOutput()) {
-            Hopper input = this.getOutput();
-            Inventory outputInventory = input.getInventory();
-            // Check si y a de la place
-            if (outputInventory.firstEmpty() != -1) {
-                outputInventory.addItem(UNCSurvival.getInstance().getGameManager().getItemsManager().createMincedMeat());
-                output.setAmount(output.getAmount()-1);
-            }
-        }
-    }
-
-    public boolean hasSpaceInOutput(Material mat) {
-        ItemStack item = inventory.getItem(15);
-        if(item != null  && (item.getAmount() == 64 || !item.getType().equals(mat))) {
-            return false;
-        }
-        return true;
-    }
-
     public void fillFromInput() {
         if(!this.hasInput()) return;
         Hopper input = this.getInput();
@@ -107,13 +86,7 @@ public class MincerBlock extends CustomStorageBlock {
         for (int i = 0;i<input.getInventory().getSize();i++) {
             ItemStack item = inputInventory.getItem(i);
             if(item != null && item.getType() == Material.COOKED_BEEF) {
-                if(inventory.getItem(11) != null && inventory.getItem(11).getAmount() != 64) {
-                    inventory.getItem(11).setAmount(inventory.getItem(11).getAmount()+1);
-                    item.setAmount(item.getAmount()-1);
-                } else if(inventory.getItem(11) == null) {
-                    inventory.setItem(11, new ItemStack(Material.COOKED_BEEF));
-                    item.setAmount(item.getAmount()-1);
-                }
+                this.moveItem(11, item);
                 return;
             }
         }

@@ -2,6 +2,7 @@ package teamunc.uncsurvival.eventsListeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
@@ -17,6 +18,8 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.advancements.Advancement;
+import teamunc.uncsurvival.logic.customBlock.CustomBlockType;
+import teamunc.uncsurvival.logic.customBlock.customStorageBlock.BottlerBlock;
 import teamunc.uncsurvival.logic.manager.AdvancementManager;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.team.Team;
@@ -125,10 +128,15 @@ public class CustomItemListener extends AbstractEventsListener {
                                 // Switch le mode de la wrench
                                 e.getPlayer().getInventory().setItemInMainHand(plugin.getGameManager().getItemsManager().giveNextWrenchItem(blockValue, im.getDamage()));
                             } else if ( e.getAction() == Action.RIGHT_CLICK_BLOCK && CanDoThisHere(player,block.getLocation())) {
-                                // TODO brewing stand en block pour cactus potion
                                 Team team = plugin.getGameManager().getParticipantManager().getTeamForPlayer(e.getPlayer());
-                                if ( team != null ) {
-                                    team.moveInterfaceGoal(blockValue, block.getLocation().add(e.getBlockFace().getDirection()));
+                                Boolean isBrewingStand = e.getClickedBlock().getType() == Material.BREWING_STAND;
+                                if(isBrewingStand || team != null) {
+                                    if(isBrewingStand) {
+                                        // Creation d'un Bottler sur le brewing stand
+                                        this.plugin.getGameManager().getCustomBlockManager().addCustomBlock(new BottlerBlock(block.getLocation(), CustomBlockType.BOTTLER_BLOCK));
+                                    } else {
+                                        team.moveInterfaceGoal(blockValue, block.getLocation().add(e.getBlockFace().getDirection()));
+                                    }
                                     // Augmente la dura
                                     if ( im.getDamage() > 30 ) {
                                         // Casse la wrench
