@@ -14,7 +14,6 @@ public class TeamCustomInterface extends GameCustomInterface{
 
     @Override
     public Inventory update() {
-        // TODO interface de team
         String teamName = this.team.getChatColor() + this.team.getName();
 
         int addedSpaces = 23 - teamName.length();

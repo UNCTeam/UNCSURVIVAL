@@ -44,7 +44,12 @@ public class MobListener extends AbstractEventsListener{
                 modifyNeeded = true;
                 break;
             case PHASE3: case FIN:
-                if (r.nextInt(150) <= 1 && e.getEntity().getEquipment() != null) {
+                if (r.nextInt(150) <= 1 && e.getEntity().getEquipment() != null
+                        && e.getEntity().getType() != EntityType.ARMOR_STAND
+                        && e.getEntity().getType() != EntityType.ENDER_DRAGON
+                        && e.getEntity().getType() != EntityType.BOAT
+                        && e.getEntity().getType() != EntityType.BAT
+                        && e.getEntity().getType() != EntityType.BEE) {
                     String temp = "§1§lU§2§ll§3§lt§4§lr§5§la§6§l-";
                     int i = 7;
                     List<String> colors = List.of("§1§l","§2§l","§3§l","§4§l","§5§l","§6§l","§7§l","§8§l","§9§l","§a§l","§b§l","§c§l","§d§l","§e§l","§f§l");

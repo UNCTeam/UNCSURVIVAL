@@ -83,7 +83,8 @@ public class CustomItemListener extends AbstractEventsListener {
 
         if (itemMeta == null) return;
 
-        if (!e.getPlayer().isSneaking() && this.plugin.getGameManager().getCustomBlockManager().getCustomBlock(block.getLocation()) != null) {
+        if (block != null && !e.getPlayer().isSneaking() &&
+                (this.plugin.getGameManager().getCustomBlockManager().getCustomBlock(block.getLocation()) != null || this.plugin.getGameManager().getInterfacesManager().getInterface(block.getLocation()) != null)) {
             e.setCancelled(true);
             return;
         }
@@ -124,6 +125,7 @@ public class CustomItemListener extends AbstractEventsListener {
                                 // Switch le mode de la wrench
                                 e.getPlayer().getInventory().setItemInMainHand(plugin.getGameManager().getItemsManager().giveNextWrenchItem(blockValue, im.getDamage()));
                             } else if ( e.getAction() == Action.RIGHT_CLICK_BLOCK && CanDoThisHere(player,block.getLocation())) {
+                                // TODO brewing stand en block pour cactus potion
                                 Team team = plugin.getGameManager().getParticipantManager().getTeamForPlayer(e.getPlayer());
                                 if ( team != null ) {
                                     team.moveInterfaceGoal(blockValue, block.getLocation().add(e.getBlockFace().getDirection()));
