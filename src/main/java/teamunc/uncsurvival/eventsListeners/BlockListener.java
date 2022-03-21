@@ -7,7 +7,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BrewingStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.*;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -25,13 +27,13 @@ public class BlockListener extends AbstractEventsListener {
         super(plugin);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Block block = event.getClickedBlock();
 
         if (block != null && event.getAction() == Action.RIGHT_CLICK_BLOCK && !event.getPlayer().isSneaking()) {
-            if (CanDoThisHere(player,block.getLocation())) {
+            if (CanDoThisHere(player,block.getLocation()) && !this.plugin.getGameManager().getItemsManager().isCustomItem(player.getInventory().getItemInMainHand(),"WRENCH")) {
                 switch (block.getType()) {
                     case BARRIER:
                         this.plugin.getGameManager().getInterfacesManager().ouvrirInterface(block.getLocation(), event.getPlayer());
@@ -154,6 +156,11 @@ public class BlockListener extends AbstractEventsListener {
         } else {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onMoveItemEvent(InventoryMoveItemEvent event) {
+        if(this.plugin.getGameManager().getCustomBlockManager().getCustomBlock(event.getDestination().getLocation()) != null) event.setCancelled(true);
     }
 
     public boolean CanDoThisHere(Player player, Location loc) {

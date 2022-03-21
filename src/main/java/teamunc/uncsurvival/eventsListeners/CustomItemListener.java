@@ -8,8 +8,10 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -77,16 +79,15 @@ public class CustomItemListener extends AbstractEventsListener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onCustomItemUse(PlayerInteractEvent e) {
         ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
         ItemMeta itemMeta = item.getItemMeta();
         Player player = e.getPlayer();
         Block block = e.getClickedBlock();
+        if (!this.plugin.getGameManager().getItemsManager().isCustomItem(item)) return;
 
-        if (itemMeta == null) return;
-
-        if (block != null && !e.getPlayer().isSneaking() &&
+        if (e.getAction() != Action.LEFT_CLICK_BLOCK && block != null && !e.getPlayer().isSneaking() &&
                 (this.plugin.getGameManager().getCustomBlockManager().getCustomBlock(block.getLocation()) != null || this.plugin.getGameManager().getInterfacesManager().getInterface(block.getLocation()) != null)) {
             e.setCancelled(true);
             return;
@@ -131,19 +132,24 @@ public class CustomItemListener extends AbstractEventsListener {
                                 Team team = plugin.getGameManager().getParticipantManager().getTeamForPlayer(e.getPlayer());
                                 Boolean isBrewingStand = e.getClickedBlock().getType() == Material.BREWING_STAND;
                                 if(isBrewingStand || team != null) {
-                                    if(isBrewingStand) {
+                                    if(isBrewingStand && !player.isSneaking()) {
                                         // Creation d'un Bottler sur le brewing stand
                                         this.plugin.getGameManager().getCustomBlockManager().addCustomBlock(new BottlerBlock(block.getLocation(), CustomBlockType.BOTTLER_BLOCK));
-                                    } else {
-                                        team.moveInterfaceGoal(blockValue, block.getLocation().add(e.getBlockFace().getDirection()));
+                                    } else if (team != null){
+                                        Location newloc = block.getLocation().add(e.getBlockFace().getDirection());
+
+                                        if (newloc.getBlock().getType() == Material.AIR) {
+                                            team.moveInterfaceGoal(blockValue,newloc);
+                                        } else return;
                                     }
                                     // Augmente la dura
-                                    if ( im.getDamage() > 30 ) {
+                                    if ( im.getDamage() > item.getType().getMaxDurability() ) {
                                         // Casse la wrench
                                         e.getPlayer().getInventory().setItemInMainHand(null);
                                         e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ITEM_SHIELD_BREAK, 1.0f, 1.0f);
                                     } else {
-                                        e.getPlayer().getInventory().setItemInMainHand(plugin.getGameManager().getItemsManager().createWrenchItem(blockValue, im.getDamage() + 2));
+                                        im.setDamage(im.getDamage() + 2);
+                                        item.setItemMeta(im);
                                     }
                                 } else {
                                     e.getPlayer().sendMessage("§cVous devez être dans une équipe !");

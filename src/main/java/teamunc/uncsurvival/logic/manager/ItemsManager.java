@@ -686,6 +686,12 @@ public class ItemsManager extends AbstractManager {
                 itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING).equals(customNameCaseSensitive));
     }
 
+    public boolean isCustomItem(ItemStack itemStack) {
+        return (itemStack != null &&
+                itemStack.hasItemMeta() &&
+                itemStack.getItemMeta().getPersistentDataContainer().get(this.getCustomitemKey(),PersistentDataType.STRING) != null);
+    }
+
     public Set<Material> getAllFoodOfTheGame() {
         Set<Material> res = new HashSet<>();
 
