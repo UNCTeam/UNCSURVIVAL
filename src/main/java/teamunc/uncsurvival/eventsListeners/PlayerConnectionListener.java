@@ -15,6 +15,9 @@ public class PlayerConnectionListener extends AbstractEventsListener
 
     @EventHandler
     public void onPlayerConnection(PlayerJoinEvent playerJoinEvent) {
+        if (this.plugin.getGameManager().getGameStats().isGameStarted())
+            this.plugin.getGameManager().appliqueStartConstraints(playerJoinEvent.getPlayer());
+
         plugin.getGameManager().getScoreboardManager().addScoreboard(new InGameInfoScoreboard(playerJoinEvent.getPlayer()));
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"advancement grant @a only uncsurvival:root");
     }

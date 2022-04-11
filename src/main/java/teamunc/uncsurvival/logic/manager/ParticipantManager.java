@@ -31,7 +31,7 @@ public class ParticipantManager extends AbstractManager{
      * @param team
      * @param player
      */
-    public void addPlayer(Team team, GamePlayer player) {
+    private void addPlayer(Team team, GamePlayer player) {
         Team team1 = this.getPlayersByTeam().get(player);
         if(team1 != null) {
             team1.quit(player);
@@ -49,6 +49,10 @@ public class ParticipantManager extends AbstractManager{
         Player player = Bukkit.getPlayer(playerName);
         if(player != null) {
             this.addPlayer(team, new GamePlayer(player));
+
+            // applique if game started already
+            if (this.plugin.getGameManager().getGameStats().isGameStarted())
+                this.plugin.getGameManager().appliqueStartConstraints(player);
         } else {
             throw new Exception("Le joueur n'existe pas");
         }
@@ -56,18 +60,9 @@ public class ParticipantManager extends AbstractManager{
 
     /**
      * Retire un joueur du jeu
-     * @param team Prends la team en param
-     * @param player et un gameplayer
+     * @param playerName est un nom de joueur co
      * @return
      */
-    public boolean removePlayer(Team team, GamePlayer player) {
-        if(team.hasMember(player)) {
-            team.quit(player);
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     public boolean removePlayer(String playerName) {
         Player player = Bukkit.getPlayer(playerName);

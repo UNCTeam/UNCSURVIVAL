@@ -142,6 +142,25 @@ public class TimeManager extends AbstractManager{
             }
         }
 
+        //duels
+        LocalDateTime now = LocalDateTime.now();
+        if ((phase == PhaseEnum.PHASE1 || phase == PhaseEnum.PHASE2 || phase == PhaseEnum.PHASE3) &&
+                now.getSecond() == 0 && now.getMinute() == 0 && now.getHour()%2 == 0 && (now.getHour() <= 2 || now.getHour() >= 9)) {
+            // choix des joueurs
+            ArrayList<GamePlayer> playersSelected = this.plugin.getGameManager().getParticipantManager().getRandomOnlineGamePlayerFromDiffTeams(2);
+
+            if (playersSelected != null) {
+                this.plugin.getMessageTchatManager().sendGeneralMesssage("Un duel se prépare... Tenez-vous pret !");
+                Bukkit.getScheduler().runTaskLater(
+                        this.plugin,
+                        () -> this.plugin.getGameManager().getGameEventsManager().startDuel(playersSelected),
+                        100
+                );
+            } else {
+                this.plugin.getMessageTchatManager().sendGeneralMesssage("Un duel a été annulé car il n'y a pas assez de joueurs connectés!",ChatColor.GOLD);
+            }
+        }
+
         // writes logs
         LoggerFile.WriteNextLine();
     }
@@ -158,26 +177,6 @@ public class TimeManager extends AbstractManager{
 
         // dicrease Water Level of 1
         if (this.minutes%3 == 0 && phase != PhaseEnum.INIT && phase != PhaseEnum.FIN) ThirstActualiser.getInstance().decreaseWaterForAllRegisteredPlayers(1);
-
-        //duels
-        LocalDateTime now = LocalDateTime.now();
-
-        if ((phase == PhaseEnum.PHASE1 || phase == PhaseEnum.PHASE2 || phase == PhaseEnum.PHASE3) &&
-            now.getSecond() == 0 && now.getMinute() == 0 && now.getHour() > 9 && now.getHour()%2 == 0) {
-            // choix des joueurs
-            ArrayList<GamePlayer> playersSelected = this.plugin.getGameManager().getParticipantManager().getRandomOnlineGamePlayerFromDiffTeams(2);
-
-            if (playersSelected != null) {
-                this.plugin.getMessageTchatManager().sendGeneralMesssage("Un duel se prépare... Tenez-vous pret !");
-                Bukkit.getScheduler().runTaskLater(
-                        this.plugin,
-                        () -> this.plugin.getGameManager().getGameEventsManager().startDuel(playersSelected),
-                        100
-                );
-            } else {
-                this.plugin.getMessageTchatManager().sendGeneralMesssage("Un duel a été annulé car il n'y a pas assez de joueurs connectés!",ChatColor.GOLD);
-            }
-        }
     }
 
     public void actionsEachHours() {

@@ -73,7 +73,8 @@ public class CustomBlockManager extends AbstractManager {
     public boolean removeCustomBlock(Location location) {
         if(this.customStorageBlockHashMap.containsKey(location)) {
             CustomStorageBlock customBlock = this.customStorageBlockHashMap.get(location);
-            for(HumanEntity player : customBlock.getInventory().getViewers()) {
+            ArrayList<HumanEntity> viewer = new ArrayList<HumanEntity>(customBlock.getInventory().getViewers());
+            for(HumanEntity player : viewer) {
                 player.closeInventory();
             }
             if(customBlock.getCustomBlockType() == CustomBlockType.GROWTH_BLOCK) {

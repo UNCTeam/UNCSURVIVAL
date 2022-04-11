@@ -89,8 +89,10 @@ public class TeamsManager extends AbstractManager implements Serializable {
     public void teleportEveryPlayers() {
         for (Team t : this.getAllTeams()) {
             for (GamePlayer p : t.getMembers()) {
-                p.getBukkitPlayer().teleport(t.getSpawnPoint());
-                p.getBukkitPlayer().setBedSpawnLocation(t.getSpawnPoint(),true);
+                if (p.getBukkitPlayer() != null) {
+                    p.getBukkitPlayer().teleport(t.getSpawnPoint());
+                    p.getBukkitPlayer().setBedSpawnLocation(t.getSpawnPoint(), true);
+                }
             }
         }
     }

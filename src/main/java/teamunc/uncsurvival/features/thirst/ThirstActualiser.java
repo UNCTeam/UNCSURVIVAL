@@ -48,7 +48,7 @@ public class ThirstActualiser {
 
     public void damageAllnoWater() {
         for (GamePlayer player : this.gameManager.getParticipantManager().getGamePlayers()) {
-            if (player.isOnline() && player.getWaterLevel() == 0) {
+            if (player.getBukkitPlayer() != null && player.isOnline() && player.getWaterLevel() == 0) {
                 player.getBukkitPlayer().damage(1);
             }
         }

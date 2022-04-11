@@ -19,9 +19,11 @@ import teamunc.uncsurvival.logic.manager.AdvancementManager;
 import teamunc.uncsurvival.logic.manager.ItemsManager;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.player.GamePlayer;
+import teamunc.uncsurvival.utils.LoggerFile;
 import teamunc.uncsurvival.utils.Region;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Team implements Serializable {
@@ -150,6 +152,8 @@ public class Team implements Serializable {
 
         this.interfacesGoals.set(itemNumber,new CustomBlock(newLocation,armorStand));
         UNCSurvival.getInstance().getGameManager().getInterfacesManager().addInterface(this.interfacesGoals.get(itemNumber).getLocation(),new GoalCustomInterface(itemNumber,this));
+
+        LoggerFile.AppendLineToWrite("[TEAM-INTERFACE] LA TEAM "+ this.name +" DEPLACE SON INTERFACE DE " + oldLoc + " A " + loc + " LE " + LocalDateTime.now());
     }
 
     public void ConsumeAllGoalItems() {
@@ -305,6 +309,8 @@ public class Team implements Serializable {
             && !advancement.alreadyGranted()) {
             advancementManager.grantToATeam(this,advancement);
         }
+
+        LoggerFile.AppendLineToWrite("[TEAM-MODULE] LA TEAM "+ this.name +" AUGMENTE SA PROTECTION A " + this.range + " LE " + LocalDateTime.now());
     }
 
     public Location getInterfaceTeam() {

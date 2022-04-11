@@ -16,6 +16,7 @@ public class GamePlayer implements Serializable {
     private final UUID uuid;
     private static int MAXFOODBUFFER = 8;
     private int waterLevel;
+    private boolean isStartRegistered = false;
     /**
      * si timeBeforeCovidExpansion == -1 alors pas de covid, sinon c'est le temps avant le prochain covid (en seconde)
      * décrémenter dans timeManager#eachSecondes
@@ -29,6 +30,14 @@ public class GamePlayer implements Serializable {
     public GamePlayer(Player bukkitPlayer) {
         this.uuid = bukkitPlayer.getUniqueId();
         this.queueOfEatenFood = new ArrayList<>();
+    }
+
+    public boolean isStartRegistered() {
+        return isStartRegistered;
+    }
+
+    public void setStartRegistered(boolean startRegistered) {
+        isStartRegistered = startRegistered;
     }
 
     public UUID getUUID() {

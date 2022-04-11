@@ -10,7 +10,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.player.GamePlayer;
+import teamunc.uncsurvival.utils.LoggerFile;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Duel {
@@ -41,11 +43,11 @@ public class Duel {
         if ( probaTir <= 5 ) {              // 0 a 5    = 5
             this.loot = new ItemStack(Material.TOTEM_OF_UNDYING,1);
         } else if ( probaTir <= 25 ) {      // 5 a 25   = 20
-            this.loot = new ItemStack(Material.DIAMOND,16);
+            this.loot = new ItemStack(Material.DIAMOND,8);
         } else if ( probaTir <= 60 ) {      // 25 a 60  = 35
-            this.loot = new ItemStack(Material.GOLD_INGOT,32);
+            this.loot = new ItemStack(Material.GOLD_INGOT,16);
         } else {                            // 55 a 100 = 45
-            this.loot = new ItemStack(Material.IRON_INGOT,48);
+            this.loot = new ItemStack(Material.IRON_INGOT,32);
         }
     }
 
@@ -67,9 +69,9 @@ public class Duel {
 
             UNCSurvival.getInstance().getMessageTchatManager().sendMessageToPlayer("Info : vous récupérerez tout votre stuff !",p, ChatColor.GOLD);
             UNCSurvival.getInstance().getMessageTchatManager().sendMessageToPlayer("Loot possible en cas de victoire :\n" +
-                    "40% -> 48 irons ingots.\n" +
-                    "35% -> 32 golds ingots.\n" +
-                    "20% -> 16 diamonds.\n" +
+                    "40% -> 32 irons ingots.\n" +
+                    "35% -> 16 golds ingots.\n" +
+                    "20% -> 8 diamonds.\n" +
                     "5% -> totem of undying",
                     p, ChatColor.GOLD);
 
@@ -100,8 +102,10 @@ public class Duel {
             }
             ChatColor teamColor = UNCSurvival.getInstance().getGameManager().getParticipantManager().getTeamForPlayer(winner.getBukkitPlayer()).getChatColor();
             UNCSurvival.getInstance().getMessageTchatManager().sendGeneralMesssage("§6Le joueur " + teamColor + winner.getBukkitPlayer().getName() + " §6remporte le duel !");
+            LoggerFile.AppendLineToWrite("[DUEL] LE DUEL LE " + LocalDateTime.now() + " A ETE WIN PAR " + winner.getBukkitPlayer().getName());
         } else {
             UNCSurvival.getInstance().getMessageTchatManager().sendGeneralMesssage("Le duel à été annulé !");
+            LoggerFile.AppendLineToWrite("[DUEL] LE DUEL LE " + LocalDateTime.now() + " A ETE ANNULE");
         }
     }
 

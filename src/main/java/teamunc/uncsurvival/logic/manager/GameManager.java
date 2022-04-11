@@ -16,6 +16,7 @@ import teamunc.uncsurvival.logic.team.Team;
 import teamunc.uncsurvival.utils.scoreboards.InGameInfoScoreboard;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GameManager extends AbstractManager {
 
@@ -97,6 +98,24 @@ public class GameManager extends AbstractManager {
         this.getGameStats().setCurrentPhase(PhaseEnum.LANCEMENT);
     }
 
+    public void appliqueStartConstraints(Player bukkitPlayer) {
+        GamePlayer player = this.getParticipantManager().getGamePlayer(bukkitPlayer.getName());
+        Team team = this.getParticipantManager().getTeamForPlayer(bukkitPlayer.getName());
+        if (player != null && team != null && !player.isStartRegistered()) {
+            player.setStartRegistered(true);
+
+            bukkitPlayer.teleport(team.getSpawnPoint());
+            bukkitPlayer.setBedSpawnLocation(team.getSpawnPoint(),true);
+
+            bukkitPlayer.setGameMode(GameMode.SURVIVAL);
+            bukkitPlayer.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(14);
+            bukkitPlayer.getInventory().clear();
+
+            this.scoreboardManager.addScoreboard(new InGameInfoScoreboard(bukkitPlayer));
+            ThirstActualiser.getInstance().registerPlayers(new ArrayList<>(List.of(player)));
+        }
+    }
+
     public boolean start() {
 
         // clear advancements
@@ -126,6 +145,11 @@ public class GameManager extends AbstractManager {
         // reset team score
         for (Team t : this.teamsManager.getAllTeams()) {
             t.resetScore();
+        }
+
+        for (GamePlayer gp :
+                this.getParticipantManager().getGamePlayers()) {
+            gp.setStartRegistered(true);
         }
 
         return true;

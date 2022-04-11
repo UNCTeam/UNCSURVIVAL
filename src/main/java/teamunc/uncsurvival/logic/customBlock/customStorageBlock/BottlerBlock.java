@@ -95,8 +95,8 @@ public class BottlerBlock extends CustomStorageBlock {
 
     private void produceCactusJuce() {
         duration = -1;
-        inventory.getItem(10).setAmount(inventory.getItem(10).getAmount());
-        inventory.getItem(12).setAmount(inventory.getItem(12).getAmount());
+        inventory.getItem(10).setAmount(inventory.getItem(10).getAmount() - 1 );
+        inventory.getItem(12).setAmount(inventory.getItem(12).getAmount() - 1 );
         inventory.setItem(7, UNCSurvival.getInstance().getGameManager().getItemsManager().createCactusJuice());
         inventory.setItem(17, UNCSurvival.getInstance().getGameManager().getItemsManager().createCactusJuice());
         inventory.setItem(25, UNCSurvival.getInstance().getGameManager().getItemsManager().createCactusJuice());

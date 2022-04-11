@@ -93,6 +93,7 @@ public class TeamCmdExec extends AbstractCommandExecutor{
                     for (String playerName : playersNameAdded) {
                         try {
                             this.plugin.getGameManager().getParticipantManager().addPlayer(team, playerName);
+
                         } catch (Exception e) {
                             commandValid = false;
                             this.messageTchatManager.sendMessageToPlayer(e.toString(), sender, ChatColor.RED);

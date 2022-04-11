@@ -76,7 +76,7 @@ public class playerInGameActionsListener extends AbstractEventsListener {
                 if (duel != null) {
                     e.setCancelled(true);
                     for (GamePlayer gp : duel.getGamePlayersInGame()) {
-                        if ( gp.getBukkitPlayer().getUniqueId() != victim.getUniqueId() ) duel.endDuel(gp);
+                        if ( gp.getBukkitPlayer() != null && gp.getBukkitPlayer().getUniqueId() != victim.getUniqueId() ) duel.endDuel(gp);
                     }
                 } else gamePlayer.setInDuel(false);
                 this.plugin.getGameManager().getGameEventsManager().endDuel();
@@ -93,7 +93,7 @@ public class playerInGameActionsListener extends AbstractEventsListener {
             Duel duel = this.plugin.getGameManager().getGameEventsManager().getDuel();
             if (duel != null) {
                 for (GamePlayer gpI : duel.getGamePlayersInGame()) {
-                    if ( gpI.getBukkitPlayer().getUniqueId() != player.getUniqueId() ) duel.endDuel(gpI);
+                    if (gp.getBukkitPlayer() != null && gpI.getBukkitPlayer().getUniqueId() != player.getUniqueId() ) duel.endDuel(gpI);
                 }
             } else gp.setInDuel(false);
 
@@ -220,12 +220,13 @@ public class playerInGameActionsListener extends AbstractEventsListener {
 
     @EventHandler
     public void onCraftGet(CraftItemEvent e) {
-        ItemStack[] items = e.getInventory().getMatrix();
-        ItemStack itemIngr = e.getInventory().getMatrix()[4];
+        ItemStack itemIngr = null;
+        if (e.getInventory().getMatrix().length >= 4) itemIngr = e.getInventory().getMatrix()[4];
         ItemStack itemAlcool = this.plugin.getGameManager().getItemsManager().createAlcool();
         ItemStack itemWrench = this.plugin.getGameManager().getItemsManager().createWrenchItem(1,0);
 
         if ( e.getRecipe() != null
+                && itemIngr != null
                 && e.getRecipe().getResult().isSimilar(itemAlcool)
                 && itemIngr.hasItemMeta()
                 && this.plugin.getGameManager().getItemsManager().isCustomItem(itemIngr,"ALCOOL")) {
