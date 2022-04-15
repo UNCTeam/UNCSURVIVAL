@@ -5,6 +5,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.features.thirst.ThirstActualiser;
@@ -96,6 +98,13 @@ public class TimeManager extends AbstractManager{
         this.plugin.getGameManager().getGameEventsManager().appliqueCovid();
         this.plugin.getGameManager().getGameEventsManager().appliqueFamine();
 
+        // lobby effect
+        if (phase == PhaseEnum.INIT) {
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,40,200));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION,40,10));
+            });
+        }
 
         this.plugin.getGameManager().getCustomBlockManager().actualiseTickBlocks(this.secondes);
 

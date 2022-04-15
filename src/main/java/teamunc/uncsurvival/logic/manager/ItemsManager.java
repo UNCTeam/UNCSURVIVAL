@@ -416,7 +416,6 @@ public class ItemsManager extends AbstractManager {
         meta.setLore(List.of("§b§oThe power in your hand..."));
         meta.setUnbreakable(true);
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(),"generic.attack_damage",12, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.HAND));
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(),"generic.attack_damage",2, AttributeModifier.Operation.ADD_NUMBER,EquipmentSlot.HAND));
 
         meta.setDisplayName("§cAmethyst Sword");
         PersistentDataContainer data = meta.getPersistentDataContainer();

@@ -246,6 +246,11 @@ public class TeamCmdExec extends AbstractCommandExecutor{
                 }
                 break;
             }
+            case "statsteam": {
+                Team teamStats = this.plugin.getGameManager().getTeamsManager().getTeam(ChatColor.valueOf(args[0]));
+                sender.sendMessage(teamStats.getStats(null));
+                break;
+            }
             case "classement": {
                 if ( sender instanceof Player ) {
                     Player player = (Player) sender;

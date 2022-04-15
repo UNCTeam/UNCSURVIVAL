@@ -58,6 +58,11 @@ commands:
     usage: /stats
     permission: uncsurvival.player
 
+  statsteam:
+    description: get stats for your team
+    usage: /stats <team>
+    permission: uncsurvival.admins
+
   classement:
     description: get leaderboard
     usage: /classement
