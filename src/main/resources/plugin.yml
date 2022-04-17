@@ -127,6 +127,11 @@ commands:
     usage: /modifyitemvalue <item number> <value>
     permission: uncsurvival.admins
 
+  openinv:
+      description: Open inventory of a player
+      usage: /openinv <Player>
+      permission: uncsurvival.admins
+
 permissions:
   uncsurvival.admins:
       default: op

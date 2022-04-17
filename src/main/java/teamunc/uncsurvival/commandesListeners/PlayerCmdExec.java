@@ -1,5 +1,6 @@
 package teamunc.uncsurvival.commandesListeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -64,6 +65,14 @@ public class PlayerCmdExec extends AbstractCommandExecutor{
                                     + ChatColor.LIGHT_PURPLE
                                     + this.plugin.getGameManager().getItemsManager().getGoalItemPrice(num1),sender, ChatColor.GOLD);
                         } catch (Exception ignored) {}
+                    }
+                    break;
+                case "openinv":
+                    if(args.length == 1) {
+                        Player targerPlayer = Bukkit.getPlayer(args[0]);
+                        if(targerPlayer != null) {
+                            ((Player) sender).openInventory(targerPlayer.getInventory());
+                        }
                     }
                     break;
             }
