@@ -259,7 +259,11 @@ public class TeamCmdExec extends AbstractCommandExecutor{
                     int count = 1;
                     for (Team team : plugin.getGameManager().getTeamsManager().getClassement()) {
                         classementStr.append(" " + team.getChatColor()).append(count);
-                        classementStr.append(" - ").append(team.getName()).append("\n");
+                        classementStr.append(" - ").append(team.getName());
+                        if(player.getDisplayName() == "ValkyrieHD" || player.getDisplayName() == "UNCDelsus") {
+                            classementStr.append(" : ").append(team.getScore());
+                        }
+                        classementStr.append("\n");
                         count++;
                     }
                     player.sendMessage(classementStr.toString());

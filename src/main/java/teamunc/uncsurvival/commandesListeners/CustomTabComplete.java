@@ -47,6 +47,8 @@ public class CustomTabComplete implements TabCompleter {
                     }
                 }
                 break;
+            case "removebonusscore":
+            case "addbonusscore":
             case "statsteam":
                 if(strings.length == 1) {
                     result.addAll(getTeamName(strings));

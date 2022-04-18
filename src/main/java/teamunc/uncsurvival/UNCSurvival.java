@@ -40,9 +40,7 @@ public class UNCSurvival extends JavaPlugin {
         this.getCommand("startuncsurvival").setExecutor(new StartCmdExec(this));
         this.getCommand("getplayersingame").setExecutor(new GetPlayersInGameCmdExec(this));
         this.getCommand("givecustomitem").setExecutor(new GiveCustomItemsCmdExec(this));
-        this.getCommand("givecustomitem").setTabCompleter(new CustomTabComplete(this));
         this.getCommand("addplayertoteam").setExecutor(new TeamCmdExec(this));
-        this.getCommand("addplayertoteam").setTabCompleter(new CustomTabComplete(this));
         this.getCommand("removeplayertoteam").setExecutor(new TeamCmdExec(this));
         this.getCommand("removeteam").setExecutor(new TeamCmdExec(this));
         this.getCommand("addteam").setExecutor(new TeamCmdExec(this));
@@ -50,11 +48,9 @@ public class UNCSurvival extends JavaPlugin {
         this.getCommand("statsteam").setExecutor(new TeamCmdExec(this));
         this.getCommand("phaseinfo").setExecutor(new TeamCmdExec(this));
         this.getCommand("classement").setExecutor(new TeamCmdExec(this));
-        this.getCommand("addtime").setTabCompleter(new CustomTabComplete(this));
         this.getCommand("addtime").setExecutor(new TimerCmdExec(this));
         this.getCommand("nextphase").setExecutor(new TimerCmdExec(this));
         this.getCommand("removetime").setExecutor(new TimerCmdExec(this));
-        this.getCommand("removetime").setTabCompleter(new CustomTabComplete(this));
         this.getCommand("addscore").setExecutor(new TeamCmdExec(this));
         this.getCommand("removescore").setExecutor(new TeamCmdExec(this));
         this.getCommand("addbonusscore").setExecutor(new TeamCmdExec(this));
@@ -65,6 +61,15 @@ public class UNCSurvival extends JavaPlugin {
         this.getCommand("modifyitemvalue").setExecutor(new PlayerCmdExec(this));
         this.getCommand("achievements").setExecutor(new TeamCmdExec(this));
         this.getCommand("startduel").setExecutor(new TeamCmdExec(this));
+
+        this.getCommand("removetime").setTabCompleter(new CustomTabComplete(this));
+        this.getCommand("addplayertoteam").setTabCompleter(new CustomTabComplete(this));
+        this.getCommand("addbonusscore").setTabCompleter(new CustomTabComplete(this));
+        this.getCommand("removebonusscore").setTabCompleter(new CustomTabComplete(this));
+        this.getCommand("givecustomitem").setTabCompleter(new CustomTabComplete(this));
+        this.getCommand("addtime").setTabCompleter(new CustomTabComplete(this));
+        this.getCommand("statsteam").setTabCompleter(new CustomTabComplete(this));
+
 
         this.getCommand("reloadconfig").setExecutor(new ReloadConfigurationCmdExec(this));
     }
