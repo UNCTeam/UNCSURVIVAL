@@ -23,6 +23,7 @@ import teamunc.uncsurvival.logic.advancements.Advancement;
 import teamunc.uncsurvival.logic.duels.Duel;
 import teamunc.uncsurvival.logic.manager.AdvancementManager;
 import teamunc.uncsurvival.logic.manager.MessageTchatManager;
+import teamunc.uncsurvival.logic.manager.ParticipantManager;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.team.Team;
@@ -70,8 +71,15 @@ public class playerInGameActionsListener extends AbstractEventsListener {
         if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
             Player whoWasHit = (Player) e.getEntity();
             Player whoHit = (Player) e.getDamager();
+            if(whoHit == null || whoWasHit == null) return;
+
+            ParticipantManager participantManager = this.plugin.getGameManager().getParticipantManager();
+
+            if(!participantManager.isPlaying(whoHit) || !participantManager.isPlaying(whoHit)) return;
+
             if(this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(whoWasHit) ==
             this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(whoHit)) return;
+
             this.plugin.getGameManager().getCombatDisconnectManager().engageCombat(whoWasHit,  whoHit);
             this.plugin.getGameManager().getCombatDisconnectManager().engageCombat(whoHit,  whoWasHit);
         }

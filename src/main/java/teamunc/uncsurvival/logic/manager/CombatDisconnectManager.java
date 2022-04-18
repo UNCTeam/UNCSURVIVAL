@@ -33,7 +33,6 @@ public class CombatDisconnectManager extends AbstractManager {
             public void run()
             {
                 if(!isPlayerStillInCombat(LocalDateTime.now(), player)) {
-
                     player.sendMessage("§7§l[ UNC ]§6Tu n'es plus en combat");
                 }
             }
@@ -58,8 +57,12 @@ public class CombatDisconnectManager extends AbstractManager {
 
     public void triggerDisconnectCombat(Player player) {
         Player targetPlayer = Bukkit.getPlayer(this.combatWithWho.get(player.getUniqueId()));
-        String line = "DISCONNECT AT " + LocalDateTime.now() + " ";
-        line += player.getDisplayName() + "(disconnected) vs " + targetPlayer.getDisplayName();
-        this.plugin.getFileManager().writeCombatLogFile(line);
+        if(targetPlayer != null) {
+            String line = "DISCONNECT AT " + LocalDateTime.now() + " ";
+            line += player.getDisplayName() + "(disconnected) vs " + targetPlayer.getDisplayName();
+            this.plugin.getFileManager().writeCombatLogFile(line);
+        } else {
+            Bukkit.getConsoleSender().sendMessage("TargetPlayer null");
+        }
     }
 }
