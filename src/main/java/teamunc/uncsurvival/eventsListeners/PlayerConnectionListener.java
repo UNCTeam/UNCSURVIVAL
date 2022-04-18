@@ -4,6 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerResourcePackStatusEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.utils.scoreboards.InGameInfoScoreboard;
 
@@ -22,6 +25,14 @@ public class PlayerConnectionListener extends AbstractEventsListener
 
         plugin.getGameManager().getScoreboardManager().addScoreboard(new InGameInfoScoreboard(playerJoinEvent.getPlayer()));
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"advancement grant @a only uncsurvival:root");
+
+        playerJoinEvent.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,10,255));
+    }
+
+    @EventHandler
+    public void onPlayerTexturePackLoading(PlayerResourcePackStatusEvent e) {
+        if (e.getStatus() == PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED)
+            e.getPlayer().removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
     }
 
     @EventHandler

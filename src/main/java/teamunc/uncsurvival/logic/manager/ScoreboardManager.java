@@ -85,7 +85,7 @@ public class ScoreboardManager extends AbstractManager{
     public int getPlayerKill(OfflinePlayer player) {
         int res = 0;
         if (this.scoreboard.getObjective("STATS.PKILL") != null)
-            res = this.scoreboard.getObjective("STATS.PKILL").getScore(player.getName()).getScore();
+            res = this.scoreboard.getObjective("STATS.PLAYER_KILLED").getScore(player.getName()).getScore();
         return res;
     }
 
@@ -99,7 +99,7 @@ public class ScoreboardManager extends AbstractManager{
     public int getStoneMined(OfflinePlayer player) {
         int res = 0;
         if (this.scoreboard.getObjective("STATS.MSTONE") != null)
-            res = this.scoreboard.getObjective("STATS.MSTONE").getScore(player.getName()).getScore();
+            res = this.scoreboard.getObjective("STATS.STONE_MINED").getScore(player.getName()).getScore();
         return res;
     }
 

@@ -1,9 +1,6 @@
 package teamunc.uncsurvival.eventsListeners;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -18,6 +15,8 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.advancements.Advancement;
 import teamunc.uncsurvival.logic.customBlock.CustomBlockType;
@@ -62,11 +61,16 @@ public class CustomItemListener extends AbstractEventsListener {
                             this.plugin.getMessageTchatManager().sendMessageToPlayer(" Vous avez maintenant votre vie au max ! Complétez votre vie avec l'armure en améthyste !", player, ChatColor.GOLD);
 
                             // advancement
+                            Team t = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(player);
                             AdvancementManager advancementManager = this.plugin.getGameManager().getAdvancementManager();
                             Advancement advancement = advancementManager.getAdvancement("ca_fait_beaucoup_la_non");
                             if(!advancement.alreadyGranted()) {
-                                Team t = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(player);
                                 advancementManager.grantToATeam(t,advancement);
+                            } else if (
+                                    advancement.getTeamColor() != t.getChatColor() &&
+                                            !this.plugin.getGameManager().getAdvancementManager().isTeamHalfPointed(t.getChatColor(),advancement)
+                            ){
+                                this.plugin.getGameManager().getAdvancementManager().setTeamHalfPointedAndGiveItPoints(t.getChatColor(),advancement);
                             }
                         }
                     }
@@ -102,13 +106,8 @@ public class CustomItemListener extends AbstractEventsListener {
                 boolean used = false;
                 switch(customType) {
                     case "HEALPATCH":
-                        if (player.getHealth() + 2 <= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()) {
-                            player.setHealth(player.getHealth() + 2);
-                            used = true;
-                        } else if (player.getHealth() + 1 == player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()){
-                            player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
-                            used = true;
-                        }
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,50,1,false,false,false));
+                        used = true;
                         break;
 
                     case "VACCIN":

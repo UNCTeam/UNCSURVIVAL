@@ -154,7 +154,7 @@ public class TimeManager extends AbstractManager{
         //duels
         LocalDateTime now = LocalDateTime.now();
         if ((phase == PhaseEnum.PHASE1 || phase == PhaseEnum.PHASE2 || phase == PhaseEnum.PHASE3) &&
-                now.getSecond() == 0 && now.getMinute() == 0 && now.getHour()%2 == 0 && (now.getHour() <= 2 || now.getHour() >= 9)) {
+                now.getSecond() == 0 && now.getMinute() == 0 && now.getHour()%2 == 0 && (now.getHour() <= 1 || now.getHour() >= 9) && this.plugin.getGameManager().getGameEventsManager().getDuel() == null) {
             // choix des joueurs
             ArrayList<GamePlayer> playersSelected = this.plugin.getGameManager().getParticipantManager().getRandomOnlineGamePlayerFromDiffTeams(2);
 

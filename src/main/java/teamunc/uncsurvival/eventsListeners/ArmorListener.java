@@ -55,12 +55,16 @@ public class ArmorListener extends AbstractEventsListener implements Listener  {
             return;
         }
         // advancement
+        Team t = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(p);
         AdvancementManager advancementManager = this.plugin.getGameManager().getAdvancementManager();
         Advancement advancement = advancementManager.getAdvancement("gucci_man");
         if(!advancement.alreadyGranted()) {
-            Bukkit.broadcastMessage("");
-            Team t = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(p);
             advancementManager.grantToATeam(t,advancement);
+        } else if (
+                advancement.getTeamColor() != t.getChatColor() &&
+                !this.plugin.getGameManager().getAdvancementManager().isTeamHalfPointed(t.getChatColor(),advancement)
+        ){
+            this.plugin.getGameManager().getAdvancementManager().setTeamHalfPointedAndGiveItPoints(t.getChatColor(),advancement);
         }
     }
 

@@ -85,7 +85,7 @@ public class MincerBlock extends CustomStorageBlock {
         Inventory inputInventory = input.getInventory();
         for (int i = 0;i<input.getInventory().getSize();i++) {
             ItemStack item = inputInventory.getItem(i);
-            if(item != null && item.getType() == Material.COOKED_BEEF) {
+            if(item != null && (item.getType() == Material.COOKED_BEEF || item.getType() == Material.BEEF)) {
                 this.moveItem(11, item);
                 return;
             }

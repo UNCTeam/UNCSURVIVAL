@@ -12,12 +12,14 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.advancements.Advancement;
 import teamunc.uncsurvival.logic.duels.Duel;
@@ -56,13 +58,32 @@ public class playerInGameActionsListener extends AbstractEventsListener {
         this.plugin.getMessageTchatManager().sendGeneralMesssage("§6§lMerci pour la mort! §b§l+300 §6§lpoints pour les autres!");
 
         // advancement
+        Team t = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(p);
         AdvancementManager advancementManager = this.plugin.getGameManager().getAdvancementManager();
         Advancement advancement = advancementManager.getAdvancement("mon_chandail");
         if(!advancement.alreadyGranted()) {
-            Team t = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(p);
             advancementManager.grantToATeam(t,advancement);
+        } else if (
+                advancement.getTeamColor() != t.getChatColor() &&
+                        !this.plugin.getGameManager().getAdvancementManager().isTeamHalfPointed(t.getChatColor(),advancement)
+        ){
+            this.plugin.getGameManager().getAdvancementManager().setTeamHalfPointedAndGiveItPoints(t.getChatColor(),advancement);
         }
 
+        // soif
+        if (this.plugin.getGameManager().getParticipantManager().getGamePlayer(p.getName()) != null ) {
+            this.plugin.getGameManager().getParticipantManager().getGamePlayer(p.getName()).setWaterLevel(6);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerSpawn(PlayerRespawnEvent e) {
+        Player p = e.getPlayer();
+        // mort respawn
+        if (this.plugin.getGameManager().getParticipantManager().getGamePlayer(p.getName()) != null && p.getBedSpawnLocation() == null) {
+            Team t = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(p);
+            e.setRespawnLocation(t.getSpawnPoint());
+        }
     }
 
     @EventHandler
@@ -242,7 +263,7 @@ public class playerInGameActionsListener extends AbstractEventsListener {
     @EventHandler
     public void onCraftGet(CraftItemEvent e) {
         ItemStack itemIngr = null;
-        if (e.getInventory().getMatrix().length >= 4) itemIngr = e.getInventory().getMatrix()[4];
+        if (e.getInventory().getMatrix().length >= 5) itemIngr = e.getInventory().getMatrix()[4];
         ItemStack itemAlcool = this.plugin.getGameManager().getItemsManager().createAlcool();
         ItemStack itemWrench = this.plugin.getGameManager().getItemsManager().createWrenchItem(1,0);
 
@@ -263,13 +284,18 @@ public class playerInGameActionsListener extends AbstractEventsListener {
             meta.setLore(List.of("§r§8Qualité : §r§l"+qualityLevel));
 
             // advancement
+            Team t = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer((Player) e.getWhoClicked());
             AdvancementManager advancementManager = this.plugin.getGameManager().getAdvancementManager();
             Advancement advancement = advancementManager.getAdvancement("pete_ma_biere");
             if(qualityLevel >= 64 ) {
                 meta.setDisplayName("§6§lGrand Cru");
-                if ( !advancement.alreadyGranted() ) {
-                    Team t = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer((Player) e.getWhoClicked());
-                    advancementManager.grantToATeam(t, advancement);
+                if(!advancement.alreadyGranted()) {
+                    advancementManager.grantToATeam(t,advancement);
+                } else if (
+                        advancement.getTeamColor() != t.getChatColor() &&
+                                !this.plugin.getGameManager().getAdvancementManager().isTeamHalfPointed(t.getChatColor(),advancement)
+                ){
+                    this.plugin.getGameManager().getAdvancementManager().setTeamHalfPointedAndGiveItPoints(t.getChatColor(),advancement);
                 }
             }
 
@@ -278,11 +304,16 @@ public class playerInGameActionsListener extends AbstractEventsListener {
 
         } else if ( e.getRecipe().getResult().isSimilar(itemWrench)){
             // advancement
+            Team t = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer((Player) e.getWhoClicked());
             AdvancementManager advancementManager = this.plugin.getGameManager().getAdvancementManager();
             Advancement advancement = advancementManager.getAdvancement("bob_le_bricoleur");
             if(!advancement.alreadyGranted()) {
-                Team t = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer((Player) e.getWhoClicked());
                 advancementManager.grantToATeam(t,advancement);
+            } else if (
+                    advancement.getTeamColor() != t.getChatColor() &&
+                            !this.plugin.getGameManager().getAdvancementManager().isTeamHalfPointed(t.getChatColor(),advancement)
+            ){
+                this.plugin.getGameManager().getAdvancementManager().setTeamHalfPointedAndGiveItPoints(t.getChatColor(),advancement);
             }
         }
     }

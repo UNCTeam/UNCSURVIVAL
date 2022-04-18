@@ -1,11 +1,14 @@
 package teamunc.uncsurvival.eventsListeners;
 
 import net.minecraft.world.entity.EnumCreatureType;
+import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -103,12 +106,31 @@ public class MobListener extends AbstractEventsListener{
         AdvancementManager advancementManager = this.plugin.getGameManager().getAdvancementManager();
         Advancement advancement = advancementManager.getAdvancement("raciste");
 
-        if( e.getEntity().getType() == EntityType.WITHER
-            && !advancement.alreadyGranted()
-            && e.getEntity().getKiller() != null ){
+        if (e.getEntity().getKiller() != null
+                && e.getEntity().getType() == EntityType.WITHER) {
             Player p = e.getEntity().getKiller();
             Team t = this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(p);
-            advancementManager.grantToATeam(t,advancement);
+            if ( !advancement.alreadyGranted() ) {
+                advancementManager.grantToATeam(t, advancement);
+            } else if (
+                    advancement.getTeamColor() != t.getChatColor() &&
+                            !this.plugin.getGameManager().getAdvancementManager().isTeamHalfPointed(t.getChatColor(), advancement)
+            ) {
+                this.plugin.getGameManager().getAdvancementManager().setTeamHalfPointedAndGiveItPoints(t.getChatColor(), advancement);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onMoutMoutEat(EntityChangeBlockEvent e) {
+        if (e.getEntity().getType() == EntityType.SHEEP) {
+            e.setCancelled(true);
+            Sheep s = (Sheep) e.getEntity();
+            s.setSheared(false);
+        } else if (e.getEntity().getType() == EntityType.ENDERMAN) {
+            e.setCancelled(true);
+        } else if (e.getEntity().getType() == EntityType.CREEPER) {
+            e.setCancelled(true);
         }
     }
 }

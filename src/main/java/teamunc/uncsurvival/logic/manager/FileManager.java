@@ -130,7 +130,7 @@ public class FileManager extends AbstractManager{
         } catch (NoSuchFileException e) {
             // Le fichier n'existe pas alors on l'init et le créer
             Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "Creation du fichier de gameStats");
-            GameStats gameStats = new GameStats(false, PhaseEnum.INIT);
+            GameStats gameStats = new GameStats(false, PhaseEnum.INIT, new HashMap<String,ArrayList<String>>());
             this.plugin.getFileManager().saveGameStats(gameStats);
             return gameStats;
         } catch (Exception e) {
