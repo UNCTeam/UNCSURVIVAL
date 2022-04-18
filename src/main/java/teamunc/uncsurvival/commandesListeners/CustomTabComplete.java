@@ -35,13 +35,7 @@ public class CustomTabComplete implements TabCompleter {
                 break;
             case "addplayertoteam":
                 if (strings.length == 1) {
-                    List<String> teams = plugin.getGameManager().getTeamsManager().getAllTeams().stream()
-                            .map(team -> team.getChatColor().name()).collect(Collectors.toList());
-                    for (String team : teams) {
-                        if (team.toLowerCase().startsWith(strings[0].toLowerCase())) {
-                            result.add(team);
-                        }
-                    }
+                    result.addAll(getTeamName(strings));
                 } else if(strings.length == 2) {
                     List<String> players = Bukkit.getOnlinePlayers().stream()
                             .map(player -> player.getName())
@@ -51,6 +45,11 @@ public class CustomTabComplete implements TabCompleter {
                             result.add(name);
                         }
                     }
+                }
+                break;
+            case "statsteam":
+                if(strings.length == 1) {
+                    result.addAll(getTeamName(strings));
                 }
                 break;
             case "removetime":
@@ -63,6 +62,18 @@ public class CustomTabComplete implements TabCompleter {
                     return result;
                 }
                 break;
+        }
+        return result;
+    }
+
+    public List<String> getTeamName(String[] strings) {
+        List<String> result = new ArrayList<>();
+        List<String> teams = plugin.getGameManager().getTeamsManager().getAllTeams().stream()
+                .map(team -> team.getChatColor().name()).collect(Collectors.toList());
+        for (String team : teams) {
+            if (team.toLowerCase().startsWith(strings[0].toLowerCase())) {
+                result.add(team);
+            }
         }
         return result;
     }

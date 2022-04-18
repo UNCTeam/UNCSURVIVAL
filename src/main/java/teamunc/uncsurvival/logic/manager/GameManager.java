@@ -33,6 +33,7 @@ public class GameManager extends AbstractManager {
     private TimeManager timeManager;
     private InterfacesManager interfacesManager;
     private GameEventsManager gameEventsManager;
+    private CombatDisconnectManager combatDisconnectManager;
 
     private CountdownPhaseTask timerTask;
     private AdvancementManager advancementManager;
@@ -52,6 +53,7 @@ public class GameManager extends AbstractManager {
         this.customBlockManager = new CustomBlockManager(plugin);
         this.gameEventsManager = new GameEventsManager(plugin);
         this.advancementManager = new AdvancementManager(plugin);
+        this.combatDisconnectManager = new CombatDisconnectManager(plugin);
 
         this.afterReload();
     }
@@ -277,6 +279,7 @@ public class GameManager extends AbstractManager {
     public GameConfiguration getGameConfiguration() {
         return gameConfiguration;
     }
+    public CombatDisconnectManager getCombatDisconnectManager() { return combatDisconnectManager; }
 
     public void save() {
         this.getTeamsManager().saveTeams();

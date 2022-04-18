@@ -65,6 +65,19 @@ public class playerInGameActionsListener extends AbstractEventsListener {
     }
 
     @EventHandler
+    public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent e) {
+        if (!this.plugin.getGameManager().getGameStats().isGameStarted()) return;
+        if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
+            Player whoWasHit = (Player) e.getEntity();
+            Player whoHit = (Player) e.getDamager();
+            if(this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(whoWasHit) ==
+            this.plugin.getGameManager().getParticipantManager().getTeamForPlayer(whoHit)) return;
+            this.plugin.getGameManager().getCombatDisconnectManager().engageCombat(whoWasHit,  whoHit);
+            this.plugin.getGameManager().getCombatDisconnectManager().engageCombat(whoHit,  whoWasHit);
+        }
+    }
+
+    @EventHandler
     public void onDamageTaken(EntityDamageEvent e) {
 
         if (e.getEntity() instanceof Player) {

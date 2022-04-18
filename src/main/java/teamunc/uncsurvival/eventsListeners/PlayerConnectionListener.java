@@ -7,6 +7,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.utils.scoreboards.InGameInfoScoreboard;
 
+import java.time.LocalDateTime;
+
 public class PlayerConnectionListener extends AbstractEventsListener
 {
     public PlayerConnectionListener(UNCSurvival plugin) {
@@ -20,5 +22,15 @@ public class PlayerConnectionListener extends AbstractEventsListener
 
         plugin.getGameManager().getScoreboardManager().addScoreboard(new InGameInfoScoreboard(playerJoinEvent.getPlayer()));
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"advancement grant @a only uncsurvival:root");
+    }
+
+    @EventHandler
+    public void onPlayerDisconnect(PlayerQuitEvent playerQuitEvent) {
+        if(this.plugin.getGameManager().getGameStats().isGameStarted()) {
+            if (this.plugin.getGameManager().getCombatDisconnectManager().isPlayerStillInCombat(LocalDateTime.now(),
+                    playerQuitEvent.getPlayer())) {
+                this.plugin.getGameManager().getCombatDisconnectManager().triggerDisconnectCombat(playerQuitEvent.getPlayer());
+            }
+        }
     }
 }

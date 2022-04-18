@@ -15,5 +15,4 @@ public class LoggerFile {
 
     public static void AppendLineToWrite(String line) {
         linesToWrite.add(line);
-    }
-}
+    }}

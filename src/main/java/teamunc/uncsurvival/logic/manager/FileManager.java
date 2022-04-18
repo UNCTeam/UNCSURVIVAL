@@ -43,6 +43,7 @@ public class FileManager extends AbstractManager{
 
     private String gameConfiguration_path;
     private String logFileNamePath;
+    private String combatLogFileNamePath;
     private File pluginDataFile;
     private File propertiesFile;
 
@@ -56,6 +57,7 @@ public class FileManager extends AbstractManager{
         // init paths
         this.gameConfiguration_path = this.pluginDataFile.getPath() + "/game-config.json";
         this.logFileNamePath = pluginDataFile.getPath() + "/logs-" + LocalDateTime.now() + ".txt";
+        this.combatLogFileNamePath = pluginDataFile.getPath() + "/combat-log.txt";
 
         // get server properties
         this.propertiesFile = new File("server.properties");
@@ -295,6 +297,15 @@ public class FileManager extends AbstractManager{
             }
 
         }
+    }
+
+    public void writeCombatLogFile(String line) {
+        try {
+            FileWriter writer = new FileWriter(combatLogFileNamePath,true);
+            writer.append(line);
+            writer.append(System.lineSeparator());
+            writer.close();
+        } catch (Exception e){}
     }
 
     public void writeInLogFile(String line) {
