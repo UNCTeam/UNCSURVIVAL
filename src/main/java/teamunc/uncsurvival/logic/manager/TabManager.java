@@ -45,7 +45,8 @@ public class TabManager extends AbstractManager {
                     header+=ChatColor.GOLD + "Players : " + ChatColor.WHITE + Bukkit.getOnlinePlayers().size() + "\n" + spacer;
                     player.setPlayerListHeader(header);
                     DecimalFormat df = new DecimalFormat("#.##");
-                    String footer = "\n" + ChatColor.GOLD + "" + ChatColor.BOLD + "TPS : " + df.format(MinecraftServer.getServer().recentTps[2]);
+                    String footer = "\n" + ChatColor.GOLD + "" + ChatColor.BOLD + "TPS \n" + df.format(MinecraftServer.getServer().recentTps[0]);
+                    footer += " - " +  df.format(MinecraftServer.getServer().recentTps[1]) + " - "  + df.format(MinecraftServer.getServer().recentTps[2]);
                     player.setPlayerListFooter(footer);
                 }
             }

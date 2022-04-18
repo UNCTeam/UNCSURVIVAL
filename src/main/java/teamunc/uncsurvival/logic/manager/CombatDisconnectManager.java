@@ -7,13 +7,14 @@ import org.bukkit.scheduler.BukkitTask;
 import teamunc.uncsurvival.UNCSurvival;
 
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalUnit;
 import java.util.HashMap;
 import java.util.UUID;
 
 public class CombatDisconnectManager extends AbstractManager {
     private HashMap<UUID, LocalDateTime> lastHit = new HashMap<UUID, LocalDateTime>();
     private HashMap<UUID, UUID> combatWithWho = new HashMap<>();
-    private HashMap<UUID, Integer> runTaskLater = new HashMap<>();
+    private HashMap<UUID, BukkitTask> runTaskLater = new HashMap<>();
 
     public CombatDisconnectManager(UNCSurvival plugin) {
         super(plugin);
@@ -21,26 +22,27 @@ public class CombatDisconnectManager extends AbstractManager {
 
     public void engageCombat(Player player, Player target) {
         // Si le combat est n'est pas encore engagé
-        if(!(lastHit.containsKey(player.getUniqueId())
-                && lastHit.get(player.getUniqueId()).plusSeconds(20l).isBefore(LocalDateTime.now()))) {
-            player.sendMessage("§7§l[ UNC ]§6Attention tu rentres en combat ! §7Il te reste 15 secondes");
+        if(!lastHit.containsKey(player.getUniqueId())) {
+            player.sendMessage("§f§l[UNC]§6 §6Attention tu rentres en combat ! §7Tu ne peux pas te déconnecter");
         }
         this.lastHit.put(player.getUniqueId(), LocalDateTime.now());
         this.combatWithWho.put(player.getUniqueId(), target.getUniqueId());
-        Integer taskId = new BukkitRunnable()
-        {
+        BukkitTask task = Bukkit.getScheduler().runTaskLater(this.plugin, new Runnable() {
             @Override
-            public void run()
-            {
-                if(!isPlayerStillInCombat(LocalDateTime.now(), player)) {
-                    player.sendMessage("§7§l[ UNC ]§6Tu n'es plus en combat");
+            public void run() {
+                if(!isPlayerStillInCombat(LocalDateTime.now(), player)
+                        && lastHit.containsKey(player.getUniqueId())
+                        && lastHit.get(player.getUniqueId()).plusSeconds(14).isBefore(LocalDateTime.now())) {
+                    player.sendMessage("§f§l[UNC]§6 Tu n'es plus en combat");
+                    lastHit.remove(player.getUniqueId());
+                    combatWithWho.remove(player.getUniqueId());
+                    runTaskLater.remove(player.getUniqueId());
                 }
             }
-        }.runTaskLater(UNCSurvival.getInstance(), 400).getTaskId();
-        Integer lastTaskId = this.runTaskLater.get(player.getUniqueId());
-        if(lastTaskId != null) {
-            Bukkit.getServer().getScheduler().cancelTask(lastTaskId);
-            this.runTaskLater.put(player.getUniqueId(), taskId);
+        }, 300);
+        if(this.runTaskLater.containsKey(player.getUniqueId())) {
+            this.runTaskLater.get(player.getUniqueId()).cancel();
+            this.runTaskLater.put(player.getUniqueId(), task);
         }
     }
 
@@ -48,7 +50,7 @@ public class CombatDisconnectManager extends AbstractManager {
         if(lastHit.containsKey(player.getUniqueId())) {
             LocalDateTime playerLastHit = lastHit.get(player.getUniqueId());
             // le délais des 20 secondes
-            if(playerLastHit.plusSeconds(20l).isBefore(disconnectTime)) {
+            if(playerLastHit.plusSeconds(15).isBefore(disconnectTime)) {
                 return true;
             }
         }
