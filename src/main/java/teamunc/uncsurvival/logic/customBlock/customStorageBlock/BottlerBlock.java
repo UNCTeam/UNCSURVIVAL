@@ -37,9 +37,9 @@ public class BottlerBlock extends CustomStorageBlock {
                 }
             }
             fillFromInput();
-            exportOutput(7, Material.GLASS_BOTTLE, UNCSurvival.getInstance().getGameManager().getItemsManager().createCactusJuice());
-            exportOutput(17, Material.GLASS_BOTTLE, UNCSurvival.getInstance().getGameManager().getItemsManager().createCactusJuice());
-            exportOutput(25, Material.GLASS_BOTTLE, UNCSurvival.getInstance().getGameManager().getItemsManager().createCactusJuice());
+            exportOutput(7, UNCSurvival.getInstance().getGameManager().getItemsManager().createCactusJuice());
+            exportOutput(17, UNCSurvival.getInstance().getGameManager().getItemsManager().createCactusJuice());
+            exportOutput(25, UNCSurvival.getInstance().getGameManager().getItemsManager().createCactusJuice());
         }
     }
 
