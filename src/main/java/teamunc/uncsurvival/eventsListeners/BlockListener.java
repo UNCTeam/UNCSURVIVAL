@@ -32,23 +32,37 @@ public class BlockListener extends AbstractEventsListener {
         Player player = event.getPlayer();
         Block block = event.getClickedBlock();
 
-        if (block != null && event.getAction() == Action.RIGHT_CLICK_BLOCK && !event.getPlayer().isSneaking()) {
-            if (CanDoThisHere(player,block.getLocation()) && !this.plugin.getGameManager().getItemsManager().isCustomItem(player.getInventory().getItemInMainHand(),"WRENCH")) {
-                switch (block.getType()) {
-                    case BARRIER:
-                        this.plugin.getGameManager().getInterfacesManager().ouvrirInterface(block.getLocation(), event.getPlayer());
-                        event.setCancelled(true);
-                        break;
-                    case SMOOTH_STONE:
-                    case BREWING_STAND:
-                        plugin.getGameManager().getCustomBlockManager().interactBlockEvent(event);
-                        break;
-                }
-            } else {
+        if (block != null) {
+            if ( !CanDoThisHere(player, block.getLocation()) )
                 event.setCancelled(true);
+            else {
+                if ( event.getAction() == Action.RIGHT_CLICK_BLOCK && !event.getPlayer().isSneaking() ) {
+                    if ( !this.plugin.getGameManager().getItemsManager().isCustomItem(player.getInventory().getItemInMainHand(), "WRENCH") ) {
+                        switch (block.getType()) {
+                            case BARRIER:
+                                this.plugin.getGameManager().getInterfacesManager().ouvrirInterface(block.getLocation(), event.getPlayer());
+                                event.setCancelled(true);
+                                break;
+                            case SMOOTH_STONE:
+                            case BREWING_STAND:
+                                plugin.getGameManager().getCustomBlockManager().interactBlockEvent(event);
+                                break;
+                        }
+                    } else {
+                        event.setCancelled(true);
+                    }
+                }
             }
         }
+    }
 
+    @EventHandler
+    public void onPlaceBlockEvent(BlockFertilizeEvent event) {
+        Block block = event.getBlock();
+
+        if (block.getType() == Material.CAVE_VINES) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler
