@@ -1,7 +1,6 @@
 package teamunc.uncsurvival.logic.customBlock.customStorageBlock;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Hopper;
@@ -10,9 +9,9 @@ import org.bukkit.inventory.ItemStack;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.customBlock.CustomBlockType;
 
-import java.util.Arrays;
-
 public class MincerBlock extends CustomStorageBlock {
+
+    private String itemToProduce = "";
 
     public MincerBlock(Location location, CustomBlockType customBlockType) {
         super(location, customBlockType);
@@ -27,7 +26,7 @@ public class MincerBlock extends CustomStorageBlock {
     public void tickAction(int seconds) {
         if(this.isBlockLoaded()) {
             if(duration == 0) {
-                produceMincedMeat();
+                produce();
             } else if(duration > 0) {
                 updateProgressBar();
                 duration--;
@@ -35,13 +34,20 @@ public class MincerBlock extends CustomStorageBlock {
                 checkIfCanProduce();
             }
             fillFromInput();
-            exportOutput(15, UNCSurvival.getInstance().getGameManager().getItemsManager().createMincedMeat());
+
+            exportOutput(15, this.getInventory().getItem(15));
         }
     }
 
     public void checkIfCanProduce() {
         ItemStack item = inventory.getItem(11);
-        if(item != null && (item.getType().equals(Material.COOKED_BEEF) || item.getType().equals(Material.BEEF))) {
+        if(item != null && (item.getType().equals(Material.COOKED_BEEF) || item.getType().equals(Material.BEEF)) ) {
+            itemToProduce = "MincedMeat";
+            item.setAmount(item.getAmount()-1);
+            duration = this.getProcessingDuration();
+            this.inventory.setItem(4,UNCSurvival.getInstance().getGameManager().getItemsManager().createAnimatedMincer());
+        } else if (item != null && item.getType().equals(Material.DRIED_KELP) ) {
+            itemToProduce = "CookedBeef";
             item.setAmount(item.getAmount()-1);
             duration = this.getProcessingDuration();
             this.inventory.setItem(4,UNCSurvival.getInstance().getGameManager().getItemsManager().createAnimatedMincer());
@@ -63,14 +69,26 @@ public class MincerBlock extends CustomStorageBlock {
         }
     }
 
-    public void produceMincedMeat() {
-        if(this.hasSpaceInOutput(Material.COOKED_BEEF, 15)) {
+    public void produce() {
+        if(this.hasSpaceInOutput(Material.COOKED_BEEF, 15) && this.itemToProduce == "MincedMeat") {
+            this.itemToProduce = "";
             duration = -1;
             ItemStack item = this.inventory.getItem(15);
             if(item != null) {
                 item.setAmount(item.getAmount()+1);
             } else {
                 inventory.setItem(15, UNCSurvival.getInstance().getGameManager().getItemsManager().createMincedMeat());
+            }
+            clearProgressBar();
+            inventory.setItem(4, UNCSurvival.getInstance().getGameManager().getItemsManager().createFixedMincer());
+        } else if (this.hasSpaceInOutput(Material.DRIED_KELP, 15) && this.itemToProduce == "CookedBeef"){
+            this.itemToProduce = "";
+            duration = -1;
+            ItemStack item = this.inventory.getItem(15);
+            if(item != null) {
+                item.setAmount(item.getAmount()+1);
+            } else {
+                inventory.setItem(15, new ItemStack(Material.COOKED_BEEF));
             }
             clearProgressBar();
             inventory.setItem(4, UNCSurvival.getInstance().getGameManager().getItemsManager().createFixedMincer());
@@ -85,7 +103,7 @@ public class MincerBlock extends CustomStorageBlock {
         Inventory inputInventory = input.getInventory();
         for (int i = 0;i<input.getInventory().getSize();i++) {
             ItemStack item = inputInventory.getItem(i);
-            if(item != null && (item.getType() == Material.COOKED_BEEF || item.getType() == Material.BEEF)) {
+            if(item != null && (item.getType() == Material.COOKED_BEEF || item.getType() == Material.BEEF || item.getType() == Material.DRIED_KELP)) {
                 this.moveItem(11, item);
                 return;
             }

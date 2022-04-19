@@ -53,6 +53,9 @@ public class GiveCustomItemsCmdExec extends AbstractCommandExecutor implements C
                         case "burger":
                             p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createBurger());
                             break;
+                        case "glowingCarrot":
+                            p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createGlowingCarrot());
+                            break;
                         case "cactusJuice":
                             p.getInventory().addItem(this.plugin.getGameManager().getItemsManager().createCactusJuice());
                             break;

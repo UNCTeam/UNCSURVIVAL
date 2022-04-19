@@ -45,7 +45,7 @@ public class ItemsManager extends AbstractManager {
         this.gameConfiguration = gameConfiguration;
         registerGoalItems(gameStats.getCurrentPhase());
         this.goalItemsPrices = gameConfiguration.getGoalItemsPrices();
-        this.customItems = List.of("diamondApple", "wrench", "mincer", "healPatch", "alcool",
+        this.customItems = List.of("diamondApple","glowingCarrot", "wrench", "mincer", "healPatch", "alcool",
                 "vaccin","module","mincedMeat","burger","wheatFlour", "growthBlock", "cactusJuice","amethystIngot","amethystSword","amethystPickaxe","famineSoup","gourde");
     }
 
@@ -58,7 +58,7 @@ public class ItemsManager extends AbstractManager {
                 Arrays.asList(
                         new ItemStack(Material.PUMPKIN_PIE),
                         createBurger(),
-                        new ItemStack(Material.BOOKSHELF),
+                        createGlowingCarrot(),
                         createCactusJuice()
                 )
         );
@@ -99,6 +99,17 @@ public class ItemsManager extends AbstractManager {
         meta.setDisplayName("§r§l§cDiamond Apple");
         PersistentDataContainer data = meta.getPersistentDataContainer();
         data.set(this.customitemKey, PersistentDataType.STRING,"DIAMONDAPPLE");
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public ItemStack createGlowingCarrot() {
+        ItemStack item = new ItemStack(Material.GOLDEN_CARROT,1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setCustomModelData(1);
+        meta.setDisplayName("§r§l§cGlowing Carrot");
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(this.customitemKey, PersistentDataType.STRING,"GLOWINGCARROT");
         item.setItemMeta(meta);
         return item;
     }
@@ -447,6 +458,12 @@ public class ItemsManager extends AbstractManager {
         diamondApple.setIngredient('*',Material.DIAMOND);
         diamondApple.setIngredient('-',Material.GOLDEN_APPLE);
         this.plugin.getServer().addRecipe(diamondApple);
+
+        // GLOWING CARROT
+        ShapelessRecipe glowingCarrot = new ShapelessRecipe(new NamespacedKey(this.plugin,"craftGlowingCarrot"),this.createGlowingCarrot());
+        glowingCarrot.addIngredient(Material.GOLDEN_CARROT);
+        glowingCarrot.addIngredient(Material.GLOW_BERRIES);
+        this.plugin.getServer().addRecipe(glowingCarrot);
 
         // WRENCH
         ShapedRecipe wrench = new ShapedRecipe(new NamespacedKey(this.plugin,"craftWrench"),this.createWrenchItem(1,0));
