@@ -87,7 +87,11 @@ public class Duel {
             pl.getActivePotionEffects().stream().map(PotionEffect::getType).forEach(pl::removePotionEffect);
             gamePlayer.setInDuel(false);
 
-            playerRestorationInfo.apply();
+            try {
+                playerRestorationInfo.apply();
+            } catch (Exception e) {
+                System.out.println("impossible d'apply les datas du duel pour le joueur : " + pl.getName());
+            }
         }
 
         // giving loot
