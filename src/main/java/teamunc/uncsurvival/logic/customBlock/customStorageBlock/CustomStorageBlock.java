@@ -62,7 +62,7 @@ public abstract class CustomStorageBlock implements Serializable {
 
     protected void exportOutput(int indexItemToExport, ItemStack item) {
         ItemStack output = this.inventory.getItem(indexItemToExport);
-        if(output != null && this.hasOutput() && output == item) {
+        if(output != null && this.hasOutput() && output.getItemMeta().getDisplayName().equals(item.getItemMeta().getDisplayName())) {
             Hopper input = this.getOutput();
             Inventory outputInventory = input.getInventory();
             // Check si y a de la place
