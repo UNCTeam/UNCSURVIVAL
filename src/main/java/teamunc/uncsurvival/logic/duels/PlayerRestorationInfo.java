@@ -87,7 +87,11 @@ public class PlayerRestorationInfo {
         getPlayer().setLevel(xpLevel);
         getPlayer().setGameMode(gameMode);
         getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth);
-        getPlayer().setHealth(currentHealth);
+        if (getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() >= currentHealth)
+            getPlayer().setHealth(currentHealth);
+        else
+            getPlayer().setHealth(getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+
         for (PotionEffect pE : this.effects) {
             getPlayer().addPotionEffect(pE);
         }

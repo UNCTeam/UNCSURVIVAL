@@ -1,6 +1,7 @@
 package teamunc.uncsurvival.logic.interfaces;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
@@ -20,6 +21,17 @@ public class GoalCustomInterface extends GameCustomInterface{
 
     @Override
     public Inventory update() {
+
+        // TODO remove after phase 2
+        if (this.itemNumber == 3 && team.getItemsProduction(3) >= 14000) {
+            UNCSurvival.getInstance().getGameManager().getParticipantManager().getGamePlayers().forEach(gamePlayer -> {
+                if (gamePlayer.getBukkitPlayer() != null && gamePlayer.getTeamColor() == team.getChatColor()) {
+                    UNCSurvival.getInstance().getMessageTchatManager().sendMessageToPlayer(" Vous avez atteint les 14 000 items de ce type ! Bravo !",gamePlayer.getBukkitPlayer(), ChatColor.GOLD);
+                }
+            });
+        }
+
+
         int itemPrice = UNCSurvival.getInstance().getGameManager().getItemsManager().getGoalItemPrice(this.itemNumber);
         int itemNumbers = this.team.getItemsProduction(this.itemNumber);
         this.updateName(this.itemNumber);
