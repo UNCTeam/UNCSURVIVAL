@@ -67,12 +67,12 @@ public class Duel {
             // remove effects
             p.getActivePotionEffects().stream().map(PotionEffect::getType).forEach(p::removePotionEffect);
 
-            UNCSurvival.getInstance().getMessageTchatManager().sendMessageToPlayer("Info : vous récupérerez tout votre stuff !",p, ChatColor.GOLD);
+            UNCSurvival.getInstance().getMessageTchatManager().sendMessageToPlayer("Info : vous ne récupérerez PAS votre stuff !",p, ChatColor.GOLD);
             UNCSurvival.getInstance().getMessageTchatManager().sendMessageToPlayer("Loot possible en cas de victoire :\n" +
-                    "40% -> 32 irons ingots.\n" +
-                    "35% -> 16 golds ingots.\n" +
-                    "20% -> 8 diamonds.\n" +
-                    "5% -> totem of undying",
+                    "50% -> 14 blocs de fer.\n" +
+                    "30% -> 18 diams.\n" +
+                    "15% -> 1 totem of undying.\n" +
+                    "5% -> 1 notch Apple.",
                     p, ChatColor.GOLD);
 
             p.sendTitle("§6§lFIGHT",null,1,40,60);

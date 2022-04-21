@@ -43,7 +43,9 @@ public class ConsumeListenerVanilla extends AbstractEventsListener {
         }
 
         // variety of food
-        if (gameManager.getItemsManager().getAllFoodOfTheGame().contains(itemStack.getType()) && (
+        if (!this.plugin.getGameManager().getItemsManager().isCustomItem(itemStack,"BURGER") &&
+                !this.plugin.getGameManager().getItemsManager().isCustomItem(itemStack,"VEGGIEBURGER") &&
+                gameManager.getItemsManager().getAllFoodOfTheGame().contains(itemStack.getType()) && (
                 gameManager.getGameStats().getCurrentPhase() == PhaseEnum.PHASE2 ||
                 gameManager.getGameStats().getCurrentPhase() == PhaseEnum.PHASE3
             )

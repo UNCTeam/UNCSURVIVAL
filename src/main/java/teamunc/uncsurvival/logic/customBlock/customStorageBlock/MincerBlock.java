@@ -70,7 +70,7 @@ public class MincerBlock extends CustomStorageBlock {
     }
 
     public void produce() {
-        if(this.hasSpaceInOutput(Material.COOKED_BEEF, 15) && this.itemToProduce == "MincedMeat") {
+        if(this.hasSpaceInOutput(UNCSurvival.getInstance().getGameManager().getItemsManager().createMincedMeat(), 15) && this.itemToProduce == "MincedMeat") {
             this.itemToProduce = "";
             duration = -1;
             ItemStack item = this.inventory.getItem(15);
