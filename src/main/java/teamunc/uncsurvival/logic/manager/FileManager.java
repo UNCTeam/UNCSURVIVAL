@@ -309,12 +309,12 @@ public class FileManager extends AbstractManager{
     }
 
     public void writeInLogFile(String line) {
-        /*try {
+        try {
             FileWriter writer = new FileWriter(this.logFileNamePath,true);
             writer.append(line);
             writer.append(System.lineSeparator());
             writer.close();
-        } catch (Exception e){}*/
+        } catch (Exception e){}
 
     }
 }

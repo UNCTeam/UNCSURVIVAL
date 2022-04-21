@@ -175,9 +175,9 @@ public class Team implements Serializable {
                     for (ItemStack itemStack : block.getBlockInventory().getContents()) {
                         if (itemStack != null && itemStack.isSimilar(itemsManager.getGoalItem(i))) {
 
-                            if (i == 3 && this.itemsProduction.get(i) >= 14000) {
+                            if (i == 4 && this.itemsProduction.get(i) >= 5000) {
 
-                                // TODO supr a phase 2
+                                // TODO supr a phase 3
 
                             } else {
                                 this.itemsProduction.set(i, this.itemsProduction.get(i) + itemStack.getAmount());

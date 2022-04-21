@@ -23,10 +23,10 @@ public class GoalCustomInterface extends GameCustomInterface{
     public Inventory update() {
 
         // TODO remove after phase 2
-        if (this.itemNumber == 3 && team.getItemsProduction(3) >= 14000) {
+        if (this.itemNumber == 4 && team.getItemsProduction(4) >= 5000) {
             UNCSurvival.getInstance().getGameManager().getParticipantManager().getGamePlayers().forEach(gamePlayer -> {
                 if (gamePlayer.getBukkitPlayer() != null && gamePlayer.getTeamColor() == team.getChatColor()) {
-                    UNCSurvival.getInstance().getMessageTchatManager().sendMessageToPlayer(" Vous avez atteint les 14 000 items de ce type ! Bravo !",gamePlayer.getBukkitPlayer(), ChatColor.GOLD);
+                    UNCSurvival.getInstance().getMessageTchatManager().sendMessageToPlayer(" Vous avez atteint les 5 000 items de ce type ! Bravo !",gamePlayer.getBukkitPlayer(), ChatColor.GOLD);
                 }
             });
         }

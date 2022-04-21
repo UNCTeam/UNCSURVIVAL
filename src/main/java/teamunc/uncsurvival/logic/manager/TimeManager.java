@@ -13,6 +13,7 @@ import teamunc.uncsurvival.features.thirst.ThirstActualiser;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.tasks.CountdownPhaseTask;
+import teamunc.uncsurvival.logic.team.Team;
 import teamunc.uncsurvival.utils.LoggerFile;
 import teamunc.uncsurvival.utils.Region;
 
@@ -171,7 +172,7 @@ public class TimeManager extends AbstractManager{
         }
 
         // writes logs
-        LoggerFile.WriteNextLine();
+        //LoggerFile.WriteNextLine();
     }
 
     public void actionsEachMinutes() {
@@ -183,6 +184,13 @@ public class TimeManager extends AbstractManager{
             if (this.plugin.getGameManager().getGameEventsManager().isItTimeForFamine(team))
                 this.plugin.getGameManager().getGameEventsManager().actionFamine(team);
         });
+
+        if (this.minutes%30 == 0 && phase != PhaseEnum.INIT && phase != PhaseEnum.FIN) {
+            for (Team t : plugin.getGameManager().getTeamsManager().getClassement()) {
+                LoggerFile.AppendScoreToWrite(t);
+            }
+            LoggerFile.WriteNextScore();
+        }
 
         // dicrease Water Level of 1
         if (this.minutes%3 == 0 && phase != PhaseEnum.INIT && phase != PhaseEnum.FIN) ThirstActualiser.getInstance().decreaseWaterForAllRegisteredPlayers(1);

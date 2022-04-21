@@ -41,13 +41,13 @@ public class Duel {
         int probaTir = r.nextInt(100);
 
         if ( probaTir <= 5 ) {              // 0 a 5    = 5
+            this.loot = new ItemStack(Material.ENCHANTED_GOLDEN_APPLE,1);
+        } else if ( probaTir <= 20 ) {      // 5 a 20   = 15
             this.loot = new ItemStack(Material.TOTEM_OF_UNDYING,1);
-        } else if ( probaTir <= 25 ) {      // 5 a 25   = 20
-            this.loot = new ItemStack(Material.DIAMOND,8);
-        } else if ( probaTir <= 60 ) {      // 25 a 60  = 35
-            this.loot = new ItemStack(Material.GOLD_INGOT,16);
-        } else {                            // 55 a 100 = 45
-            this.loot = new ItemStack(Material.IRON_INGOT,32);
+        } else if ( probaTir <= 50 ) {      // 20 a 50  = 30
+            this.loot = new ItemStack(Material.DIAMOND,18);
+        } else {                            // 50 a 100 = 50
+            this.loot = new ItemStack(Material.IRON_BLOCK,14);
         }
     }
 

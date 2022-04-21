@@ -37,6 +37,7 @@ public class CustomItemListener extends AbstractEventsListener {
     public void onExecute(PlayerItemConsumeEvent e) {
         // taking Data of the player
         Player player = e.getPlayer();
+        GamePlayer gamePlayer = this.plugin.getGameManager().getParticipantManager().getGamePlayer(player.getName());
 
         // taking Data of the item
         ItemStack itemStack = e.getItem();
@@ -77,7 +78,50 @@ public class CustomItemListener extends AbstractEventsListener {
 
                     break;
                 case "BURGER":
-                    e.getPlayer().setFoodLevel(20);
+                    if (gamePlayer != null) {
+                        if ( gamePlayer.EatHowOften(itemStack.getType()) == 3 ) {
+                            this.plugin.getMessageTchatManager().sendMessageToPlayer("Vous avez mangé cette nourriture 4 fois ! changez de nourriture.", player, ChatColor.GOLD);
+                        } else if ( gamePlayer.EatHowOften(itemStack.getType()) >= 4 ) {
+                            this.plugin.getMessageTchatManager().sendMessageToPlayer("Changez de nourriture! Gains nutritionnels divisés par 3!", player, ChatColor.GOLD);
+
+                            // new value of food
+                            int newVal = player.getFoodLevel() + 4;
+                            player.setFoodLevel(Math.min(newVal, 20));
+
+                            // removing item
+                            gamePlayer.getBukkitPlayer().getItemInUse().setAmount(gamePlayer.getBukkitPlayer().getItemInUse().getAmount() - 1);
+
+                            e.setCancelled(true);
+                        }
+
+                        if ( gamePlayer.EatHowOften(itemStack.getType()) < 4 ) {
+                            e.getPlayer().setFoodLevel(20);
+                            gamePlayer.addToEatenFoodQueue(itemStack.getType());
+                        }
+                    }
+                    break;
+                case "VEGGIEBURGER":
+                    if (gamePlayer != null) {
+                        if ( gamePlayer.EatHowOften(itemStack.getType()) == 3 ) {
+                            this.plugin.getMessageTchatManager().sendMessageToPlayer("Vous avez mangé cette nourriture 4 fois ! changez de nourriture.", player, ChatColor.GOLD);
+                        } else if ( gamePlayer.EatHowOften(itemStack.getType()) >= 4 ) {
+                            this.plugin.getMessageTchatManager().sendMessageToPlayer("Changez de nourriture! Gains nutritionnels divisés par 3!", player, ChatColor.GOLD);
+
+                            // new value of food
+                            int newVal = player.getFoodLevel() + 3;
+                            player.setFoodLevel(Math.min(newVal, 20));
+
+                            // removing item
+                            gamePlayer.getBukkitPlayer().getItemInUse().setAmount(gamePlayer.getBukkitPlayer().getItemInUse().getAmount() - 1);
+
+                            e.setCancelled(true);
+                        }
+
+                        if ( gamePlayer.EatHowOften(itemStack.getType()) < 4 ) {
+                            e.getPlayer().setFoodLevel(16);
+                            gamePlayer.addToEatenFoodQueue(itemStack.getType());
+                        }
+                    }
                     break;
             }
         }

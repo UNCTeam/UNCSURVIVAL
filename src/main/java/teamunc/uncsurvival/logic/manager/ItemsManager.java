@@ -46,7 +46,7 @@ public class ItemsManager extends AbstractManager {
         registerGoalItems(gameStats.getCurrentPhase());
         this.goalItemsPrices = gameConfiguration.getGoalItemsPrices();
         this.customItems = List.of("diamondApple","glowingCarrot", "wrench", "mincer", "healPatch", "alcool",
-                "vaccin","module","mincedMeat","burger","wheatFlour", "growthBlock", "cactusJuice","amethystIngot","amethystSword","amethystPickaxe","famineSoup","gourde");
+                "vaccin","module","mincedMeat","burger","veggieBurger","wheatFlour", "growthBlock", "cactusJuice","amethystIngot","amethystSword","amethystPickaxe","famineSoup","gourde");
     }
 
     public void setGoalItemPrice(int strictIndex, int newValue) {
@@ -57,9 +57,9 @@ public class ItemsManager extends AbstractManager {
         ArrayList<ItemStack> res = new ArrayList<>(
                 Arrays.asList(
                         new ItemStack(Material.PUMPKIN_PIE),
-                        createBurger(),
-                        createGlowingCarrot(),
-                        createCactusJuice()
+                        createVeggieBurger(),
+                        new ItemStack(Material.BEEHIVE),
+                        createGlowingCarrot()
                 )
         );
 
@@ -226,6 +226,17 @@ public class ItemsManager extends AbstractManager {
         return item;
     }
 
+    public ItemStack createMincedTofuMeat() {
+        ItemStack item = new ItemStack(Material.COOKED_BEEF,1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setCustomModelData(4);
+        meta.setDisplayName("§rMinced tofu meat");
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(this.customitemKey, PersistentDataType.STRING, "MINCEDTOFUMEAT");
+        item.setItemMeta(meta);
+        return item;
+    }
+
     public ItemStack createBurger() {
         ItemStack item = new ItemStack(Material.COOKED_BEEF,1);
         ItemMeta meta = item.getItemMeta();
@@ -233,6 +244,17 @@ public class ItemsManager extends AbstractManager {
         meta.setDisplayName("§b§eBurger");
         PersistentDataContainer data = meta.getPersistentDataContainer();
         data.set(this.customitemKey, PersistentDataType.STRING, "BURGER");
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public ItemStack createVeggieBurger() {
+        ItemStack item = new ItemStack(Material.COOKED_BEEF,1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setCustomModelData(3);
+        meta.setDisplayName("§b§eVeggie Burger");
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(this.customitemKey, PersistentDataType.STRING, "VEGGIEBURGER");
         item.setItemMeta(meta);
         return item;
     }
@@ -504,6 +526,13 @@ public class ItemsManager extends AbstractManager {
         burger.setIngredient('*',Material.BREAD);
         burger.setIngredient('-',new RecipeChoice.ExactChoice(this.createMincedMeat()));
         this.plugin.getServer().addRecipe(burger);
+
+        // VEGGIE BURGER
+        ShapedRecipe veggieburger = new ShapedRecipe(new NamespacedKey(this.plugin,"craftVeggieBurger"),this.createVeggieBurger());
+        veggieburger.shape(" * "," - "," * ");
+        veggieburger.setIngredient('*',Material.BREAD);
+        veggieburger.setIngredient('-',new RecipeChoice.ExactChoice(this.createMincedTofuMeat()));
+        this.plugin.getServer().addRecipe(veggieburger);
 
         // WHEAT FLOUR
         FurnaceRecipe wheat_flour = new FurnaceRecipe(new NamespacedKey(this.plugin,"craftWheatFlour"),this.createWheatFlour(),Material.WHEAT,1,200);

@@ -19,7 +19,7 @@ import java.util.*;
 
 public class GameEventsManager extends AbstractManager{
     private final int TAUX_COVID = 2;
-    private final int TAUX_FAMINE = 1;
+    private final int TAUX_FAMINE = 200;
     private Duel actualDuel;
 
     public GameEventsManager(UNCSurvival plugin) {
@@ -93,9 +93,9 @@ public class GameEventsManager extends AbstractManager{
         if ( (phase == PhaseEnum.PHASE2 || phase == PhaseEnum.PHASE3 ) && !team.isFamined() && min1playerOfTeamOnline ) {
             Random r = new Random();
 
-            int res = r.nextInt(500);
+            int res = r.nextInt(400);
 
-            result = (res <= TAUX_FAMINE);
+            result = (res == TAUX_FAMINE);
         }
         return result;
     }

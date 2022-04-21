@@ -73,6 +73,14 @@ public abstract class CustomStorageBlock implements Serializable {
         }
     }
 
+    protected boolean hasSpaceInOutput(ItemStack itemToCheck, int index) {
+        ItemStack item = inventory.getItem(index);
+        if(item != null  && (item.getAmount() == 64 || !item.isSimilar(itemToCheck))) {
+            return false;
+        }
+        return true;
+    }
+
     protected boolean hasSpaceInOutput(Material mat, int index) {
         ItemStack item = inventory.getItem(index);
         if(item != null  && (item.getAmount() == 64 || !item.getType().equals(mat))) {

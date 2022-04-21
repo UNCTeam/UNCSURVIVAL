@@ -46,8 +46,8 @@ public class MincerBlock extends CustomStorageBlock {
             item.setAmount(item.getAmount()-1);
             duration = this.getProcessingDuration();
             this.inventory.setItem(4,UNCSurvival.getInstance().getGameManager().getItemsManager().createAnimatedMincer());
-        } else if (item != null && item.getType().equals(Material.DRIED_KELP) ) {
-            itemToProduce = "CookedBeef";
+        } else if (item != null && item.getType().equals(Material.DRIED_KELP_BLOCK) ) {
+            itemToProduce = "MincedTofuMeat";
             item.setAmount(item.getAmount()-1);
             duration = this.getProcessingDuration();
             this.inventory.setItem(4,UNCSurvival.getInstance().getGameManager().getItemsManager().createAnimatedMincer());
@@ -81,14 +81,14 @@ public class MincerBlock extends CustomStorageBlock {
             }
             clearProgressBar();
             inventory.setItem(4, UNCSurvival.getInstance().getGameManager().getItemsManager().createFixedMincer());
-        } else if (this.hasSpaceInOutput(Material.DRIED_KELP, 15) && this.itemToProduce == "CookedBeef"){
+        } else if (this.hasSpaceInOutput(UNCSurvival.getInstance().getGameManager().getItemsManager().createMincedTofuMeat(), 15) && this.itemToProduce == "MincedTofuMeat"){
             this.itemToProduce = "";
             duration = -1;
             ItemStack item = this.inventory.getItem(15);
             if(item != null) {
                 item.setAmount(item.getAmount()+1);
             } else {
-                inventory.setItem(15, new ItemStack(Material.COOKED_BEEF));
+                inventory.setItem(15, UNCSurvival.getInstance().getGameManager().getItemsManager().createMincedTofuMeat());
             }
             clearProgressBar();
             inventory.setItem(4, UNCSurvival.getInstance().getGameManager().getItemsManager().createFixedMincer());
@@ -103,7 +103,7 @@ public class MincerBlock extends CustomStorageBlock {
         Inventory inputInventory = input.getInventory();
         for (int i = 0;i<input.getInventory().getSize();i++) {
             ItemStack item = inputInventory.getItem(i);
-            if(item != null && (item.getType() == Material.COOKED_BEEF || item.getType() == Material.BEEF || item.getType() == Material.DRIED_KELP)) {
+            if(item != null && (item.getType() == Material.COOKED_BEEF || item.getType() == Material.BEEF || item.getType() == Material.DRIED_KELP_BLOCK)) {
                 this.moveItem(11, item);
                 return;
             }

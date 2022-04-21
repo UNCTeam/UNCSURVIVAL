@@ -82,8 +82,8 @@ public class PlayerRestorationInfo {
     public void apply() {
 
         getPlayer().teleport(loc);
-        getPlayer().getInventory().setContents(inventoryContents);
-        getPlayer().getInventory().setArmorContents(armorContents);
+        //getPlayer().getInventory().setContents(inventoryContents);
+        //getPlayer().getInventory().setArmorContents(armorContents);
         getPlayer().setLevel(xpLevel);
         getPlayer().setGameMode(gameMode);
         getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth);
