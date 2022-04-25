@@ -45,8 +45,28 @@ public class ItemsManager extends AbstractManager {
         this.gameConfiguration = gameConfiguration;
         registerGoalItems(gameStats.getCurrentPhase());
         this.goalItemsPrices = gameConfiguration.getGoalItemsPrices();
-        this.customItems = List.of("diamondApple","glowingCarrot", "wrench", "mincer", "healPatch", "alcool",
-                "vaccin","module","mincedMeat","burger","veggieBurger","wheatFlour", "growthBlock", "cactusJuice","amethystIngot","amethystSword","amethystPickaxe","famineSoup","gourde");
+        this.customItems = List.of(
+                "diamondApple",
+                "glowingCarrot",
+                "wrench",
+                "mincer",
+                "healPatch",
+                "alcool",
+                "vaccin",
+                "module",
+                "mincedMeat",
+                "burger",
+                "veggieBurger",
+                "wheatFlour",
+                "growthBlock",
+                "cactusJuice",
+                "amethystIngot",
+                "amethystSword",
+                "amethystPickaxe",
+                "famineSoup",
+                "gourde",
+                "glowingDripstone"
+        );
     }
 
     public void setGoalItemPrice(int strictIndex, int newValue) {
@@ -56,10 +76,10 @@ public class ItemsManager extends AbstractManager {
     public void registerGoalItems(PhaseEnum phase) {
         ArrayList<ItemStack> res = new ArrayList<>(
                 Arrays.asList(
-                        new ItemStack(Material.PUMPKIN_PIE),
-                        createVeggieBurger(),
-                        new ItemStack(Material.BEEHIVE),
-                        createGlowingCarrot()
+                        new ItemStack(Material.ROOTED_DIRT),
+                        new ItemStack(Material.SCUTE),
+                        new ItemStack(Material.EXPOSED_COPPER),
+                        createGlowingDripStone()
                 )
         );
 
@@ -167,6 +187,17 @@ public class ItemsManager extends AbstractManager {
         meta.setDisplayName("§b§cSARS-COV19 UNC-VAX");
         PersistentDataContainer data = meta.getPersistentDataContainer();
         data.set(this.customitemKey, PersistentDataType.STRING,"VACCIN");
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public ItemStack createGlowingDripStone() {
+        ItemStack item = new ItemStack(Material.STRUCTURE_BLOCK,1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setCustomModelData(2);
+        meta.setDisplayName("§rGlowing DripStone");
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(this.customitemKey, PersistentDataType.STRING, "GLOWINGDRIPSTONE");
         item.setItemMeta(meta);
         return item;
     }
@@ -486,6 +517,12 @@ public class ItemsManager extends AbstractManager {
         glowingCarrot.addIngredient(Material.GOLDEN_CARROT);
         glowingCarrot.addIngredient(Material.GLOW_BERRIES);
         this.plugin.getServer().addRecipe(glowingCarrot);
+
+        // GLOWING CARROT
+        ShapelessRecipe glowingDripstone = new ShapelessRecipe(new NamespacedKey(this.plugin,"craftGlowingDripstone"),this.createGlowingDripStone());
+        glowingDripstone.addIngredient(Material.POINTED_DRIPSTONE);
+        glowingDripstone.addIngredient(Material.GLOW_INK_SAC);
+        this.plugin.getServer().addRecipe(glowingDripstone);
 
         // WRENCH
         ShapedRecipe wrench = new ShapedRecipe(new NamespacedKey(this.plugin,"craftWrench"),this.createWrenchItem(1,0));
