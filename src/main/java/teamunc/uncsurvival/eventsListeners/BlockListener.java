@@ -56,14 +56,14 @@ public class BlockListener extends AbstractEventsListener {
         }
     }
 
-    @EventHandler
+    /*@EventHandler
     public void onPlaceBlockEvent(BlockFertilizeEvent event) {
         Block block = event.getBlock();
 
-        if (block.getType() == Material.CAVE_VINES) {
+        if (block.getType() == Material.CAVE_VINES || block.getType() == Material.CAVE_VINES_PLANT) {
             event.setCancelled(true);
         }
-    }
+    }*/
 
     @EventHandler
     public void onBreakEvent(BlockBreakEvent event) {

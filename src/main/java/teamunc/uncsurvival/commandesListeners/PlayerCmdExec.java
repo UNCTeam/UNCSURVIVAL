@@ -1,9 +1,6 @@
 package teamunc.uncsurvival.commandesListeners;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,8 +10,12 @@ import teamunc.uncsurvival.UNCSurvival;
 import teamunc.uncsurvival.logic.manager.GameManager;
 import teamunc.uncsurvival.logic.phase.PhaseEnum;
 import teamunc.uncsurvival.logic.player.GamePlayer;
+import teamunc.uncsurvival.logic.team.Team;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Locale;
+import java.util.UUID;
 
 public class PlayerCmdExec extends AbstractCommandExecutor{
     public PlayerCmdExec(UNCSurvival plugin) {
@@ -67,11 +68,38 @@ public class PlayerCmdExec extends AbstractCommandExecutor{
                         } catch (Exception ignored) {}
                     }
                     break;
+                case "modifyitemnumber":
+                    // ITEM VALUE MODIFICATION
+                    if (args.length == 3) {
+                        try {
+                            String team = args[0];
+                            int numIndex = Integer.parseInt(args[1]);
+                            int newNumberItem = Integer.parseInt(args[2]);
+
+                            Team t = this.plugin.getGameManager().getTeamsManager().getTeam(team);
+                            Field field = Team.class.getDeclaredField("itemsProduction");
+                            field.setAccessible(true);
+                            ArrayList<Integer> list = (ArrayList<Integer>) field.get(t);
+                            list.set(numIndex,newNumberItem);
+                            this.plugin.getMessageTchatManager().sendMessageToPlayer("the "+ t.getName() + "'s items goals has been changed succesfully.",sender);
+                        } catch (Exception ignored) {}
+                    } else {
+                        this.plugin.getMessageTchatManager().sendMessageToPlayer("modifyitemnumber team indexItem newNumberItem",sender);
+                    }
+                    break;
                 case "openinv":
                     if(args.length == 1) {
                         Player targerPlayer = Bukkit.getPlayer(args[0]);
                         if(targerPlayer != null) {
                             ((Player) sender).openInventory(targerPlayer.getInventory());
+                        }
+                    }
+                    break;
+                case "openenderchest":
+                    if(args.length == 1) {
+                        Player targerPlayer = Bukkit.getPlayer(args[0]);
+                        if(targerPlayer != null) {
+                            ((Player) sender).openInventory(targerPlayer.getEnderChest());
                         }
                     }
                     break;

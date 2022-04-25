@@ -105,11 +105,13 @@ public class GameEventsManager extends AbstractManager{
      */
     public void actionFamine(Team team) {
         team.setFamined(true);
-        team.getMembers().forEach(gamePlayer ->
-                this.plugin.getMessageTchatManager().sendMessageToPlayer(
+        team.getMembers().forEach(gamePlayer -> {
+                if (gamePlayer.isOnline())
+                    this.plugin.getMessageTchatManager().sendMessageToPlayer(
                         "Une lourde famine s'abat sur votre équipe ! Coup dur... il vous faut craft un remède !",
                         gamePlayer.getBukkitPlayer(),
-                        ChatColor.BOLD)
+                        ChatColor.BOLD);
+            }
         );
 
     }

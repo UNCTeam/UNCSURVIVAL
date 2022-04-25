@@ -127,10 +127,19 @@ commands:
     usage: /modifyitemvalue <item number> <value>
     permission: uncsurvival.admins
 
+  modifyitemnumber:
+    description: modify value of an item goal
+    usage: /modifyitemnumber <team> <item number> <newValue>
+    permission: uncsurvival.admins
+
   openinv:
       description: Open inventory of a player
       usage: /openinv <Player>
       permission: uncsurvival.admins
+  openenderchest:
+    description: Open ender chest of a player
+    usage: /openenderchest <Player>
+    permission: uncsurvival.admins
 
 permissions:
   uncsurvival.admins:

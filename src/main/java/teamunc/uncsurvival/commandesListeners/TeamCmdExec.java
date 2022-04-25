@@ -12,6 +12,7 @@ import teamunc.uncsurvival.logic.manager.MessageTchatManager;
 import teamunc.uncsurvival.logic.player.GamePlayer;
 import teamunc.uncsurvival.logic.team.Team;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -252,22 +253,28 @@ public class TeamCmdExec extends AbstractCommandExecutor{
                 break;
             }
             case "classement": {
-                if ( sender instanceof Player ) {
-                    Player player = (Player) sender;
-                    StringBuilder classementStr = new StringBuilder();
-                    classementStr.append("§8--------------| §b§lClassement §8|---------------\n \n");
-                    int count = 1;
-                    for (Team team : plugin.getGameManager().getTeamsManager().getClassement()) {
+
+                StringBuilder classementStr = new StringBuilder();
+                classementStr.append("§8--------------| §b§lClassement §8|---------------\n \n");
+                int count = 1;
+                for (Team team : plugin.getGameManager().getTeamsManager().getClassement()) {
+                    try {
+                        Field field = Team.class.getDeclaredField("bonusScore");
+                        field.setAccessible(true);
+                        int bonusScore = (int) field.get(team);
+
+
                         classementStr.append(" " + team.getChatColor()).append(count);
                         classementStr.append(" - ").append(team.getName());
-                        if(player.getDisplayName().equals("ValkyrieHD") || player.getDisplayName().equals("UNCDelsus")) {
-                            classementStr.append(" : ").append(team.getScore());
-                        }
+                        /*if(player.getDisplayName().equals("ValkyrieHD") || player.getDisplayName().equals("UNCDelsus")) {*/
+                        classementStr.append(" : ").append(team.getScore()).append(" (" + (team.getScore() - bonusScore) + ")");
+                        /*}*/
                         classementStr.append("\n");
                         count++;
-                    }
-                    player.sendMessage(classementStr.toString());
+                    } catch (Exception ignored) {}
                 }
+                sender.sendMessage(classementStr.toString());
+
                 break;
             }
             case "phaseinfo": {
