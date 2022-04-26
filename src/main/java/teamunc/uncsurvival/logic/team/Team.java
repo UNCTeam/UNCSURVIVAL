@@ -175,15 +175,9 @@ public class Team implements Serializable {
                     for (ItemStack itemStack : block.getBlockInventory().getContents()) {
                         if (itemStack != null && itemStack.isSimilar(itemsManager.getGoalItem(i))) {
 
-                            if (i == 4 && this.itemsProduction.get(i) >= 5000) {
-
-                                // TODO supr a phase 3
-
-                            } else {
-                                this.itemsProduction.set(i, this.itemsProduction.get(i) + itemStack.getAmount());
-                                this.addScore(itemsManager.getGoalItemPrice(i, phase) * itemStack.getAmount());
-                                block.getBlockInventory().remove(itemStack);
-                            }
+                            this.itemsProduction.set(i, this.itemsProduction.get(i) + itemStack.getAmount());
+                            this.addScore(itemsManager.getGoalItemPrice(i, phase) * itemStack.getAmount());
+                            block.getBlockInventory().remove(itemStack);
                             // advancement
                             AdvancementManager advancementManager = UNCSurvival.getInstance().getGameManager().getAdvancementManager();
                             Advancement advancement = advancementManager.getAdvancement("precoce");

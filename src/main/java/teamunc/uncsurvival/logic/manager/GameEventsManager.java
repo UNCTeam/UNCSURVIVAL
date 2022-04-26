@@ -18,7 +18,7 @@ import teamunc.uncsurvival.logic.team.Team;
 import java.util.*;
 
 public class GameEventsManager extends AbstractManager{
-    private final int TAUX_COVID = 2;
+    private final int TAUX_COVID = 1;
     private final int TAUX_FAMINE = 200;
     private Duel actualDuel;
 
@@ -31,7 +31,7 @@ public class GameEventsManager extends AbstractManager{
         if (this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE3) {
             Random r = new Random();
 
-            int res = r.nextInt(100);
+            int res = r.nextInt(350);
 
             result = (res <= TAUX_COVID);
         }

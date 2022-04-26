@@ -37,7 +37,7 @@ public class MobListener extends AbstractEventsListener{
         double damageFact = 1;
         Random r = new Random();
         String baseName = e.getEntity().getName();
-
+        if (baseName.contains("Super") || baseName.contains("§1§lU§2§ll§3§lt§4§lr§5§la§6§l-") || baseName.contains("Mega-")) return;
         // modifications par phases
         switch (phase) {
             case PHASE2:
@@ -47,7 +47,7 @@ public class MobListener extends AbstractEventsListener{
                 modifyNeeded = true;
                 break;
             case PHASE3: case FIN:
-                if (r.nextInt(150) <= 1 && e.getEntity().getEquipment() != null
+                if (r.nextInt(300) <= 1 && e.getEntity().getEquipment() != null
                         && e.getEntity().getType() != EntityType.ARMOR_STAND
                         && e.getEntity().getType() != EntityType.ENDER_DRAGON
                         && e.getEntity().getType() != EntityType.BOAT
@@ -62,11 +62,11 @@ public class MobListener extends AbstractEventsListener{
                     }
                     baseName = temp;
                     prefix = "";
-                    healthFact = 2.25;
-                    damageFact = 1.75;
+                    healthFact = 3;
+                    damageFact = 3;
                     e.getEntity().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,9999999,1,false,true,true));
                     e.getEntity().getEquipment().setItemInOffHand(this.plugin.getGameManager().getItemsManager().createAmethystIngot());
-                    e.getEntity().getEquipment().setItemInOffHandDropChance(1.0f);
+                    e.getEntity().getEquipment().setItemInOffHandDropChance(0.75f);
                     modifyNeeded = true;
                 } else {
                     prefix = "§c§lMega-";
