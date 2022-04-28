@@ -42,6 +42,22 @@ public class GrowthBlock extends CustomStorageBlock {
         fillFromInput();
     }
 
+    public int growBlockUnder(Block block, Material mat, int size) {
+        int age = 0;
+        for(int i = 0; i<size; i--) {
+            Block currentBlock = block.getLocation().clone().add(0, i, 0).getBlock();
+            if (currentBlock.getType() == mat) {
+                age++;
+            }
+        }
+        if(age<12 && block.getLocation().clone().add(0, age, 0).getBlock().getType() == Material.AIR) {
+                age=age+block.getY();
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "setblock " + block.getX() + " " + age + " " + block.getZ() + " minecraft:" + mat.name().toLowerCase());
+                return 1;
+        }
+        return 0;
+    }
+
     public int growBockAbove(Block block, Material mat, int size) {
         int age = 0;
         for(int i = 0; i<size; i++) {
@@ -67,10 +83,11 @@ public class GrowthBlock extends CustomStorageBlock {
                     if(block.getType() == Material.CACTUS) {
                         return growBockAbove(block, Material.CACTUS, 3);
                     } else if(block.getType() == Material.SUGAR_CANE) {
-
                         return growBockAbove(block, Material.SUGAR_CANE, 3);
                     } else if(block.getType() == Material.BAMBOO) {
                             return growBockAbove(block, Material.BAMBOO, 12);
+                    } else if(block.getType() == Material.DRIPSTONE_BLOCK) {
+                            return growBlockUnder(block, Material.DRIPSTONE_BLOCK, 12);
                     } else {
                         Ageable ag = (Ageable) block.getBlockData();
                         int newAge = ag.getAge()+1;
