@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -112,7 +113,7 @@ public class playerInGameActionsListener extends AbstractEventsListener {
         if (e.getEntity() instanceof Player) {
             Player victim = (Player) e.getEntity();
             GamePlayer gamePlayer = this.plugin.getGameManager().getParticipantManager().getGamePlayer(victim.getName());
-            if (e.getDamage() >= victim.getHealth() && gamePlayer != null && gamePlayer.isInDuel()) { // DUEL
+            if (e.getFinalDamage() >= victim.getHealth() && gamePlayer != null && gamePlayer.isInDuel()) { // DUEL
 
                 Duel duel = this.plugin.getGameManager().getGameEventsManager().getDuel();
                 if (duel != null) {
@@ -150,7 +151,8 @@ public class playerInGameActionsListener extends AbstractEventsListener {
         if (this.plugin.getGameManager().getGameStats().getCurrentPhase() == PhaseEnum.PHASE3) {
             // dont apply double damage for customItems
             if ( !this.plugin.getGameManager().getItemsManager().isCustomItem(itemStack,"WRENCH") ) {
-                e.setDamage(e.getDamage() * 3);
+                if (itemStack.getType() != Material.ELYTRA )
+                    e.setDamage(e.getDamage() * 3);
             }
         }
     }
